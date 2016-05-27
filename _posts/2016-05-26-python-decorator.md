@@ -41,7 +41,7 @@ decorator在python中形如@decorator，如：
 
 `LOAD_CONST`指令将`pass`对应的代码对象压入堆栈。
 
-`MAKE_FUNCTION`将代码对象弹出堆栈，创建函数，并将函数压入堆栈。
+`MAKE_FUNCTION`将代码对象弹出堆栈，并创建一个PyFunctionObject对象，然后将函数压入堆栈。
 
 `STORE_NAME`将函数弹出栈，并将它绑定到`foo`变量。
 
@@ -65,7 +65,7 @@ decorator在python中形如@decorator，如：
 
 `LOAD_CONST`命令将`foo`下的代码对象压入栈项。
 
-`MAKE_FUNCTION`命令将代码对象弹出栈，从代码对象生成一个函数，压入堆栈。
+`MAKE_FUNCTION`命令将代码对象弹出栈，并创建一个PyFunctionObject对象，并压入堆栈。
 
 `CALL_FUNCTION`命令是新增命令，调用最开始压入堆栈的装饰器函数，然后将函数的返回值压入堆栈。
 
