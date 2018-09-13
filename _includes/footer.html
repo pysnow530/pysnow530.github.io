@@ -1,0 +1,25 @@
+<div style="position:fixed;right:15px;top:62px;">
+  <button id="content_btn" class="btn btn-primary btn-xs">
+    <i class="icono-plus"></i>
+  </button>
+</div>
+<div style="position:fixed;right:15px;top:20px;">
+  <button id="nav_btn" class="btn btn-primary btn-xs">
+    <i class="icono-bars"></i>
+  </button>
+</div>
+
+<link rel="stylesheet" href="/public/css/bootstrap.css">
+<link rel="stylesheet" href="/public/css/font-awesome.css">
+<link rel="stylesheet" href="/public/js/prettify/prettify.css">
+<link rel="stylesheet" href="/public/css/base.css">
+<link href="/pages/atom.xml" rel="alternate" title="{{site.title}}" type="application/atom+xml">
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.js"></script>
+<script src="/public/js/prettify/prettify.js"></script>
+<script src="/public/js/jquery.pjax.js"></script>
+<script src="/public/js/base.js"></script>
+<script>
+    $('a[href="#{{ site.active }}"]').tab('show');
+</script>

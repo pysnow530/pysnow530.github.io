@@ -1,3 +1,42 @@
-name: pysnow530的博客
-markdown: kramdown
-permalink: /blog/:year/:month/:day/:title
+permalink: /:year/:month/:day/:title.html
+paginate: 5
+
+# 作者信息
+author:
+  name: 吴建明
+  email: pysnow530@163.com
+  link: http://pysnow530.github.io
+#  weibo: http://weibo.com/orangeissweet
+  github: http://github.com/pysnow530
+#  music: http://site.douban.com/linanya
+#  linkedin: https://www.linkedin.com/pub/anya-lin/81/91/232
+
+# 站点信息
+title: pysnow530的博客
+description:
+url: http://pysnow530.github.io
+rss_url: /pages/atom.xml
+
+# gavatar头像及Favicon
+gavatar: /public/img/avatar.png
+bigavatar: /public/img/avatar.jpg
+favicon: /public/img/avatar.png
+
+# disqus 设置
+disqus:
+  shortname: thinkingdog
+
+# 主题设置，自动激活某个标签
+active: tags
+
+# 首页除了最新文章外显示分类
+cates:
+
+# 中文本地化
+locals:
+  tags: 标签
+  about: 关于
+  newest: 最新文章
+  archive: 归档
+
+gems: [jekyll-paginate]

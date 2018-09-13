@@ -1,0 +1,3 @@
+User-Agent: *
+
+Sitemap: http://pysnow530.github.io/sitemap.txt
