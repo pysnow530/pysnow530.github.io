@@ -2,7 +2,7 @@
 layout: post
 title: Linux命令之top
 categories: 编程
-tags: linux,top
+tags: linux top
 ---
 
 > top命令可以动态实时地显示系统的运行状态，它的输出包括系统信息、进程信息和线程信息等。这篇文章主要讲解top输出的各项信息，以帮助用户更好的理解和使用top。
