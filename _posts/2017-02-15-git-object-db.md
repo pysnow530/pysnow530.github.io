@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Git之对象数据库
-categories: 工具
+categories: 编程
 tags: git
 ---
 

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 为什么我不使用JetBrains的屌炸天编辑器
-categories: 工具
-tags: 编辑器
+categories: 编程
+tags: editor
 ---
 
 首先解释一下，JetBrains并没有出过一款叫做“屌炸天”的编辑器。
