@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="pysnow530 的博客">
+<meta property="og:url" content="https://pysnow530.github.io/page/2/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pysnow530@163.com">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不要踩坏我的圆</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-celery-fabric-ssh-w" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/12/celery-fabric-ssh-w/" class="article-date">
+  <time datetime="2018-09-12T16:00:00.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/12/celery-fabric-ssh-w/">celery使用fabric出现大量ssh -W进程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>公司的运维平台有很大一部分是python写的。</p>
+<p>发布系统不可避免的要与远程机器做交互，我们选择了基于paramiko的fabric模块来完成这部分工作。</p>
+<p>由于发布过程中存在大量耗时很久的任务，所以选用了celery来执行异步任务。有一部分远程操作是通过celery的任务调用fabric来完成的。</p>
+<h2 id="出现大量ssh-W"><a href="#出现大量ssh-W" class="headerlink" title="出现大量ssh -W"></a>出现大量ssh -W</h2><p>在某一天，突然接到运维同学的反馈，说生产环境存在大量ssh -W进程，希望可以查一下出现的原因。</p>
+<p>通过定位，很快确认了是ssh连接远程时使用了ProxyCommand，导致出现了ssh -W进程，这些进程实际上是ssh连接到远端的代理。</p>
+<p>但是奇怪的是，为什么任务执行完后仍然存在大量ssh -W不能正常退出。</p>
+<p>后来通过阅读fabric的源代码，在代码里找到了答案。</p>
+<p>fabric/state.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Host connection dict/cache</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">connections = HostConnectionCache()</span><br></pre></td></tr></table></figure>
+
+<p>fabric/network.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HostConnectionCache</span><span class="params">(dict)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    ...</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Force a new connection to ``key`` host string.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">from</span> fabric.state <span class="keyword">import</span> env</span><br><span class="line"></span><br><span class="line">        user, host, port = normalize(key)</span><br><span class="line">        key = normalize_to_string(key)</span><br><span class="line">        seek_gateway = <span class="literal">True</span></span><br><span class="line">        <span class="comment"># break the loop when the host is gateway itself</span></span><br><span class="line">        <span class="keyword">if</span> env.gateway:</span><br><span class="line">            seek_gateway = normalize_to_string(env.gateway) != key</span><br><span class="line">        self[key] = connect(</span><br><span class="line">            user, host, port, cache=self, seek_gateway=seek_gateway)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Autoconnect + return connection object</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        key = normalize_to_string(key)</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self:</span><br><span class="line">            self.connect(key)</span><br><span class="line">        <span class="keyword">return</span> dict.__getitem__(self, key)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">disconnect_all</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Disconnect from all currently connected servers.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Used at the end of ``fab``'s main loop, and also intended for use by</span></span><br><span class="line"><span class="string">    library users.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">from</span> fabric.state <span class="keyword">import</span> connections, output</span><br><span class="line">    <span class="comment"># Explicitly disconnect from all servers</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> connections.keys():</span><br><span class="line">        <span class="keyword">if</span> output.status:</span><br><span class="line">            <span class="comment"># Here we can't use the py3k print(x, end=" ")</span></span><br><span class="line">            <span class="comment"># because 2.5 backwards compatibility</span></span><br><span class="line">            sys.stdout.write(<span class="string">"Disconnecting from %s... "</span> % denormalize(key))</span><br><span class="line">        connections[key].close()</span><br><span class="line">        <span class="keyword">del</span> connections[key]</span><br><span class="line">        <span class="keyword">if</span> output.status:</span><br><span class="line">            sys.stdout.write(<span class="string">"done.\n"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>原来，fabric默认会维护一个连接缓存，并且不会主动断开这些连接，直到脚本结束垃圾回收时自己断开。但是由于使用了celery，celery是常驻进程不会退出，导致fabric不能自己主动释放连接，所以连接一直在，ssh -W也一直在。</p>
+<p>知道原因，就很好解决了。可以主动调用network.disconnect_all()来释放连接，或者干脆就保持着连接，以待下次使用。</p>
+<p>需要注意的是，HostConnectionCache是一个全局变量，在celery这类常驻进程中使用还是存在一些坑的。</p>
+<h2 id="cpu飙升到100"><a href="#cpu飙升到100" class="headerlink" title="cpu飙升到100%"></a>cpu飙升到100%</h2><p>知道原因后，我做了一个kill操作，手动将ssh -W杀死了。这时候，再次向之前的目标机发送命令时，ssh应该会报错，因为代理被干掉了。</p>
+<p>意料之中，系统再次执行命令时果然提示“broken pipe”。</p>
+<p>但是，奇怪的是，运行celery的机器，cpu占用率达到了100%。这就有点奇怪了。</p>
+<p>查找原因无果，在github上提交了一个issue <a href="https://github.com/paramiko/paramiko/issues/1277" target="_blank" rel="noopener">https://github.com/paramiko/paramiko/issues/1277</a>。ploxiln提供了另一个关联issue，表明这是paramiko库的一个bug，通过链接可以查找到patch文件。</p>
+<p>到此，问题都已解决。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2018/09/12/celery-fabric-ssh-w/" data-id="ck7768vkw0004zvkrc2b141ki" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-the-art-of-niubility" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/08/the-art-of-niubility/" class="article-date">
+  <time datetime="2017-04-08T16:00:00.000Z" itemprop="datePublished">2017-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/08/the-art-of-niubility/">吹牛逼的艺术</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>写下这个题目，我是非常心虚的。因为我不会吹牛逼。</p>
+<p>不过我想起了之前做过的一些软件系统，它们最开始看上去确实其貌不扬，但是经过不断地优化改进，最终的效果非常令人满意。</p>
+<p>所以我决定写这么一篇其貌不扬的文章，或者说给自己看的一份指南，就像手机使用指南一样。不同的是，这份指南不提供产品，因为我们指导的其实就是我们自己。然后，我来慢慢地把它优化改进，让它变成一份更有参考价值的指南。</p>
+<p>不得不说，吹牛逼是一件很有技术含量的事。</p>
+<h2 id="为什么我们需要吹牛逼"><a href="#为什么我们需要吹牛逼" class="headerlink" title="为什么我们需要吹牛逼"></a>为什么我们需要吹牛逼</h2><p>我觉得我们是需要吹牛逼的，就像我们需要手机。</p>
+<p>对于个人，吹牛逼能将我们丰富的内心世界跃然嘴前。为了不让这么一个美丽的心灵埋没，我们必须要学会吹牛逼的能力。</p>
+<p>对于他人，吹牛逼能把我们的神奇经历传授于众，让人们的生活更丰富。</p>
+<h2 id="如何吹牛逼"><a href="#如何吹牛逼" class="headerlink" title="如何吹牛逼"></a>如何吹牛逼</h2><p>要想吹一个满分的牛逼，需要做到下面几点：</p>
+<ol>
+<li>必须要有吹牛逼的资本。吹自己擅长的，不吹自己不擅长的（这时要吸）。</li>
+<li>吹牛逼一定要吹实，不吹虚。如果吹虚不务实，再牛的逼也会被吹破，让自己陷入尴尬的境地。</li>
+<li>吹牛逼一定要打草稿。不打草稿的牛逼，往往是吹到一半就卡壳泄了气。</li>
+<li>平日一定要注意自己的言行。要时刻牢记，注意当下的言行，以为我们日后吹牛逼积攒资本。</li>
+<li>勤学苦练。我觉得这个在最开始是最难的，因为最开始可吹的牛逼是很少的。这是个量变到质变的过程，不可强硬，顺其自然。</li>
+<li>从小事练起。吹牛逼非一日之功，而且要注意从一些微不足道的地方练起，从走路吃饭说话写字练起，吹可吹与不可吹之牛逼。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/08/the-art-of-niubility/" data-id="ck7768vmb001kzvkr8e351myw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-basic-principle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/07/python-basic-principle/" class="article-date">
+  <time datetime="2017-04-07T16:00:00.000Z" itemprop="datePublished">2017-04-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/07/python-basic-principle/">唠唠python(9) -- 基础概念的梳理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>温顾而知新，可以为师矣。</p>
+</blockquote>
+<p>温顾知新，可以为师。当然，我们的目标不是为师。</p>
+<p>时常复习一下自己学习到的东西，是一种不错的习惯。就像牛的反刍，复习是对已有知识的梳理，这个过程既轻松，又能更好的巩固我们的所学，而且时常还可以关注到自己之前因匆忙而遗漏的东西。</p>
+<p>当然，这篇文章草草看一下也是可以的，有很多东西是不需要一次掌握的。</p>
+<p>当我们都意识不到有这么一个概念时，实际上已经掌握个七八分了，只需要再稍微整理一下思路，就可以轻松掌握了。这就是所谓的质变吧？</p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>我们首先得说说“术语”这个词。</p>
+<p>“术语”听起来给人的第一印象是吓人，又是什么神奇的正常人看不懂的东西？</p>
+<p>为什么会有术语这种神奇的东西呢？</p>
+<p>人类的语言是很重要的，从诞生以来，它大大提高了人们沟通的效率。但是随着语言的发展，同一个词都衍生出了多种意思，而在使用不当的情况下，语言恰恰又阻碍了人们的沟通。</p>
+<p>怎么来避免这种一词多义的情况呢，于是人们发明出了术语这么个东西。术语的特点在于，在某种特定的领域或上下文中，同一个术语是精确的，它会被多方理解成同一种意思，这样人们就达成了共识。</p>
+<p>说白了，术语就是为了使大家沟通的过程尽可能少的产生歧义。</p>
+<p>为了达到这种目的，术语就不得不避开我们平日经常会用到的词。这就导致术语看起来稀奇古怪，对我们不那么友好。实际上，它是为了精确的沟通而作了妥协，我们要体谅。</p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">"hello, I'm a string"</span></span><br></pre></td></tr></table></figure>
+
+<p>我们之前说，<code>print</code>可以显示“一句话”。实际上，“一句话”是非常不准确的，因为一句话有可能是我们听到的一段录音，也有可能是文章中的文字。我们可以找个更明确的词。</p>
+<p>在计算机中，一个字母<code>a</code>叫做一个字符。顾名思义，就是一个符号，它代表一个字母。就像我们的羊肉串是把很多羊肉串起来，我们之前所说的“一句话”是由一个或多个字符组成的，故叫做字符串。</p>
+<p>“a”是字符串，”abc”也是字符串。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"hello, I'm a string"</span></span><br><span class="line"><span class="keyword">print</span> s</span><br></pre></td></tr></table></figure>
+
+<p>根据我们之前的解释，s类似于一个箱子，它可以把我们的字符串”hello, I’m a string”放进去，在使用的时候（如print s）再从里面取出来，这样就达到了类似箱子一样的暂存功能。</p>
+<p>这里的箱子只是一种类比，在语言中有一个术语，叫做“变量”，这个术语听起来怪怪的，不那么直观。它实际上是从数学里借来的概念（说借并不合适，计算机本就是数学的一个分支），意思是没有固定的值，可以改变的数。到计算机里，它也可能是字符串或其它类型的东西。</p>
+<p>这里的“变”很好理解，一个箱子可以放衣服，也可以放鞋袜。</p>
+<p>当然，有变量就会有常量。比如我们的文具盒只能放铅笔像皮，放不下衣物。python是一门简洁的语言，在语法上是没有定义常量的，所以我们可以不需要纠结“常量”的概念，在这里提到是为了帮助我们理解“变量”这个概念。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p>我们说洗衣机把洗衣服的很多步骤打包封装起来，只留给我们一个按钮开关。“洗衣机有洗衣服的功能”，虽然听起来有点白痴，但它确实是个事实。</p>
+<p>功能的概念是很好好理解的。它比较接近我们的生活。</p>
+<p>在计算机中也有一个概念，叫做“函数”，它是比功能更准确的一种描述。这也是一个从数学中借用过来的概念，它并非我们日常生活中提到的功能，而就是单指语言中所提供的对步骤的封装。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>类是使用了生物学中的概念。</p>
+<p>生物学中对生物有“界门纲目科属种”的不同精细程度的分类，如豹是猫科，豹属，再细分下来是豹种。计算机语言相对于生物学分类，它只有类的概念，但它提供了继承，即豹可以继承自动物，所以在计算机语言中同样可以提供如生物学分类中那样复杂的从属关系。</p>
+<p>类中有类似变量和函数的概念，习惯上被称为属性和方法，以区分我们上面谈到的变量和函数。</p>
+<p>实际上，类在计算机里并不是必要的。在一些古老的计算机语言里，甚至都不存在类这个概念。</p>
+<p>使用类来抽象现实世界的编程方式，又叫做面向对象编程。而不使用类，仅使用函数和变量的编程方式，叫做面向过程编程。前者更接近人类的思考模式，但需要我们掌握更多的概念。</p>
+<h2 id="库"><a href="#库" class="headerlink" title="库"></a>库</h2><p>我们之前在操作表格文件时，用到过一个openpyxl包。它是一些类和函数文件的集合。</p>
+<p>为了更精确地描述，我们有时会把包称作“库”。我们通常会把从网上找到的库叫做第三方库。</p>
+<p>那哪些是第一方库和第二方库呢？有点意思，哈哈。</p>
+<p>我们同样可以把单个文件作为类和函数等的集合。通常我们会把单文件的包叫做模块，比如之前的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> os.name</span><br></pre></td></tr></table></figure>
+
+<p>为了演示方便，我们使用了一个随python语言打包的模块，叫做<code>os</code>。它实际上就是一个模块。</p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>想要装一个完美的x，熟悉并掌握这些概念是必须的。</p>
+<p>不过不必急于求成，就算我们不掌握这些概念，对我们的学习也没有太大影响。</p>
+<p>有很多优秀的东西，我们是可以潜移默化地吸收的。可能突然有一天，我们回头时猛然发现，以前不明不白的概念，竟然已经被我们彻底理解了。</p>
+<p>在那之前，我们可以继续愉快地叨叨。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/07/python-basic-principle/" data-id="ck7768vlj000tzvkrbn04cijn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-round-excel-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/03/python-round-excel-data/" class="article-date">
+  <time datetime="2017-04-03T16:00:00.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/03/python-round-excel-data/">唠唠python(8) -- 使用脚本代替手工数据操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个问题已经过了很多天了，都记不太清细节了。</p>
+<p>先捋一捋我们的需求。</p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p><img src="/public/img/post/bom.png" alt="待处理表格"></p>
+<p>这个表格有点熟悉，好像在之前的文章里看到过。我们还是以它为例子。</p>
+<p>我们有一张如上的物料订单表格。每两行对应一种物料，即需要的料数和订购的料数。不同的列对应不同时期需要的物料数量。</p>
+<p>因为供应商提供给我们的物料都是以10000为单位的，所以就算我们只需要9颗料，也要订购10000颗料。也就是以10000为单位，对料数上取整。</p>
+<p>我们看到其中有一些表格的数量是红颜色，它表示这些数据已经被手工填写了。每个单元格的料数以10000为单位上取整后，被填入它下面的一个单元格。</p>
+<h2 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a>计算公式</h2><p>我们在之前的文章里已经给出了订单数量的计算公式：<code>(n+10000-1) / 10000 * 10000</code>，其中n为需要的实际数量。</p>
+<h2 id="功能清单"><a href="#功能清单" class="headerlink" title="功能清单"></a>功能清单</h2><p>我们列一下需要的功能清单：</p>
+<ol>
+<li>打开或保存excel文件</li>
+<li>读取或写入单元格</li>
+</ol>
+<p>再不需要其它的功能了。</p>
+<p>上一篇讲到的<code>openpyxl</code>很好地实现了我们需要的这些功能。</p>
+<p>打开excel使用<code>workbook = openpyxl.load_workbook(&quot;excel文件位置&quot;)</code>，保存使用<code>workbook.save(&quot;保存到的路径&quot;)</code>。</p>
+<p>读取某个单元格使用<code>print sheet[&quot;B5&quot;].value</code>，写入某个单元格使用<code>sheet[&quot;B5&quot;] = 30000</code>。其中<code>sheet</code>是我们使用<code>workbook.active</code>获取的工作簿里的第一张表格。</p>
+<h2 id="几点逻辑"><a href="#几点逻辑" class="headerlink" title="几点逻辑"></a>几点逻辑</h2><p>我们需要对上面的表格中，I3到S28的奇数行数据查看一遍，还需要根据单元格的内容和它下面一个单元格的内容来判断是否需要处理单元格数据。</p>
+<p>挨个查看一遍我们会用到一个这样的语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    处理row行数据</span><br></pre></td></tr></table></figure>
+
+<p>这条语句的意思是，row分别等于3到28（不包含28）的奇数，然后依次执行下面的语句。后面的2是说，从3开始，取相隔为2的数。</p>
+<p>这里有一点需要注意，我们的行号是数字表示的，但是列号是字母，我们需要先把字母转换成数字，在处理每一列时，再把数字转换成字母。庆幸的是，python已为我们准备好这些了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(ord(<span class="string">"I"</span>), ord(<span class="string">"U"</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = chr(col)</span><br><span class="line">        处理(row, col_char)单元格数据</span><br></pre></td></tr></table></figure>
+
+<p><code>ord()</code>是将一个字母转化为数字，<code>chr()</code>是将数字转化回字母。注意我们给ord(“U”)加了一个1，因为ord(“U”)是不包含U的。我们再一次与python的作者来了一场完美的合作。</p>
+<p>判断是否需要处理单元格，我们可以使用下面这条语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> sheet[<span class="string">"I3"</span>].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> sheet[<span class="string">"I4"</span>].value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    处理I3单元格</span><br></pre></td></tr></table></figure>
+
+<p>意思也很好懂，翻译过来就是，如果I3单元格不是空的，并且它下面的I4单元格是空的，我们就处理I3单元格，并将处理结果填充到I4单元格。</p>
+<h2 id="实现脚本"><a href="#实现脚本" class="headerlink" title="实现脚本"></a>实现脚本</h2><p>说了这么多，其实脚本已经差不多了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">"a.xlsx"</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count_bill</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (n+<span class="number">10000</span><span class="number">-1</span>) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(ord(<span class="string">"I"</span>), ord(<span class="string">"U"</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = chr(col)</span><br><span class="line"></span><br><span class="line">        cell_src_idx = col_char + str(row)</span><br><span class="line">        cell_dst_idx = col_char + str(row + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sheet[cell_src_idx].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span></span><br><span class="line">                sheet[cell_dst_idx].value <span class="keyword">is</span> <span class="literal">None</span>):</span><br><span class="line">            n = int(sheet[cell_src_idx].value)</span><br><span class="line">            sheet[cell_dst_idx] = count_bill(n)</span><br><span class="line"></span><br><span class="line">sheet.save(<span class="string">"b.xlsx"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>14行代码，就实现了我们的需求。它读取当前目录下的a.xlsx文件，并根据我们之前所说的规则，处理指定范围内的表格数据，并将处理后的结果保存到一个新文件b.xlsx。</p>
+<p>它真正将我们从枯燥无味的繁重工作中解放了出来，终于可以安心地睡个好觉了。</p>
+<h2 id="更好的脚本"><a href="#更好的脚本" class="headerlink" title="更好的脚本"></a>更好的脚本</h2><p>当然，它还不够好，我们在这篇文章里不打算再把它变得更好，因为这个过程是很漫长的。但是它现在已经能帮我们节省比付出多几十倍甚至几百倍的时间。</p>
+<p>它不够好，还能做怎么样的改进呢？</p>
+<p>第一，里面全是代码，代码相对于人类自己的语言来说总没那么直观，毕竟我们是在迁就计算机嘛。</p>
+<p>第二，每次执行时都要修改代码（输入输出文件名和单元格范围），十分之不友好。我们希望它可以让我们通过文件选择框选择某个文件，然后用鼠标拖选出我们要处理的范围，并询问我们要保存到哪个文件。</p>
+<p>以上两点是显而易见的，特别是第二点。</p>
+<p>不过最紧急的事情完成了，这个脚本已经可以帮我们节省下大量时间，以实现我们上面所说的改进了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>终于把处理表格的傻逼工作交接给了计算机，可以舒一口气了。</p>
+<p>为了不加重我们的心理负担，文章里有很多地方只是一带而过。至少对现在这个阶段来说，不需要知道的东西都是不重要的。如果哪里感到困惑，恭喜，这说明我们并不满足现状，想要一个更清晰的结果。</p>
+<p>下一篇，我们先不急着改进上面说的两点不足，它们已经不那么紧急了，我们先来回顾一下之前提到的内容，并重新整理一下知识结构，让他们形成一个清晰的脉络，以便为以后装逼打下坚实的基础。</p>
+<p><img src="/public/img/post/venation.jpg" alt="叶脉"></p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>零零散散地终于把这个脚本完成了，是时候回过头来梳理一下了。</p>
+<p>跟<a href="http://jinguoliang.github.io/" target="_blank" rel="noopener">小金</a>约定，两天或两天以上的假期，每天一篇文章，失约100红包。本是想逼迫自己，竟然有时候写的不易乐乎，到了凌晨2、3点钟还在想读者会不会读懂这句话在说什么。</p>
+<p>作者从读者的角度思考，读者又反过来从作者的角度思考，想想真的是一件很有趣的事情。</p>
+<p>不得不说，写作的过程很快乐，虽然可能没有什么人看，但它至少已经帮助到了我。希望可以尽自己的一点微薄之力，让碰巧看到的人能生活得更轻松。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/03/python-round-excel-data/" data-id="ck7768vlu0015zvkrhasg2hr8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-package" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/02/python-package/" class="article-date">
+  <time datetime="2017-04-02T16:00:00.000Z" itemprop="datePublished">2017-04-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/02/python-package/">唠唠python(7) -- 包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我们打基础的最后一节。下一节，我们就来兑现之前许下的承诺，用脚本来实现表格的自动处理。</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>这里所说的包就是《你的背包》的包，是对背包概念的一种模拟。</p>
+<p>这两天小郭去武汉玩，为了途中更方便一点，我就把我的背包给她用了（其实是我一直在用她的背包😁）。我担心公司有一些事务要处理，所以一直都保持着背笔记本回家的习惯。最近几天都是手拿笔记本，十分的不方便。</p>
+<p>所以你看，包还是很重要的。</p>
+<p>我们一般会把一些平时经常用到的物品放到书包，如果我们有多个包，则会把同类物品放到同个包。比如我们把纸笔放进背包里，只要背着这个背包出去，就可以在需要的时候写字了，而且背在肩上很方便。</p>
+<p>python里的包也是类似的用途。</p>
+<h2 id="python中的包"><a href="#python中的包" class="headerlink" title="python中的包"></a>python中的包</h2><p>互联网的兴起，让全球的人都可以有机会合作，大大提高了人们的工作效率。</p>
+<p>实际上，python中的包还有另外一个异常重要的作用：复用。比如，我们之前说的表格处理的例子，世界上有很大一部分人都会用到表格处理的功能，如果大家每人做一套工具来操作表格（比如读取或写入表格中的某个单元格），成本很高，不利于人类知识的叠加。有句话叫站在巨人的肩膀上，说得很有道理。</p>
+<p>那怎么做呢？</p>
+<p>把我们的功能合集打个包，而且只把人们要用的东西提供出来。举个例子，我们要读取某个单元格的数据（比如我们要读取B5单元格的数据），只需要<code>sheet[&quot;B5&quot;].value</code>就可以了，具体怎么获取的，交给那个精通表格文件处理的人就可以了，我们不需要理会。</p>
+<p>背包很好理解，但python中的包听起来就有点玄乎了。python中的包到底是什么东西呢？或者说，它的外在表现是什么呢？</p>
+<p>我们之前把洗衣服的操作封装成一台洗衣机，叫做功能。又把人的说学逗唱的功能和人的姓名等属性封装成一个人类的概念，叫做类。包其实就是一个功能和类的合集，也就是说，它里面既包含有功能，又包含有类。说白了，其实就是把我们之前所有的代码放到一块。</p>
+<h2 id="使用包"><a href="#使用包" class="headerlink" title="使用包"></a>使用包</h2><p>之前我们讨论类的时候，自己亲自写了一个类来更深入的体会类的概念。</p>
+<p>现在我们使用包，再来亲自手写一个包？</p>
+<p>这次我们不写了，我们之前谈到封装，其实就是把细节隐藏起来，而让一个东西更好用。比如一台洗衣机，我们只需要学会按按键就可以了。如果我们读了洗衣机的使用说明还不知道洗衣机怎么用，只能说这台洗衣机做得太烂了，或者说交互太差了。</p>
+<p>我们直接来使用一个包体验一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">print</span> os.name</span><br></pre></td></tr></table></figure>
+
+<p>执行上面两条命令后，会显示当前系统的名称。如在mac下，会显示”posix”。它是怎么获取的，我们并不关心，只要返回的名称正确，我们就认为，嗯，小伙子干得不错。</p>
+<p><code>import</code>意思是使用，我们请求使用os包，并要求显示我们os的name。</p>
+<h2 id="读取表格文件"><a href="#读取表格文件" class="headerlink" title="读取表格文件"></a>读取表格文件</h2><p>我们已经来到了这里：读取表格文件。</p>
+<p>只要能用语言精确表达出来的功能，大部分都很简单，而且非常有可能已被其他人实现了。表格处理就是这样。</p>
+<p>现在有一个问题，既然这个包有可能已经被实现了，那我们怎么获取这个包呢？</p>
+<p>我们知道肯定不止一个包可以做这种操作。一般我们会在网上搜索大量资料，然后对比选取符合我们需求的包。</p>
+<p>假设我们已经阅读并对比了大量资料，发现了一个可以读写表格文件的库，叫做<code>openpyxl</code>。</p>
+<p>现在我们要准备安装这个包了。这是一个最好的时代，只要确定了使用哪个包，安装极其简单，我们甚至都不用关心去哪里下载，下载完成后要做什么，它会不会依赖其它的包，等等等等这些问题。python已为我们准备好了安装的方式。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install openpyxl</span><br></pre></td></tr></table></figure>
+
+<p>是的，就是这么一条简单的命令。然后稍许的等待，这个包就安装成功了。真的方便极了，美好的东西总能让我们心情愉快。我们甚至也不用关心它被安装到了哪，直接用就可以了。</p>
+<p>想想如果我们用表格处理软件查看B5单元格的数据。先打开目标表格文件，然后翻到第一张表格（一个表格文件对应一个工作簿，里面可能有多张表格），找到B5单元格，并查看内容。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">'a.xlsx'</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> sheet[<span class="string">"B5"</span>].value</span><br></pre></td></tr></table></figure>
+
+<p>就这么简单的几行，就把<code>B5</code>单元格的内容显示出来了。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>现在我们已经可以获取表格中的某个单元格了，写入跟获取是同样简单的。下一篇我们来看如何写入，以及如何来实现我们之前的物料取整问题。</p>
+<p>终于可以不用对着成百上千的数据心力交瘁，提心吊胆了。可以有更多时间喝咖啡了。想想好激动。</p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>晚上9点30，写完了，可以去吃饭了，哈哈。</p>
+<p>老板来一个煎饼果子，一盒水果，一个鸡腿。街边小吃让人愉悦。</p>
+<p>想起申总的一句话：不吃街边小吃的人，不知道要丧失多少乐趣。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/02/python-package/" data-id="ck7768vls0013zvkrayhla0wc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-big-idiot" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/01/big-idiot/" class="article-date">
+  <time datetime="2017-04-01T16:00:00.000Z" itemprop="datePublished">2017-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/01/big-idiot/">读《巨婴国》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>读完这本书已经有两个月了。其间恰好碰上过年，我回到山东老家，冬天冰冷的雪夜里，或是乍暖还寒的清晨，看着捧在光下发黄的屏幕，别有一番滋味。</p>
+<p><img src="/public/img/post/big-idiot.jpeg" alt="巨婴国封面"></p>
+<p>第一次看到封面上奇形怪状的小人时，以为是一本漫画书。这本书读起来很轻松，思考起来又有点沉重。</p>
+<p>书中有很多很有意思的观点，比如谈到“普遍缺席的父亲”，“把儿子视为权利争夺战筹码的母亲”。我对这些并不感冒，我的父母给了我足够的爱与自由。</p>
+<p>我感触最深的一点，是讲到“中国式好人”。武志红说他自己就是一个典型的“中国式好人”，可能大部分人读到都会产生共鸣吧，毕竟“中国式的好人”占了绝大多数，因为有集体主义在压着。</p>
+<p>我们总是有意无意地被灌输集体主义的思想，一切为了集体，要牺牲小我成就大我。这其实就是在压制自己，因为自私是人的天性。</p>
+<p>从达尔文的进化论来看，生物的进化，靠的是物竞天择，而不同物种如何竞争？</p>
+<p>我们在初中时就已经知道了，即使是单细胞生物，也懂得“趋利避害”的道理。当然，说懂得是过分了，它们不用懂得，竞争会把基因里存在“趋利避害”特性的物种筛选出来。</p>
+<p>我身边有很多人，包括过去的我，都不好意思为自己争取利益，唯恐被人说闲话，或者自己道德上过不去。</p>
+<p>书中也提到一个原因，如果我们把自己的某部分毁掉，比如我们不为自己争取利益，那我们就站在了道德的制高点，“我把本属于自己的一部分都不要了，你还怎么来指责我？”但越是打压自己的天性，我们的能量就会变得越萎缩。</p>
+<p>不自私的人还容易碰到的一个问题是，述情障碍。我们接受的教育是，个人要服从集体，这导致我们很难感受到自己的感觉。自私的人是坏的，是可耻的。所以我们拒绝自己自私的部分，我们不想让自己的那部分阴暗被别人看到，被拒绝的部分就陷入了黑暗。</p>
+<p>“中国式好人”不懂得拒绝。一切为了他人，导致自己最后活得很累。而且情况往往是，我们一边帮助他人，一边却又在抱怨，因为我们并不是因为感觉到了他们的困难，而是集体主义教导我们要帮助他人，不然自己就太自私了。</p>
+<p>“中国式好人”没有自己的个性。个性是对集体的背叛，在一个以集体为生活单位的环境下，被集体排斥是很恐怖的一件事情。所以很多人为了融入集体，干脆泯灭了自己的个性。</p>
+<p>自私是个好东西。只有能充分感知到自己的感受，我们才能对别人的处境感同身受，也才能真正发自内心地想去帮助他人。</p>
+<p>自私对公司的管理一样有很大的好处。吴军在讲到公司管理时引入了一个数学概念，我觉得很好，叫做“利益最大化函数”，即我们将公司的发展与员工的利益绑定，员工为自己获得最大利益的同时，也可以为公司做出最大的产出。但是，如果一群人都是一群集体主义下催生的僵尸，没有感情，没有创意，打一鞭子就动一动，这样的人，做出的产出能有多少？</p>
+<p>“老油条”应该就是这么来的吧？</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/01/big-idiot/" data-id="ck7768vku0003zvkrcegsh39k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-the-art-of-readable-code" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/28/the-art-of-readable-code/" class="article-date">
+  <time datetime="2017-03-28T16:00:00.000Z" itemprop="datePublished">2017-03-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/28/the-art-of-readable-code/">读《编写可读代码的艺术》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>感谢公司的图书角，让我免费读到了这样一本好书。</p>
+<p>用kindle已经有一段时间了，也陆陆续续地在上面买了一些电子书。但慢慢地发现，还是读纸质书来得舒服，翻起来也方便。当然，最好是自己买的书，可圈可点，不喜欢的书还可以拿来擦屁股。</p>
+<p>然后我就联想到了李敖的读书秘诀，给大家摘一段体会一下：</p>
+<blockquote>
+<p>我李敖看的书很少会忘掉，什么原因呢？方法好。什么方法？心狠手辣。剪刀美工刀全部用到，把书给分尸掉了，就是切开了。这一页我需要，这一段我需要，我把它按类别分开来。那背面有用怎么办呢？把它影印出来，或者一开始就买两本书，把两本书都切开以后整理出来，把要看的部分分类留存。结果一本书看完了，这本书也被分尸掉了。这就是我的看书方法。</p>
+</blockquote>
+<p>虽然有点偏激，但至少说明，读书要活读，要跟书互动，产生参与感，还要温故知新，常翻常新。纸质书可以做到，电子书总归不那么方便。</p>
+<p>《编写可读代码的艺术》，一个书名就已经道出了它接下来的目标了。谈到艺术，大多时候是从微小处着眼，细细体味，而非一个hello world那么简单。有生活，有哲学，代码也该像一件精心雕琢的艺术品。</p>
+<p>这本书的结构已经非常清晰了，再做总结总显啰嗦。下面是我读这本书时想到的，并非笔记。</p>
+<h2 id="想人所想"><a href="#想人所想" class="headerlink" title="想人所想"></a>想人所想</h2><p>这个标题看起来一点都不酷，但是做起来甚至会感动到我们自己。我们不想看到队友因为看不懂代码而苦恼的样子，我们的用户已经疲惫不堪，我们不想让他们再承受着蹩脚的使用体验。</p>
+<p>写代码和写文章是极其类似的，作者要站在读者的角度思考问题。</p>
+<p>读者读到这个词时是否会理解它，会不会产生歧义，是否需要了解某个背景，这段话是不是多余，会不会太啰嗦。</p>
+<p>作者要思考比读者多得多的东西，因为作者这个角色本身，是包含了读者角色的双重角色。</p>
+<p>站在再高一点，从系统用户的视角来看，这个字段的描述用户是否能看懂，是否正确理解了它的用途，有没有必要填写，用户是否可直观地了解有哪些注意事项，是否知道在做什么，当用户看到这个提示时是否知道它在说什么，blahblahblah一大坨，慢慢体会。</p>
+<p>我们即是作者，又是读者；即是开发者，又是维护者；即是产品，又是用户。</p>
+<h2 id="遵循惯例"><a href="#遵循惯例" class="headerlink" title="遵循惯例"></a>遵循惯例</h2><p>遵循惯例可以看作是“想人所想”的一部分。</p>
+<p>每个行业都有自己的惯例。伴随着行业的发展，大家在相互配合中，整理出了一些行之有效的通用规则。</p>
+<p>理想的情况是，这些通用规则，本行业的人，大家耳熟能详。</p>
+<p>既然大家耳熟能详，就很少存在误解，也可能更好地被理解。这无疑对读者更友好。</p>
+<p>当然，惯例也有可能带来相反的效果。《编写可读代码的艺术》里提到过一个例子，<code>get_xxx()</code>按惯例来说就该是O(1)复杂度的函数，该书作者坚信这一点，结果该函数并非O(1)函数，导致作者在优化速度时吃了点苦头。</p>
+<p>不过就像爱情一样，惯例是有的，你坚信，准没错，至少它能保证你在80%的情况下是正确的。这很值。</p>
+<h2 id="讲究卫生"><a href="#讲究卫生" class="headerlink" title="讲究卫生"></a>讲究卫生</h2><p>一张干净的脸总是讨人喜欢的。</p>
+<p>记得小时候家里不富裕，还穿过打补丁的裤子。老师教导我们，裤子破了打补丁很正常，但即使打了补丁，也要把裤子洗干净。一个漂亮的补丁，甚至会给一条旧裤子增色，就是这样。</p>
+<p>在我的理解里，讲究卫生意味着整洁和干净。注意变量的出场顺序，把相关的代码或变量分块，都是一些好习惯。</p>
+<p>好的代码就是要看上去赏心悦目。</p>
+<p>可能有的人觉得，只要让系统运行起来就万事大吉了，很明显，这是不负责任。</p>
+<p>我维护过一些系统，杂乱且无用的旧代码像战场上的残骸，任性的空格空行天马行空放荡不羁，拷贝的痕迹随处可见。这些都会加重读者的心理负担。</p>
+<p>当然，我们也有能力写出这样的代码，所以，可以安静下来想想，怎么对待自己。</p>
+<h2 id="提升技能"><a href="#提升技能" class="headerlink" title="提升技能"></a>提升技能</h2><p>书中提到一点我觉得很受用：偶尔地翻一下语言内置的和常用的第三方库。</p>
+<p>维护代码需要很大成本，甚至我们的大部分时间都是在做维护的工作。以我之前做的“代码发布系统”为例，开发用了一个月，后期的维护已经达到8个月之久，而且还会持续下去。</p>
+<p>而大部分第三方库都已经过严格测试，而且可以节约我们的维护成本。</p>
+<p>有的程序员喜欢重造轮子，出于学习目的或现存库不能满足需求还好，如果是为技术而技术，可要在关键时刻提醒一下自己啰。</p>
+<h2 id="屏蔽细节"><a href="#屏蔽细节" class="headerlink" title="屏蔽细节"></a>屏蔽细节</h2><p>最后一点同样重要，帮助我们的读者隐藏不必要的细节。</p>
+<p>函数的一个好处是，它把繁杂的上下文剥离开，让理解变得简单。比如，<code>send_mail_html(mail_address, html)</code>这个函数可以给指定邮箱地址发送一段html类型的文本，只要函数封装地够好，用户或主调函数无需关心它的实现细节。</p>
+<p>这也是自下而上编码的好处，上层提供了比下层更高一级的操作接口，并为用户屏蔽下层的实现细节。从这个意义上来说，编程语言也是自下而上中的一层实现，语言的细节我们无需关心，只要它封装地够好且使用无歧义。</p>
+<p>再往大了说，一个好的团队也应该有屏蔽彼此细节的能力，团队中的成员由不同的领域专家组成，大家的职责彼此正交。这时，如果你是一个虚拟化技术的专家，而我更擅长用系统来为大家提供帮助，如果我的系统需要申请一个临时环境，调用你的一个接口，我可以获得一个可用的ip，你怎么生成这个环境我不关心，我怎么用你也不用关心。再这时，如果我们要改变容器的管理方式，这对我们的用户是透明的，也就是说，他们甚至都不知道我们在做这一操作，用户只需关心他们所应关心的内容即可。</p>
+<p>函数的使用亦如是，彼此一体却又边界清晰。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>编码如是，生活亦如是。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/28/the-art-of-readable-code/" data-id="ck7768vmc001mzvkr5lnack7c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-class" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/24/python-class/" class="article-date">
+  <time datetime="2017-03-24T16:00:00.000Z" itemprop="datePublished">2017-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/24/python-class/">唠唠python(6) -- 事物的边界和内在</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>上一篇文章，我们讲到可以将一批操作打包成一个“功能”，从而屏蔽其内部实现的细节。</p>
+</blockquote>
+<blockquote>
+<p>这篇文章，我们将对屏蔽细节做出进一步的努力，并让计算机的世界更符合我们的直观感受。</p>
+</blockquote>
+<h2 id="边界的重要性"><a href="#边界的重要性" class="headerlink" title="边界的重要性"></a>边界的重要性</h2><p>昨天走在街上，看到一只动物，长得个绵羊样，体型却小得多。想起之前看到狗伪装成熊猫的样子，我就在心想，这可能也是一只演技派超强的狗。</p>
+<p>在平日里，我们会有意无意地对看到的事物进行分类，这有很多好处。</p>
+<p>首先，它能减少我们大脑的记忆量，屏蔽具体事物的一些不必要的细节。比如，我们现在肚子很饿，想吃点东西。我们发现路边有一个服装店，正常的人类，不用走进去就知道，里面没有我们急需的东西：食物。</p>
+<p>其次，分类可以帮助我们更快地认识新事物。迎面奔来一只恶狠狠地狗，经验告诉我们，狗是会咬人的。所以，我们远远地躲开了它。狗喜欢骨头，喜欢吃屎，只要是一只狗，就可以对它的这些行为做出判断。</p>
+<p>既然分类这么重要，如何进行分类呢？</p>
+<p>凭直觉，可以。我们长这么大，没吃过猪肉也见过猪上树，看到长得像猪，八成就是猪了。</p>
+<p>当然，凭直觉有时不那么灵。我就没凭直觉一眼看出那只迷你小绵羊其实是一只狗，而且直觉不方便数字化，我们无法直观地向计算机描述我们的直觉。</p>
+<p>所以，除了直觉，我们应该还有其它的分类方法。</p>
+<p>我们可以通过事物之间可识别的独特区别来区分事物，也就是通过事物之间的边界。比如，男人有鸡鸡，而女人没有，只要检查一下一个人有没有鸡鸡，就能判断他是个男人还是女人了。只要交给计算机这条规则，计算机也能很容易地判断一个人的性别了。当然，反之亦然，我们猥琐地猜想眼前的这个男人是有鸡鸡的。</p>
+<h2 id="划分边界"><a href="#划分边界" class="headerlink" title="划分边界"></a>划分边界</h2><p>我们平时接触最多的是人，叫做“人类”。我们就以人为例，来想一下我们“人类”的一些事情。</p>
+<p>首先，人有名字，有出生年月，有属于一个人具体的属性。</p>
+<p>其次，我们知道，人可以说话，可以写字，可以吃喝拉撒。我们可以把这些看作一个人所具有的“功能”。这里的功能，其实就是我们上一篇所说的“功能”。比如，吃可能是由一系列的动作组成的，把食物塞到嘴里，咀嚼，下咽，blahblah…一系列的动作，我们把它们打包成一个功能，就叫做“吃”。</p>
+<p>再次，当我们说“人类”的时候，实际上，我们在说的是一个概念，一个通过边界区分出来的分类，而并非特指老王。而当我们讨论老王的时候，我们就有了更具体的信息，我们不仅知道他有名字，还知道他叫“老王”，而且知道他出生于1962年（这让我们觉得“老”字合情合理）。很有意思的一点是，我们之前说的吃喝拉撒，老王全会，而且做起来跟其他人差别不大（不像名字那样千差万别）。老王就是人类具体化后的一个对象。</p>
+<h2 id="介绍隔壁老王"><a href="#介绍隔壁老王" class="headerlink" title="介绍隔壁老王"></a>介绍隔壁老王</h2><p>现在我们知道了更多隔壁老王的秘密，下面我们来做一些更有意义的事：把老王介绍给计算机。</p>
+<p>听起来怪怪的，我们先来做点稍微正常点的事，把老王介绍给楼上老赵先。</p>
+<p>“老赵，早啊。这位是我的隔壁，叫老王。60年代的人，跟你差不多大，以后有人陪你下象棋了。”</p>
+<p>嗯，这个介绍还算正常。</p>
+<p>我们试着再迈出一步，把老王介绍给计算机。</p>
+<p>这时，有一个问题出现了。老王是个人，但计算机并不知道人是个什么东西。首先，我们需要跟计算机解释人是什么。我们不需要严格的人的定义，而只要梳理一下人自身有哪些信息，可以做哪些事情就可以了。</p>
+<p>人有名字，有出生年月，可以说话，可以写字，可以吃喝拉撒。</p>
+<p>我们只要把这些规则简单地转化成代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span>               <span class="comment"># 定义人类</span></span><br><span class="line">    name = <span class="string">''</span>               <span class="comment"># 人类有名字</span></span><br><span class="line">    birthday = <span class="string">''</span>           <span class="comment"># 而且有生日</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span>        <span class="comment"># 人类会说话</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(self)</span>:</span>        <span class="comment"># 会写字</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trivia</span><span class="params">(self)</span>:</span>       <span class="comment"># 吃喝拉撒样样精通</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>这里有几个新东西。<code>class</code> 意思是“定义一个类”。<code>pass</code> 是为了先占个位，我们在这里还不想涉及到 <code>说话</code> 的细节。</p>
+<p>我们在这里看到了上一篇讲到的“功能”，这里的功能跟上一篇的“功能”并无二致。在执行这几个功能时，会传入一个 <code>self</code>，我们可以先暂时不予理会。</p>
+<p>好了，现在计算机已经知道人类是个什么东西了，可以介绍老王了。</p>
+<p>“老王是一个出生于1962年的老头。”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mr_wang = Person()              <span class="comment"># 有一个人</span></span><br><span class="line">mr_wang.name = <span class="string">'老王'</span>           <span class="comment"># 他的名字叫“老王”</span></span><br><span class="line">mr_wang.birthday = <span class="string">'1962-10-13'</span> <span class="comment"># 出生于1962年10月17日</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> mr_wang.name              <span class="comment"># 打印老王的名字</span></span><br></pre></td></tr></table></figure>
+
+<p>这时，计算机就知道老王是怎么一回事了。尽管有点明知顾问，我们最后还是打印了一下老王的名字，计算机显示了一个“老王”。</p>
+<p>想获取老王的个人信息，使用这种方式就可以了：<code>mr_wang.name</code>，很简单，对吧？</p>
+<h2 id="重新理解老王"><a href="#重新理解老王" class="headerlink" title="重新理解老王"></a>重新理解老王</h2><p>上面的解释很容易懂，但是有几一点没有说清楚。<code>mr_wang = Person()</code> 意思是“有一个人”？</p>
+<p>很明显这是一个动作，而不是一种状态（有一个人）的描述。</p>
+<p>为了更清楚地了解 <code>mr_wang = Person()</code> 的实际意义，我们来回想一下钥匙的制作过程：如果我们的钥匙丢了，要去重新配一把，来到配钥匙的地方，会发现老师傅那里有很多没齿的钥匙。这时，老师傅会根据我们那把正常钥匙的齿，来打磨一把新的钥匙给我们。<code>mr_wang = Person()</code> 就是取没齿的钥匙的过程。打磨的过程就是将一个对象的特殊性添加到这个对象中的过程。</p>
+<p>也就是说，我们先从人这个类里生成一个新的人（没有姓名、没有生日），然后把老王的数据打磨到这个人里（具体化）。</p>
+<h2 id="开口说话"><a href="#开口说话" class="headerlink" title="开口说话"></a>开口说话</h2><p>我们之前说人类可以说话，但上面这个例子并不能讲话。我们来修改一下代码，让老王可以自报家门：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">()</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Hello, I'm"</span>, self.name</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
+
+<p>为了方便说明，这里只显示了关键代码。我们实现了之前 <code>speak()</code> 功能里的 <code>pass</code> 部分，使用了之前使用过的 <code>print</code>。</p>
+<p>这里有几点要说明：</p>
+<ol>
+<li><code>self</code> 是我们之前留下的小尾巴，现在可以清晰地看到，<code>self</code> 实际上是实例的别称。当我们通过 <code>mr_wang.speak()</code> 来使用 <code>speak()</code> 功能时，<code>self</code> 就是我们亲爱的老王。</li>
+<li>我们发现，使用一个对象的功能，和使用一个对象属性形式一下，只是多了一个功能所特有的 <code>()</code>。</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>需要说明一点的是，计算机中的类很少是用来分类的，因为大部分情况下，我们已经提前知道一个对象是人还是狗了。它主要是用来划分边界，让我们意识到，这个对象有哪些信息，可以做什么。</p>
+<p>小结不应该太多废话，我们把之前的代码整理一下，看懂即可，<a href="/public/script/mr_wang.py">下载链接</a>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义人类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    name = <span class="string">''</span></span><br><span class="line">    birthday = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Hello, I'm"</span>, self.name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trivia</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体化一个人，并写入老王的信息</span></span><br><span class="line">mr_wang = Person()</span><br><span class="line">mr_wang.name = <span class="string">'老王'</span></span><br><span class="line">mr_wang.birthday = <span class="string">'1962-10-13'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让老王开口说话</span></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
+
+<h2 id="尾注"><a href="#尾注" class="headerlink" title="尾注"></a>尾注</h2><p>嗯，到现在为止，我们已经忽略了很多不需要知道的细节。</p>
+<p>但可能在实操的过程中，我们的好奇心没有停下来，也或者因为小手一抖敲错个空格，而让问题变得非常复杂。我的建议是，保存好有错误的代码，然后重新来过，毕竟到现在为止，长点的代码也不过20行。</p>
+<p>错误都非常有价值，多犯不同的错误会让我们更有经验。当你完成了整篇文章的内容，就可以回过头来重新查看之前的错误了。询问旁边的人，或者借助互联网，都是不错的选择。</p>
+<p>在完成一个重要的里程碑后，我们会重点整理一下之前最有可能产生误解的点。</p>
+<p>最后，毫无疑问的是，如果你发现某一句话没看明白，或者实操时老出问题，那一定是我出问题了。请给我一个改正的机会。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/24/python-class/" data-id="ck7768vmv002jzvkr2tdkbhby" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-the-abandoned-capital" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/the-abandoned-capital/" class="article-date">
+  <time datetime="2017-03-22T16:00:00.000Z" itemprop="datePublished">2017-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/22/the-abandoned-capital/">读《废都》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是第二次读这本小说了，算是重温。</p>
+<p>第一次读是在高中。那时去姨家玩，进了一个房间后，发现墙角有一个书框，密密麻麻地摆着好几排的书，想是堂哥平时慢慢积攒起来的。那时我并不喜欢阅读，就随便翻着看。翻到这本书时，看着书里的情节，面红耳赤，不能自已。</p>
+<p>那时我十七八岁，正是情窦初开的年纪。</p>
+<p>借这本书时，刚好堂哥不在，胆战心惊，怕被姨识破。我把书借回了家，仔细研读并温习着书中描写的场景。特别是读到“□□□”时（此处并非敏感词，原书中确为“□□□”），心中充满无限的想象。那份荷尔蒙急剧上升带来的怦然心动，一颗鲜红滚烫的心仿佛要脱离这个僵硬的躯壳。</p>
+<p>所以想象力很重要。</p>
+<p>就像冯唐讲他们在网络资源匮乏时，一个视频一传十十传百的刻录，最后模糊不清，也依然平静不下观看时的激动。最后乃至看到阳光下树影斑驳，下面都会不自觉地硬起来。</p>
+<p>十年前，山东，盛夏的某个夜晚，我躲在被窝里，战战兢兢地抱着一本泛黄的纸书，虔诚得像一个圣徒，有作为生命最原始地憧憬与渴望。我读得兴奋，从外面远远地望过来，千家万户独一盏灯火通明，肯定更美。</p>
+<p>一晃十年过去了，“十年生死两茫茫”。十年有可能是我生命的八分之一，五分之一，甚至是三分之一。</p>
+<p>一席春梦了无痕。十年后，午后饭饱，阳光正好。人懒洋洋地坐在办公室的座椅上，旁若无人地拿着kindle，总觉得少了点什么。手里的这个版本，已经没有了当初的“□□□”，也不再有当时斟字酌句的心境。</p>
+<p>不知再过他个十年二十年后，看到远处的灯火通明，是否还能一眼看出，那个曾经亲爱的自己。为之感动，为之神伤。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/22/the-abandoned-capital/" data-id="ck7768vm8001hzvkrbmdne9in" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-class-again" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/18/class-again/" class="article-date">
+  <time datetime="2017-03-18T16:00:00.000Z" itemprop="datePublished">2017-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/18/class-again/">上课走神</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我记得之前的每一次考试，心里都会非常紧张，惟恐整个考试被自己搞砸。甚至多次被这样的梦境吓醒，梦中自己竟睁不开眼看试题。</p>
+<p>我慢慢地在这样的紧张中，缩小自己心理的活动范围。</p>
+<p>如今又做了这样一个梦，说不上是算昨天还是今天，这篇文章是一篇跨夜文章。</p>
+<h2 id="梦"><a href="#梦" class="headerlink" title="梦"></a>梦</h2><p>梦里还是高中时候的同桌。</p>
+<p>老师说：“你们先随便看看书吧。”像是地理书。</p>
+<p>说完以后，我就开始自顾自地玩了。</p>
+<p>过了一会，老师说，现在开始考查刚才让你们背诵的内容。</p>
+<p>what???</p>
+<p><img src="/public/img/fuyuanhui.png" alt="what"></p>
+<p>逗我，啥时候让我们背诵了，不是说就随便看看吗？</p>
+<p>更夸张的是，竟然是所有人挨个过去，他提问题我们回答。搞得更像是面试。</p>
+<p>我的天，这是什么情况，我再一次慌了。</p>
+<p>我前边的几个人挨个过去，都答的不错。</p>
+<p>到我过去背诵，他先问我：“你觉得你背诵得怎么样？”</p>
+<p>我说：“背得不是很好，尤其是后面。”</p>
+<p>他一下子就怒了，怒了，说：“那还学什么了，我要把你开除”。</p>
+<p>开除？我清晰地觉得这是在跟我说工作的事。</p>
+<p>看到他在纸上写下开除两个字，我一下子就释然了。一个感觉是，你没权利开除我；第二个感觉是，开除我也不怕，又不是什么大不了的事。</p>
+<h2 id="醒"><a href="#醒" class="headerlink" title="醒"></a>醒</h2><p>醒来后，我觉得自己很开心。多年的恐惧已经解除了。</p>
+<p>也或许，我真的有了一定能力，可以理直气壮的说，我不怕失去。</p>
+<p>我觉得我真正要害怕的是生命的失去。失去生命，意味着将不再有努力的机会。</p>
+<p>而考试，或者老师布置的任务，并没有可以让我们害怕的因素。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/18/class-again/" data-id="ck7768vkx0005zvkrhhhd4l7n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/28/hexo-migrate/">hexo博客搬迁</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/read-lisp-paper-recursive/">lisp论文《recursive》</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/28/lilian/">莉莉安</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/22/gtd-practice/">GTD实践分享</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/15/emacs-keymap/">emacs keymaps</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
