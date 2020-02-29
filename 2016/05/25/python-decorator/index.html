@@ -15,7 +15,7 @@
 <meta property="og:description" content="本文主要讲解python中decorator的历史，然后说明decorator在python中的实现，以帮助初识decorator的pythoner能够灵活运用decorator。  装饰器模式装饰器模式来自GoF的23种设计模式。 在设计模式中，装饰器模式的意图描述如下：  Attach additional responsibilities to an object dynamically.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2016-05-25T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-29T05:40:43.831Z">
+<meta property="article:modified_time" content="2020-02-29T17:29:53.632Z">
 <meta property="article:author" content="pysnow530@163.com">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@ waste time: 4.29153442383e-05</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/05/25/python-decorator/" data-id="ck776gab4000y0dsleaqzh9ag" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2016/05/25/python-decorator/" data-id="ck77vs9z7000y18sd6rlt7vzx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
@@ -194,7 +194,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
     </div>
   </div>
 
@@ -204,7 +204,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a>
+      <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a>
     </div>
   </div>
 
@@ -226,6 +226,10 @@ waste time: 4.29153442383e-05</code></pre>
       <ul>
         
           <li>
+            <a href="/2020/02/29/read-ruby-world/">读《松本行宏的程序世界》</a>
+          </li>
+        
+          <li>
             <a href="/2020/02/28/hexo-migrate/">hexo博客搬迁</a>
           </li>
         
@@ -239,10 +243,6 @@ waste time: 4.29153442383e-05</code></pre>
         
           <li>
             <a href="/2019/03/22/gtd-practice/">GTD实践分享</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/15/emacs-keymap/">emacs keymaps</a>
           </li>
         
       </ul>
