@@ -40,5 +40,5 @@ hexo 也有主题跟插件机制，出于简单易用的考虑，后面有需要
 
 记录两个事后发现的问题：
 
-1. 按照官方提示，接入 travis-ci 后，从 github 不能将分支正常切换到 gh-pages。github 官方在 16年已经 [给出说明](https://github.blog/2016-08-17-simpler-github-pages-publishing/)，2020年更新的 hexo 文档竟然没有修正。我参照了网上给出的代码片段，把 gh pages 设置到了 master 分支，有需要可以参考这个仓库的 ci 文件。
+1. 按照官方提示，接入 travis-ci 后，从 github 不能将分支正常切换到 gh-pages。github 官方在 16年已经 [给出说明](https://github.blog/2016-08-17-simpler-github-pages-publishing/)，2020年更新的 hexo 文档竟然没有修正，英文文档在页底有评论给出了解法。有需要可以参考这个仓库的 ci 文件。
 2. 小金反馈说，在迁移文件时，由于月份和日期在官方格式是双位的，单位会出现问题。这应该是 jekyll 兼容性过高引起的。
