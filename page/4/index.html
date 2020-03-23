@@ -70,6 +70,103 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python-script-file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/04/python-script-file/" class="article-date">
+  <time datetime="2017-03-04T16:00:00.000Z" itemprop="datePublished">2017-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/04/python-script-file/">唠唠python(3) -- 保存计算过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>昨天的文章，我们学会了跟计算机进行简单的语言交流和用计算机来做简单的算术。我们发现，计算机用来做简单的算术还是很方便的。但不知你是否注意到了，每次当我们退出翻译器时，我们之前的数据就消失了。</p>
+</blockquote>
+<blockquote>
+<p>消失比错误更可怕，它代表着我们已不能确定对错，而且就算错了，错误的根源也无从找起。</p>
+</blockquote>
+<blockquote>
+<p>多可怕！</p>
+</blockquote>
+<h2 id="奇怪的翻译器"><a href="#奇怪的翻译器" class="headerlink" title="奇怪的翻译器"></a>奇怪的翻译器</h2><p>在上一篇文章里，我们通过实验，得知，在python翻译器里输入<code>&quot;hello&quot;</code>，翻译器给我们回复了一个<code>&#39;hello&#39;</code>。有的朋友可能已经注意到了，输出的<code>hello</code>两边有一对<code>&#39;</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &quot;hello&quot;</span><br><span class="line">&#39;hello&#39;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>不对呀，我们输入的是<code>&quot;</code>，结果里带的却是<code>&#39;</code>？！</p>
+<p>先别慌，我们说在python里，一句许两边要带<code>&quot;</code>，实际上，<code>&#39;</code>和<code>&quot;</code>在python里面功能是一样的。没错，<code>&quot;hello&quot;</code>和<code>&#39;hello&#39;</code>并没有什么本质的区别。</p>
+<p>那现在问题来了：</p>
+<ol>
+<li>为什么python的输出里要带一对<code>&#39;</code>呢？</li>
+<li>我就是不想看到这个<code>&#39;</code>，怎么办？</li>
+</ol>
+<h2 id="跟计算机打招呼和做算术题是一码事"><a href="#跟计算机打招呼和做算术题是一码事" class="headerlink" title="跟计算机打招呼和做算术题是一码事"></a><code>跟计算机打招呼</code>和<code>做算术题</code>是一码事</h2><p>没错，在python翻译器看来，在对待这两者时，处理方式是一样的。</p>
+<p>想想我们在做<code>1+1</code>时，翻译器做了什么？它把我们输入的文字翻译给计算机，并将结果显示给我们。</p>
+<p>那当我们输入<code>&quot;hello&quot;</code>时，翻译器又做了什么？它把我们输入的文字翻译给计算机，并将结果显示给我们。</p>
+<p>看到了吗，这两个答案其实是一致的。不同之处在于值本身，一个值是一句话，而另一个值是一个数字。</p>
+<p>试想，如果把<code>&quot;hello&quot;</code>换成<code>&quot;1&quot;</code>，而翻译器显示了一个<code>1</code>，我们就不知道这是一句话还是一个数字了。所以，结果，跟我们的猜想一致。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &quot;1&quot;</span><br><span class="line">&#39;1&#39;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>现在问题1的答案已经很清晰了，为什么python的输出里要带一对<code>&#39;</code>呢？这代表求值的结果是一句话，而非一个数字或者其它什么。</p>
+<h2 id="主动地表达我们的意图"><a href="#主动地表达我们的意图" class="headerlink" title="主动地表达我们的意图"></a>主动地表达我们的意图</h2><p>对，是时候表达我们的想法了。</p>
+<p>之前，我们是把python翻译器当作一个计算器，对一句话的计算也好，对一个算术表达式的计算也罢。</p>
+<p>对一句话求值，所得的结果是一句话。为了表明它是一句话，结果的两边加了一对<code>&#39;</code>。</p>
+<p>现在，我们要对计算机提出更高的要求。我们不需要计算机帮我们对一句话求值，我们想直接把一句话显示到屏幕上。这也就是问题2的答案，显示意味着我们不再需要知道这是一句话或一个数字，而是想知道这个值表达的是什么。<code>&quot;1&quot;</code>或<code>1</code>你都给我显示1就好了，我知道是什么意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; print &quot;hello&quot;</span><br><span class="line">hello</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们告诉翻译器，帮我们显示一句话<code>&quot;hello&quot;</code>，计算机显示给我们一个没有<code>&quot;</code>的<code>hello</code>。</p>
+<p>需要注意的是，这里的<code>print &quot;hello&quot;</code>仍然会求值并将值显示出来。但因为这里的值是空的，所以我们只看到了<code>hello</code>。</p>
+<p><strong><code>hello</code>是求值<code>过程中</code>产生的输出，而求值没有结果</strong>。</p>
+<h2 id="保存我们的计算过程"><a href="#保存我们的计算过程" class="headerlink" title="保存我们的计算过程"></a>保存我们的计算过程</h2><p>前面说，我们有时需要查错，所以需要<code>保存计算过程</code>。</p>
+<p><code>保存计算过程</code>还有一个更重要的意义，因为我们的目标，是让计算机帮我们更高效的工作，如果不能重复的使用我们之前使用过的计算过程，意味着工作不仅没有高效起来，反而更加低效了。</p>
+<p>所以保存我们的计算过程，就显得十分之必要。</p>
+<p>从前面我们输入过的代码来看（对，我们已经是在写代码了），代码的表现形式非常简单，都是文字，或者说文本。也就是说，只要我们把以上的代码记录到文本文件里面就完成了保存计算过程的目标。</p>
+<p>保存计算过程就是这么简单。</p>
+<p>不过这里还有几点需要补充说明一下：</p>
+<ol>
+<li>对文件名的要求：文件名要以<code>.py</code>结尾，以表明文件里存放着用python语言写成的”小诗”或”文章”。如果你不知道什么名字好听，<code>a.py</code>或者<code>b.py</code>都是不错的选择。</li>
+<li>执行时要注意，执行的结果，更遵循<code>主动地表达我们的意图</code>，而不是直接求值并显示值。这里可能不太好理解，在python翻译器里求值时，翻译器会直接显示求值结果，但是，当直接执行保存在文件里的代码时，求值结果不会再直接显示，而是需要我们使用前面提到的<code>print</code>来告诉计算机显示。</li>
+</ol>
+<h2 id="重复使用计算过程"><a href="#重复使用计算过程" class="headerlink" title="重复使用计算过程"></a>重复使用计算过程</h2><p>我们先来实践一下<code>保存我们的计算过程</code>。</p>
+<p>还记得<a href="/2017/03/04/python-abc.html">上一篇文章</a>中提到的那个<code>神密的黑色窗口</code>吗。打开黑色窗口后，输入<code>notepad a.py</code>（windows）或<code>nano a.py</code>（其它系统）并回车，这会创建一个新的名为<code>a.py</code>的文件。打开文件后输入以下内容并保存。这样，我们的计算过程就被保存到了<code>a.py</code>这个文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print &quot;hello&quot;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们就可以使用这个计算过程了。</p>
+<p>在黑色窗口内输入<code>python a.py</code>并回车，即可看到类似我们之前的输出了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; python a.py</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>这个命令跟之前请出翻译时使用的命令，唯一区别在于这里多了一个文件名。</p>
+<p>只是显示一个<code>&quot;hello&quot;</code>，未免显得单调乏味。但是实际上，这代表着我们已经可以完成一个简单系统<code>hello</code>的从开发到运行的整个过程了。</p>
+<p>当然，这还远远不够。我们需要这个系统能接收用户的输入（有可能是按钮点击、文字输入或者游戏手柄按键输入等），并可以通过复杂的计算过程，最后得到我们想要的结果(有可能是一个处理过的excel文件，或者一张图片，一封邮件等)。</p>
+<p>当然，丰富多样的输入，复杂计算，不同载体的输出，也都是十分简单的。想想我们输出<code>hello</code>的过程吧，与此大同小异，只是对一些新鲜事物更熟悉的过程。</p>
+<p>下一篇，我们就来利用已经学过的知识，与计算机这个古板的老朋友一起合作，来抽象一部分我们繁琐的工作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/04/python-script-file/" data-id="ck84olkgx001a1hrl56g7h1bb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python-abc" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/03/python-abc/" class="article-date">
@@ -145,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/03/python-abc/" data-id="ck7uj4pk6000t3tpqdyax542k" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/03/python-abc/" data-id="ck84olkgk000u1hrlfa472tlo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -206,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/25/python-context/" data-id="ck7uj4pk8000x3tpqa74thuj7" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/25/python-context/" data-id="ck84olkgo000y1hrl4tl9c25v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -260,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/24/silent/" data-id="ck7uj4pks001j3tpq8yavbcp8" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/24/silent/" data-id="ck84olkh3001k1hrlb94125qf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li></ul>
@@ -314,7 +411,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/17/crashed-plane/" data-id="ck7uj4pjq00083tpq86nj0lic" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/17/crashed-plane/" data-id="ck84olkg300081hrl3bm0di83" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -411,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/14/git-object-db/" data-id="ck7uj4pjw000f3tpqhpdw35ry" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/14/git-object-db/" data-id="ck84olkgb000f1hrl5mt1dmbr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
@@ -476,7 +573,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/09/why-not-jetbrains/" data-id="ck7uj4pkz001z3tpqgq5zh722" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/09/why-not-jetbrains/" data-id="ck84olkha00201hrlb4a7c7an" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/" rel="tag">editor</a></li></ul>
@@ -531,7 +628,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/04/16-end-17-start/" data-id="ck7uj4pj700003tpq05cfd4dh" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/04/16-end-17-start/" data-id="ck84olkfh00001hrl1v5m8wol" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li></ul>
@@ -635,7 +732,7 @@ sda               0.56     0.37    1.21    0.30    20.00     3.66    31.28     0
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/06/01/linux-command-iostat/" data-id="ck7uj4pk0000l3tpq1snc809l" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2016/06/01/linux-command-iostat/" data-id="ck84olkgf000m1hrl24vkgfo2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
@@ -735,108 +832,10 @@ KiB Swap:   976892 total,        0 used,   976892 free.   126516 cached Mem
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/05/31/linux-command-top/" data-id="ck7uj4pk1000m3tpqbzda66pr" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2016/05/31/linux-command-top/" data-id="ck84olkgh000p1hrl23wdee1v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/top/" rel="tag">top</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-decorator" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/05/25/python-decorator/" class="article-date">
-  <time datetime="2016-05-25T16:00:00.000Z" itemprop="datePublished">2016-05-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/25/python-decorator/">Python中的装饰器</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文主要讲解python中decorator的历史，然后说明decorator在python中的实现，以帮助初识decorator的pythoner能够灵活运用decorator。</p>
-</blockquote>
-<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><p>装饰器模式来自GoF的23种设计模式。</p>
-<p>在设计模式中，装饰器模式的意图描述如下：</p>
-<blockquote>
-<p><a href="http://c2.com/cgi/wiki?DecoratorPattern" target="_blank" rel="noopener">Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.</a></p>
-</blockquote>
-<p>即将附加的职责动态添加到一个对象。在扩展功能时，它比子类继承的方式要来得灵活。它是面向切面编程的一种手段。</p>
-<h3 id="python中的装饰器"><a href="#python中的装饰器" class="headerlink" title="python中的装饰器"></a>python中的装饰器</h3><h4 id="提出"><a href="#提出" class="headerlink" title="提出"></a>提出</h4><p>在python中，decorator最早是在<a href="https://www.python.org/dev/peps/pep-0318/" target="_blank" rel="noopener">PEP 318 – Decorators for Functions and Methods</a>被提出的。</p>
-<h4 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h4><p>decorator在python中形如@decorator，如：</p>
-<pre><code>@log
-def foo():
-    ...</code></pre><p>我们将通过观察字节码，看一看添加decorator在字节码层带来了哪些变化。</p>
-<p>首先来看函数定义产生的字节码：</p>
-<pre><code>def foo():
-    pass
-
-0 LOAD_CONST               0 (&lt;code object foo at 0xb72508d8, file &quot;&lt;stdin&gt;&quot;, line 1&gt;)
-3 MAKE_FUNCTION            0
-6 STORE_NAME               0 (foo)</code></pre><p><code>foo</code>函数的定义对应三条字节码。</p>
-<p><code>LOAD_CONST</code>指令将<code>pass</code>对应的代码对象压入堆栈。</p>
-<p><code>MAKE_FUNCTION</code>将代码对象弹出堆栈，并创建一个PyFunctionObject对象，然后将函数压入堆栈。</p>
-<p><code>STORE_NAME</code>将函数弹出栈，并将它绑定到<code>foo</code>变量。</p>
-<p>此时，<code>foo</code>变量即是一个函数。</p>
-<p>然后我们看一下加了装饰器的函数定义对应的字节码：</p>
-<pre><code>@log
-def foo():
-    pass
-
- 0 LOAD_NAME                0 (log) &lt;---------- 1
- 3 LOAD_CONST               0 (&lt;code object foo at 0xb720e8d8, file &quot;&lt;stdin&gt;&quot;, line 1&gt;)
- 6 MAKE_FUNCTION            0
- 9 CALL_FUNCTION            1       &lt; --------- 2
-12 STORE_NAME               1 (foo)</code></pre><p>给<code>foo</code>函数添加一个装饰器时，对应的字节码多个两条。上面使用1、2标出。</p>
-<p><code>LOAD_NAME</code>命令是新增命令，将<code>log</code>函数（装饰器函数）压入堆栈。</p>
-<p><code>LOAD_CONST</code>命令将<code>foo</code>下的代码对象压入栈项。</p>
-<p><code>MAKE_FUNCTION</code>命令将代码对象弹出栈，并创建一个PyFunctionObject对象，并压入堆栈。</p>
-<p><code>CALL_FUNCTION</code>命令是新增命令，调用最开始压入堆栈的装饰器函数，然后将函数的返回值压入堆栈。</p>
-<p><code>STORE_NAME</code>将栈项装饰器函数的返回值绑定到<code>foo</code>变量。</p>
-<p>也就是说，装饰器是一个函数，它将被装饰的函数作为输入，并将输出绑定到被装饰的函数名上。而装饰器的使用本质上就是一个语法糖。</p>
-<h4 id="煮个粟子"><a href="#煮个粟子" class="headerlink" title="煮个粟子"></a>煮个粟子</h4><p>知道了它的内部实现，我们就可以动手了。</p>
-<p>例如，实现一个打印函数耗时的装饰器：</p>
-<pre><code>import time
-
-def log(func):
-    def wrapper(*args, **kwargs):
-        start = time.time()
-        func(*args, **kwargs)
-        end = time.time()
-        waste_time = end - start
-        print &apos;waste time:&apos;, waste_time
-    return wrapper
-
-@log
-def hello():
-    print &apos;hello, world&apos;
-
-hello()
-hello, world
-waste time: 4.29153442383e-05</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/05/25/python-decorator/" data-id="ck7uj4pkb000z3tpq7w1807lp" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
 
     </footer>
   </div>
@@ -849,7 +848,7 @@ waste time: 4.29153442383e-05</code></pre>
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &amp;raquo;</a>
   </nav>
 
 </section>
@@ -863,7 +862,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/url/" rel="tag">url</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
     </div>
   </div>
 
@@ -873,7 +872,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 15px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 10px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/url/" style="font-size: 10px;">url</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 15px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 10px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
     </div>
   </div>
 
@@ -895,6 +894,10 @@ waste time: 4.29153442383e-05</code></pre>
       <ul>
         
           <li>
+            <a href="/2020/03/22/jango-1-route/">django核心处理流程 1. 路由</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/16/read-wukongzhuan/">读《悟空传》</a>
           </li>
         
@@ -908,10 +911,6 @@ waste time: 4.29153442383e-05</code></pre>
         
           <li>
             <a href="/2020/03/02/read-the-three-body-problem/">读《三体》</a>
-          </li>
-        
-          <li>
-            <a href="/2020/02/29/read-ruby-world/">读《松本行宏的程序世界》</a>
           </li>
         
       </ul>
