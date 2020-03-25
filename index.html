@@ -70,6 +70,87 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-jango-2-request-and-response" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/25/jango-2-request-and-response/" class="article-date">
+  <time datetime="2020-03-25T12:13:23.000Z" itemprop="datePublished">2020-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/25/jango-2-request-and-response/">django核心处理流程 2. 请求响应逻辑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>web 框架的设计，将每一个资源地址映射到一个处理逻辑。这篇文章将讲述 django 中对请求的解析处理，及处理结果的返回。</p>
+<h3 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h3><p>资源地址对应的处理逻辑，在 django 中叫做视图（view）。</p>
+<p>视图是一个可调用对象，一般为函数。</p>
+<p>请求的上下文被打包到一个叫做 HttpRequest 的对象中，并传入视图函数。函数处理后，将结果打包到一个 HttpResponse 对象，并返回给主调方。</p>
+<p>这里的主调方，其实就是我们的框架了。</p>
+<p>下面是一个比较典型的视图函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">(request, nickname)</span>:</span></span><br><span class="line">    content = <span class="string">f'Hello <span class="subst">&#123;nickname&#125;</span>, welcome to jango.'</span></span><br><span class="line">    response = HttpResponse(content=content)</span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
+
+<p>这个示例函数的结构比较清晰。需要注意的是，参数里有一个 nickname，django 会把资源地址中的匹配参数一并作为视图参数传递过来。</p>
+<p>与该函数绑定的 url 为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">r'/welcome/(?P&lt;nickname&gt;\w+)'</span>, views.welcome]</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 nickname 的来源及解析方式。</p>
+<h3 id="请求上下文"><a href="#请求上下文" class="headerlink" title="请求上下文"></a>请求上下文</h3><p>那么请求的上下文是如何构造出来的呢，下面就是构造的过程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpRequest</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, environ)</span>:</span></span><br><span class="line">        self.method = environ[<span class="string">'REQUEST_METHOD'</span>]</span><br><span class="line">        self.path_info = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">        self.environ = environ</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，HttpRequest 是通过解析一个 environ 字典生成的。environ 字典里包含了请求的上下文信息。至于 environ 从何而来，它实际上是 wsgi 接口定义。我们在下篇文章展开。</p>
+<p>environ 里包含了所有请求相关的信息，上例中的 path_info 实际上就是我们的请求地址了，比如前面的 <code>&#39;/welcome/oog&#39;</code>。</p>
+<p>HttpResponse 也会解析请求参数及 COOKIE 等，这样我们就可以很方便的获取需要的信息了。</p>
+<h3 id="http-响应"><a href="#http-响应" class="headerlink" title="http 响应"></a>http 响应</h3><p>请求被处理完后，视图函数需要返回一个 HttpResponse 对象。该对象包含了需要返回的信息。</p>
+<p>一个 http 请求返回的结果，比较典型的有下面几项：</p>
+<ol>
+<li>status code，它定义了请求被处理的结论，比如 200 表示成功，302 表示该资源需要跳转到其它资源地址等</li>
+<li>body，比如一段 html 代码，或者是一个故事的文本描述</li>
+<li>content type，标识 body 的类型，以方便资源请求方正确理解它。比如 text/html、text/plain 等类型</li>
+</ol>
+<p>HttpResponse类的定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpResponse</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, content, content_type=<span class="string">'plain/text'</span>, status_code=<span class="number">200</span>)</span>:</span></span><br><span class="line">        self.content = content</span><br><span class="line">        self.content_type = content_type</span><br><span class="line">        self.status_code = status_code</span><br></pre></td></tr></table></figure>
+
+<h3 id="请求、响应流程"><a href="#请求、响应流程" class="headerlink" title="请求、响应流程"></a>请求、响应流程</h3><p>现在我们已经有请求解析和响应对象的构造，一个请求过来是如何发生的呢？</p>
+<p>我们先来看 8 行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wsgi_application</span><span class="params">(environ, start_response)</span>:</span></span><br><span class="line">    <span class="string">"""标准wsgi程序"""</span></span><br><span class="line">    request = HttpRequest(environ)</span><br><span class="line">    response = handle_view(request, root_urlconf)</span><br><span class="line"></span><br><span class="line">    status = STATUS_TO_DISPLAY[response.status_code]</span><br><span class="line">    headers = []</span><br><span class="line">    start_response(status, headers)</span><br><span class="line"></span><br><span class="line">    ret = [response.content.encode(<span class="string">'utf-8'</span>)]</span><br><span class="line">    <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+
+<p>代码中，得到 request 后，调用函数并获取 response，然后把关键信息按需要的格式返回即可。</p>
+<p>其中 handle_view() 是一个 10 行函数，功能是根据 url 找到视图函数并执行。具体参见 jango 的源码 <a href="https://github.com/pysnow530/jango" target="_blank" rel="noopener">https://github.com/pysnow530/jango</a>。</p>
+<p>这里的结果渲染部分初看会有点奇怪，这里其实是 wsgi 定义的规范，后面的文章会讲到。</p>
+<p>到这里，我们就已经完成了一个 url 从请求匹配，到视图执行，最后到请求响应的完整过程。文章里讲到的 wsgi 将会在下一篇文章细说。</p>
+<h3 id="一些重要细节"><a href="#一些重要细节" class="headerlink" title="一些重要细节"></a>一些重要细节</h3><p>我们上面看到的视图，都是一些函数的形式。如果看 django 的官方文档，会发现 django 也提供了一种类的方式，类名对应请求名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span><span class="params">(View)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""GET方法"""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""POST方法"""</span></span><br></pre></td></tr></table></figure>
+
+<p>但是不要被外在形式迷惑，类形式的视图本质也是一个可调用对象，只是通过 Welcome.as_view() 包装的语法糖方便使用。具体可参考 django 源码。</p>
+<p>另外一点，http 比例子中讲到的功能要更为丰富，它还涉及了文件的上传下载等功能。具体可参考扩展资源给出的 rfc 文档。</p>
+<h3 id="扩展资料"><a href="#扩展资料" class="headerlink" title="扩展资料"></a>扩展资料</h3><p>http 协议可参考 <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc2616</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/25/jango-2-request-and-response/" data-id="ck87cchub000l3btq770nhxwh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-jango-1-route" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/22/jango-1-route/" class="article-date">
@@ -120,10 +201,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ck84olkge000j1hrlgwl6beg1" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ck87cchua000j3btq8obj9khb" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/url/" rel="tag">url</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
 
     </footer>
   </div>
@@ -161,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ck84olkh2001i1hrlcyhx98z9" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ck87cchv2001j3btq4dyb9wuc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -202,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ck84olkg7000b1hrl834l17gj" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ck87cchu6000b3btqeu2j3d8a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
@@ -246,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ck84olkh4001n1hrlc6kv8joz" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ck87cchv6001o3btqeh683j0i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -303,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ck84olkh0001f1hrl8yu4b5sc" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ck87cchv0001h3btqfe3teopk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li></ul>
@@ -371,7 +452,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ck84olkgz001d1hrl6lk7937c" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ck87cchuy001e3btq0ryq27y6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li></ul>
@@ -426,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/02/28/hexo-migrate/" data-id="ck84olkgd000h1hrl7pcgcyxn" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/02/28/hexo-migrate/" data-id="ck87cchu9000h3btqd27aczlv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li></ul>
@@ -569,7 +650,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/30/read-lisp-paper-recursive/" data-id="ck84olkhq003k1hrlck3daz1l" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2019/03/30/read-lisp-paper-recursive/" data-id="ck87cchw6003l3btq4g3qee7a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
@@ -617,106 +698,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/28/lilian/" data-id="ck84olkgf000l1hrld0o12jwu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-gtd-practice" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/22/gtd-practice/" class="article-date">
-  <time datetime="2019-03-22T16:00:00.000Z" itemprop="datePublished">2019-03-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/gtd-practice/">GTD实践分享</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h2 id="关于写作"><a href="#关于写作" class="headerlink" title="关于写作"></a>关于写作</h2><p>现在几乎一周可以出一篇文章，闲暇里我也想过这个问题，也获得了一些结论。</p>
-<p><strong><strong>关于写作时间</strong></strong> ：对我来说，写作已经不需要消耗多少时间了，因为我在电脑前坐下写作之前，文章的内容和大体框架实际上已经完成了，这只是一个再现的过程，或者把之前整理的思路重现的过程。是的，写作其实是走在路上完成的。</p>
-<p><strong><strong>关于写作目的</strong></strong> ：现在写作的目的已经完全不是我预想的目的了。最开始的想法是可以帮助他人，但是写作这件事已经摆脱了我的设想，朝着自定的方向发展了。他想做什么呢？</p>
-<p>以前跟小郭出去逛街，不像真实意义上的逛街，不重在吃和买，倒像是一次长谈。我们一边走一边讨论生活，交换价值观，很多思想也都互通有无。我喜欢这种交流。</p>
-<p>而现在的写作，更像是跟自己进行的一次长谈。平时很少有机会可以静下来跟自己聊聊，现在有了一段跟自己交换思想的时间。当然也是跟看到这篇文章的人交流，当然，交流的目的还是互通有无，不问对错，只需要了解。从这一点上来说，写作是自私的。</p>
-<p>其次呢，写作更是一种学习的途径。我看很多人的技术博客或者文章，都是对过去的一些事情的总结。我现在写作并不是对过去的总结，或者在必要的时候总结过去只是为了更好地梳理以帮忙到现在或未来。每当我想学习一个新东西的时候，就会在日程上安排一个写作计划，制定一个deadline，积累素材的过程实质上就是一个学习的过程。</p>
-<p>关于第二点，划下重点， <span class="underline"><span class="underline">写作不是总结</span></span> 。</p>
-<p>在写作的过程中，我还会有一些额外的收获，比如在写作这篇文章时，在希望有一个手机全局软件可以作为GTD收件箱的时候，我想到了<a href="https://www.smartisan.com/os/#/ideapills" target="_blank" rel="noopener">闪念胶囊</a>，但是由于苹果的封闭性，市场里只能找到一些拙劣的替代品。虽然锤子科技17年有说ios版在开发中，可以已经流产了。</p>
-<p>一句话，如果想学习某个东西，就制定一个写作计划（思想）或者做一个成品的计划（技能）吧！</p>
-<h2 id="时间管理简史"><a href="#时间管理简史" class="headerlink" title="时间管理简史"></a>时间管理简史</h2><h3 id="混沌期"><a href="#混沌期" class="headerlink" title="混沌期"></a>混沌期</h3><p>学生时代并不需要管理时间，时间都是被学习管理好的，明明白白。</p>
-<p>到了大学的时候，也不太需要管理时间，想做什么做什么，想做的不多，时间倒挺多。</p>
-<p>这段时间我称它为混沌期，或者叫被动管理期。一直延续到工作以后。</p>
-<h3 id="初见workflowy"><a href="#初见workflowy" class="headerlink" title="初见workflowy"></a>初见workflowy</h3><p>工作以后，时间安排的重要性就慢慢体现出来了。</p>
-<p>随着时间的推移，我们cover的事情越来越多，而精力又越来越少，不得不将自己的时间管理起来。</p>
-<p>时间管理，其实是精力管理。</p>
-<p>工作以后，我们或早或晚地会意识到计划的重要性。它可以指导我们时间或精力的分配，不至于因为事情太多感到茫然无助。而且在汇报工作时，也有一个好的参考。</p>
-<p>最开始我是记在文本里的，一天一记，定时总结（大部分时候都感觉总结没必要，就直接跳过了。走到某天意识到遗失了一批最有价值的宝藏 :p）。</p>
-<p>PS: 刚才突然意识到很多人为什么用:-p而不用:p，因为:)在编辑器里的括弧会匹配到左括弧我的天。</p>
-<p>后来，认识了workflwy（好像是<a href="https://jinguoliang.github.io/" target="_blank" rel="noopener">小金</a>推荐的），瞬间被它的简洁和优雅打动。我甚至极度迷恋到以为可以用它来管理我的整个后半生。</p>
-<p>最初使用的过程中，除了加载会有点慢，没有发现其它的问题。我至今都不明白，zf做的这些“努力”到底是为了什么。</p>
-<p>不过在后来的一次更新中，登录后数据怎么都加载不出来。跟开发者反馈后，经过复杂的五步操作，解决了这个问题。后来这类问题又反复了几次，最终决定卸载。</p>
-<p>在写这篇文章前又试了一下，还没有恢复，也可能是手机缓存的问题。不过我不想再把自己的精力浪费在别人反复出现的问题上了。这时候，我意识到纯文本管理的便捷性，这是我使用org-mode的一个重要原因。</p>
-<p>我换用了中国人开发的workflowy copy版app幕布，数据加载没有问题。唯二的缺点是使用更复杂和夹杂着使用体验上的bug（键盘RETURN键失效）。第一点是团队的设计原则问题，没法改变。第二点已经反馈给官方。</p>
-<p>不过，GTD才是解决时间管理的真正方法。</p>
-<p>由于我写作大多是在闲暇时间完成的，所以习惯用手机构建，workflowy类软件多终端同步，可以解决这个问题。注意，workflowy适合整理思路，不应该被用来做时间管理。</p>
-<h3 id="apple-notes"><a href="#apple-notes" class="headerlink" title="apple notes"></a>apple notes</h3><p>这是我在换到苹果全家桶后非常喜欢的一款软件，它简单，开箱即用，支持多终端。</p>
-<p>我曾经有很长一段时间用它来记录信息，支持图片，搜索也方便。我还用它来写文章，写完后直接拷贝到blog就可以发布了（后来意识到用它写文章是不方便的，手机适合助攻，电脑才是王道）。</p>
-<p>甚至我尝试过用它做todo，不过在做todo的过程中，发现了一堆bug，皆因它自动把todo条目转换成图形导致。这让我再一次意识到纯文本的重要性。其实转换不是问题，但是操作的一定要是文本，否则出了问题就是单向不可恢复的。</p>
-<h3 id="拥抱GTD，拥抱org-mode"><a href="#拥抱GTD，拥抱org-mode" class="headerlink" title="拥抱GTD，拥抱org-mode"></a>拥抱GTD，拥抱org-mode</h3><p>如果你没用过GTD，我要说明一点的是，它不止是todolist。</p>
-<p>这一点值得被反复强调，它不止是todolist。</p>
-<p>一个很重要的关键词是收件箱，GTD是一个系统，它会把你接收到的思想或者事件，都放到收件箱里。收件箱会再次被转交到GTD系统，来缓解我们在记忆上的压力和精力分散的问题。</p>
-<p>为什么要单独提收件箱，因为org-mode里的GTD已经很完整了，经过少量的配置就可以高度可用。剩下的问题只有，如何跟外部打通。最为关键的就是，用什么来做收件箱？</p>
-<p>如果使用org-mode，电脑端已经毫无疑问是remember命令，但是手机端呢？当我们离开办公场所，离开家，只有一个手持设备时，如何快速记录临时的想法呢？</p>
-<p>我现在仍然坚定的认为，闪念胶囊，或者说闪念胶囊之类的设计，是最理想的收件箱。</p>
-<p>我尝试过使用notes来做收件箱，但是效果并不理想。打开notes需要很多的思考，它不是“不假思索”的。而且手机上的回车和电脑上的回车有天壤之别，电脑上的回车跟其它键是一致的，但手机上的回车跟字母键（在人的直观感觉上）是分离的，而且回错了要删除，删除键也是分离的。</p>
-<p>退而求其次的方法是使用一个todo工具或者workflowy类工具。</p>
-<h2 id="任务类型的思考"><a href="#任务类型的思考" class="headerlink" title="任务类型的思考"></a>任务类型的思考</h2><p>就我个人的思考，任务分很多种，每种任务的处理方式是不一样的。</p>
-<p>对任务类型的分类，是这篇文章中思考密集度最为集中的地方，也是这篇文章指导我要思考的点。</p>
-<p>任务的分类并非严格按照重要紧急四象限排列，在GTD的实践中，我发现它们之间有些许不同。所以我决定先忘记四象限，按照GTD的思路整理一下。</p>
-<h3 id="临时性紧急任务"><a href="#临时性紧急任务" class="headerlink" title="临时性紧急任务"></a>临时性紧急任务</h3><p>此类任务可能会打断我们当前的状态，需要立即去执行。</p>
-<p>比如刚才我在写作的过程中，突然外卖到了，门铃响了。这就很紧急，如果我不给他开门，中午就没饭吃了。</p>
-<h3 id="临时性非紧急任务"><a href="#临时性非紧急任务" class="headerlink" title="临时性非紧急任务"></a>临时性非紧急任务</h3><p>此类任务也会打断我们的状态，但是由于不紧急，可以将它加到 <strong><strong>收件箱</strong></strong> ，然后快带恢复到之前的状态。</p>
-<p>它会耗费我们一定的精力，但是不多，包括两方面：一是任务细节的沟通，二是加到收件箱的操作。所以为什么我很重视收件箱的设计，因为它是保证我们可以快速恢复到正常状态（之前状态）的非常非常重要的一环。所以收件箱最好是全局的，是可以一键唤起的。</p>
-<p>这类任务当我们整理收件箱的时候，会加入待办，或者更进一步，对待办排期。</p>
-<p>一个很好的例子就是，你的朋友打电话约你周末去图书馆看书。</p>
-<p>注意，上面这两类任务还不能称其为任务，或者还没有进程GTD系统。因为它们一个不必要进，一个还在收件箱里等待进。</p>
-<p>后面的这几类任务，就都是GTD系统里的任务了。</p>
-<h3 id="scheduled任务"><a href="#scheduled任务" class="headerlink" title="scheduled任务"></a>scheduled任务</h3><p>临时性非紧急任务可以转为排期任务，它很重要，但是不会立即去做。它不仅是重要不紧急，而且还有一个属性，就是利用一段确切的时间（比如3个番茄钟）是可以完成的。</p>
-<h3 id="deadline任务"><a href="#deadline任务" class="headerlink" title="deadline任务"></a>deadline任务</h3><p>这类任务比较有目标、有雄心、有毅力，它表示你要在一段时间内努力达成某种效果。</p>
-<p>比如，你计划在半年内打到《王者荣耀》王者段位。这类任务需要很好的自控能力，因为达成任务需要消耗的时间不确定，如果你没有自信，可以把任务细分为子任务，这样就拆解成了排期任务，实现的难度就大大降低了。但是没准，你就是想挑战一下自己呢？</p>
-<h3 id="repeat任务"><a href="#repeat任务" class="headerlink" title="repeat任务"></a>repeat任务</h3><p>这类任务挺悠闲，没有任务，或者说完成它们本身就是任务。这类任务更侧重提醒功能，去做而不是做完。</p>
-<p>比如，我做了一个repeat任务，为了保持自己的形象，每隔两天刮一次胡子。</p>
-<h3 id="maybe任务"><a href="#maybe任务" class="headerlink" title="maybe任务"></a>maybe任务</h3><p>这类任务还没有排期，不重要也不紧急，甚至不一定要做。它只是我们的一些奇形怪状的想法，可能在某天突然来了灵感或者突然变得重要，然后就被加到我们的排期里。也可能这辈子都不会被我们注意到了，谁知道呢？</p>
-<p>但是一定要记下来，好让我们知道，我们已经考虑过了，而不是再考虑一次。</p>
-<h2 id="哪些任务需要记录耗时"><a href="#哪些任务需要记录耗时" class="headerlink" title="哪些任务需要记录耗时"></a>哪些任务需要记录耗时</h2><p>我喜欢org-mode里的org-clock-in功能，它能让我知道做一件事耗费的时间。</p>
-<p>当然，工具就是工具，不是所有的事情都需要知道耗时的。</p>
-<p>比如，我每隔四天做一次俯卧撑，但是并不需要知道它的时间。根据我最开始的计算，每次都是3分钟左右。</p>
-<p>阅读是一个与之相对的例子，因为我每次阅读是以章节为单位的，而不是时间，所以我需要记录每次阅读的时间，以知道读一本书需要多在成本。我不喜欢那种每天花 <strong><strong>半小时</strong></strong> 读书的计划，它太死板，书有逻辑性。</p>
-<p>再比如写作，不同的文章内容，耗费的精力和时间是不一样的。当我在写下这篇文章时，编辑器的下方会提醒我在这篇文章上花费的时间。看，已经1小时40分钟了，不过这篇文章也已经接近尾声了。</p>
-<p>最后一句话，适合自己的才是最好的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/22/gtd-practice/" data-id="ck84olkho003f1hrlai5d3xv8" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2019/03/28/lilian/" data-id="ck87cchud000m3btqa9cx261g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
@@ -746,7 +728,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/url/" rel="tag">url</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
     </div>
   </div>
 
@@ -756,7 +738,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/url/" style="font-size: 10px;">url</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 15px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 10px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/django/" style="font-size: 12.5px;">django</a> <a href="/tags/editor/" style="font-size: 12.5px;">editor</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12.5px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 15px;">梦</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 15px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 10px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
     </div>
   </div>
 
@@ -778,6 +760,10 @@
       <ul>
         
           <li>
+            <a href="/2020/03/25/jango-2-request-and-response/">django核心处理流程 2. 请求响应逻辑</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/22/jango-1-route/">django核心处理流程 1. 路由</a>
           </li>
         
@@ -791,10 +777,6 @@
         
           <li>
             <a href="/2020/03/03/sky-river-dream/">记一个关于星河的梦</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/02/read-the-three-body-problem/">读《三体》</a>
           </li>
         
       </ul>
