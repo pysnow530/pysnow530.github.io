@@ -3,6 +3,7 @@ title: django核心处理流程 3. wsgi
 date: 2020-03-26 21:28:00
 tags:
   - django
+  - wsgi
 ---
 
 wsgi 是 python 服务器与 web 应用间交互的通用接口，实现该接口的应用可以通过任何实现了该接口的服务器部署。
