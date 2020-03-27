@@ -5,21 +5,19 @@
   
 
   
-  <title>读《三体》 | pysnow530 的博客</title>
+  <title>python 函数着色器设想 | pysnow530 的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="《三体》是刘慈欣创作的系列长篇科幻小说，一共分三部分。 我在一年前就已经开始了阅读，读到第二部分的开头，就读不下去了。原因可能是场景转变太大，一下子没产生读第一部时的兴趣。 跟一个朋友交流，他也遇到了同样的问题。网上也有人读到放弃，但原因是太多物理知识不好理解。不过我觉得对于一本小说来说，不必要这么较真。 大约过了大半年，接近19年年终，我又拾起了这部小说，在江西的一段时间，彻底读完。 没有太体会">
+  <meta name="description" content="背景跟食品一样，代码也有过期时间。但糟糕的是，食品出产时就已标明了何时过期，但是一段代码是否过期却不好判定。 我们通常有这样的经验，当一个资源地址（url）要下线时，我们会从 nginx 的请求日志里查看该接口在最近一段时间内有没有被访问。 函数也可以做类似的处理，要解决的问题是，由谁来充当 nginx 记录请求的角色。 现状当前网络上已经有比较好的支持，最典型的实现有以下几类：  python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读《三体》">
-<meta property="og:url" content="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/index.html">
+<meta property="og:title" content="python 函数着色器设想">
+<meta property="og:url" content="https://pysnow530.github.io/2020/03/27/python-function-colorize/index.html">
 <meta property="og:site_name" content="pysnow530 的博客">
-<meta property="og:description" content="《三体》是刘慈欣创作的系列长篇科幻小说，一共分三部分。 我在一年前就已经开始了阅读，读到第二部分的开头，就读不下去了。原因可能是场景转变太大，一下子没产生读第一部时的兴趣。 跟一个朋友交流，他也遇到了同样的问题。网上也有人读到放弃，但原因是太多物理知识不好理解。不过我觉得对于一本小说来说，不必要这么较真。 大约过了大半年，接近19年年终，我又拾起了这部小说，在江西的一段时间，彻底读完。 没有太体会">
+<meta property="og:description" content="背景跟食品一样，代码也有过期时间。但糟糕的是，食品出产时就已标明了何时过期，但是一段代码是否过期却不好判定。 我们通常有这样的经验，当一个资源地址（url）要下线时，我们会从 nginx 的请求日志里查看该接口在最近一段时间内有没有被访问。 函数也可以做类似的处理，要解决的问题是，由谁来充当 nginx 记录请求的角色。 现状当前网络上已经有比较好的支持，最典型的实现有以下几类：  python">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-02T14:03:05.000Z">
+<meta property="article:published_time" content="2020-03-27T15:30:41.000Z">
 <meta property="article:modified_time" content="2020-03-27T16:35:37.748Z">
 <meta property="article:author" content="pysnow530@163.com">
-<meta property="article:tag" content="三体">
-<meta property="article:tag" content="人类文明">
-<meta property="article:tag" content="科幻小说">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
@@ -73,10 +71,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-read-the-three-body-problem" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-python-function-colorize" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/03/02/read-the-three-body-problem/" class="article-date">
-  <time datetime="2020-03-02T14:03:05.000Z" itemprop="datePublished">2020-03-02</time>
+    <a href="/2020/03/27/python-function-colorize/" class="article-date">
+  <time datetime="2020-03-27T15:30:41.000Z" itemprop="datePublished">2020-03-27</time>
 </a>
     
   </div>
@@ -87,7 +85,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      读《三体》
+      python 函数着色器设想
     </h1>
   
 
@@ -95,33 +93,66 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>《三体》是刘慈欣创作的系列长篇科幻小说，一共分三部分。</p>
-<p>我在一年前就已经开始了阅读，读到第二部分的开头，就读不下去了。原因可能是场景转变太大，一下子没产生读第一部时的兴趣。</p>
-<p>跟一个朋友交流，他也遇到了同样的问题。网上也有人读到放弃，但原因是太多物理知识不好理解。不过我觉得对于一本小说来说，不必要这么较真。</p>
-<p>大约过了大半年，接近19年年终，我又拾起了这部小说，在江西的一段时间，彻底读完。</p>
-<p>没有太体会到大部头，kindle 给人的感觉飘飘忽忽，对字数和厚度没有太大感觉。</p>
-<p>那时坐在三楼的阳台，冬天的阳光有点暖，照得人很舒服，算是比较惬意的一段经历。</p>
-<h2 id="科幻小说"><a href="#科幻小说" class="headerlink" title="科幻小说"></a>科幻小说</h2><p>这是一本科幻小说，也就是科学幻想小说，它的基础是科学，所以有很多内容是真实的，在科学的基础上，开了一些脑洞。</p>
-<p>还有一类小说叫文玄幻小说，这一类就不需要科学基础了。</p>
-<p>之前饺子导演的一部动画片《哪吒》，哪吒从结界偷跑出去了，两个把门的小妖对话，”很玄幻”，”不科学”。对仗之工整，令人吧服。</p>
-<p>小说发生的背景是宇宙，至于具体的故事概要，没有提及的必要，小说嘛。</p>
-<h2 id="优秀小说的一个标准"><a href="#优秀小说的一个标准" class="headerlink" title="优秀小说的一个标准"></a>优秀小说的一个标准</h2><p>《得到》上有一个课程，叫做《跟着李新学编剧》，发刊词里讲到神作跟口水剧的区别，里面讲到一个标准我觉得很好，”一部神作可以让你搞懂一个行业的底层逻辑”。</p>
-<p>这种底层逻辑是需要大量知识积累和大量精力的，从这一点也可以看出作者是否用心去写作或者创作，还是只是赚个流量敷衍了事。</p>
-<p>通过阅读《三体》这部小说，一方面可以跟着作者对人类文明做一些更加深度的思考，同时也可以了解一些宇宙科学知识，是比较值得的一部小说。</p>
-<p>通过这一条标准，很容易联想到《疯子在左，天才在右》这本书，不过不太好对其归类，只是做个参考比较吧。</p>
-<h2 id="对于人类科学的思考"><a href="#对于人类科学的思考" class="headerlink" title="对于人类科学的思考"></a>对于人类科学的思考</h2><p>一个确定的事实是，人类的科学是有局限的，而且是必然不完整的科学。</p>
-<p>所以人类定义的时间才会从大爆炸开始，大爆炸之前是什么，没有人会知道。</p>
-<p>小说里提到的黑域就是一个很有意思的概念，作者说最开始光的速度是无限的，但是我们可以通过一些技术来将某一区域的光速设置一个上限，甚至可以将某一个区域通过这种方式与外部宇宙隔离。</p>
-<p>比如人类现在发现的光速是30万千米，但为什么是30万而不是40万或者50万，如果不是依赖其它物理因素，这在科学上就不是很完美。</p>
-<p>人类永远不可能解开所有的疑惑。</p>
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>跟食品一样，代码也有过期时间。但糟糕的是，食品出产时就已标明了何时过期，但是一段代码是否过期却不好判定。</p>
+<p>我们通常有这样的经验，当一个资源地址（url）要下线时，我们会从 nginx 的请求日志里查看该接口在最近一段时间内有没有被访问。</p>
+<p>函数也可以做类似的处理，要解决的问题是，由谁来充当 nginx 记录请求的角色。</p>
+<h3 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h3><p>当前网络上已经有比较好的支持，最典型的实现有以下几类：</p>
+<ol>
+<li>python 用来性能调优的库，如 profile、hotshot 等</li>
+<li>使用装饰器实现，每个要统计的对象都需要加装饰器，操作不够优雅且略笨拙</li>
+<li>自己维护变量统计，这种人工成本较大</li>
+</ol>
+<p>方案 2、3 成本都比较高，且实现不够优雅，难以在高层次上复用。</p>
+<p>方案 1 是比较好的一种方式，但也存在着它的问题。</p>
+<p>对于脚本来说，这种方式很具优势。但是，对于大型系统来说，这类库的接入成本不低，可操作性较差。</p>
+<p>其次它的抽象程度不够，需要自己再做额外分析处理，很难做到开箱即用。</p>
+<h3 id="设想"><a href="#设想" class="headerlink" title="设想"></a>设想</h3><p>基于以上原因，我们可以设想一种更为友好的方式，以一种系统的抽象粒度给出。</p>
+<p>这里有一个很重要的指标需要评估，就是对系统性能的影响有多大。当然，这是个技术问题，可以从技术角度解决。</p>
+<p>我们这里使用着色来形象地表达记录访问状态的动作。不考虑性能影响，我们的目标是可以针对某命名空间下的对象及其方法进行着色，并获得着色后的可视化效果，以辅助对旧的代码进行重构。</p>
+<p>我们希望有一个开关来控制着色，并可以热启动和热停止，且停止后尽可能减少或彻底取消对性能的影响。</p>
+<p>着色器记录的信息，包括函数的调用次数及耗时。我们希望可以对各层级进行比较，可以很简单地看出对象下哪个函数在近一个月没有调用过，或者一个函数调用的平均耗时。</p>
+<p>更上一层次，我们希望该功能以一种成熟的第三方模块给出，仅需配置极少内容即可使用。如作为 django 的第三方模块。</p>
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><p>我们将使用钩子或其它技术手段，接管函数的调用逻辑。我们将记录函数的如下信息：</p>
+<table>
+<thead>
+<tr>
+<th>梯度时间</th>
+<th>函数或属性</th>
+<th>调用次数</th>
+<th>平均耗时</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2020-03-28 20:01</td>
+<td>views.WelcomeView.get()</td>
+<td>20</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>2020-03-28 20:01</td>
+<td>views.WelcomeView.post()</td>
+<td>3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>2020-03-28 20:01</td>
+<td>views.WelcomeView.var</td>
+<td>2</td>
+<td>0.5</td>
+</tr>
+</tbody></table>
+<p>由于请求量较大，可对数据做缓存处理，并定期刷新到数据库；由于数据量较大，可对过旧的数据进行压缩处理。</p>
+<p>系统将对该数据制作报表，报表主要有两种：</p>
+<p>第一种，一段时间内函数的调用次数热力图，并对不同函数按调用次数作升序排列。</p>
+<p>第二种，一段时间内函数的调用耗时热力图，并对不同函数按调用平均耗时作降序排列。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ck8aeqgbu001l3kj98cnq1apn" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/27/python-function-colorize/" data-id="ck8aeqgbm00173kj9f5ngeywu" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
 
     </footer>
   </div>
@@ -129,19 +160,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/03/03/sky-river-dream/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          记一个关于星河的梦
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/02/29/read-ruby-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/03/26/jango-3-wsgi/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">读《松本行宏的程序世界》</div>
+      <div class="article-nav-title">django核心处理流程 3. wsgi</div>
     </a>
   
 </nav>
