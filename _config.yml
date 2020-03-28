@@ -93,9 +93,14 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: polk
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: ''
+
+# SNS config
+sns:
+  Blog: /archives
+  GitHub: https://github.com/pysnow530
