@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>布朗运动的计算机模拟 - pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content=布朗运动>
+  
+    <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="pysnow530 的博客" type="application/atom+xml">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">pysnow530 的博客</a>
+    <div class="subtitle">不要踩坏我的圆</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link">About</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+<article class="post">
+  <div class="post-title">
+    <h1 class="article-title">布朗运动的计算机模拟</h1>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2020-04-02</span>
+  </div>
+  <div class="post-content">
+    <p>布朗运动是指悬浮在液体或气体中的微粒所做的永不停息的无规则运动。</p>
+<p>薛定谔在《生命是什么》中描述高锰酸钾的扩散现象，他说虽然高锰酸钾看上去是从高浓度向低浓度扩散，但并非是分子的冲撞造成的，本质上是分子的无规则随机运动。</p>
+<p>这里的无规则随机运动是指，分子在某一时刻的运动方向，是完全随机的，不受液体浓度的影响。</p>
+<p>看上去似乎难以置信，但正是由于高浓度+随机运动，才产生了一种从高浓度流向低浓度的观察效果。</p>
+<p>书中给出了一个解释，假设其中有一薄膜，由于分子运动随机，左右运动的概率是相等的，但假设左侧浓度更高，向右运动穿过薄膜的分子必然更多。</p>
+<p>本文试图通过计算机模拟的方式，来呈现分子的运动。</p>
+<p>在试验中，我们有一个正方体水箱，开始时，在水箱的左下方矩形区域放置高锰酸钾溶液，然后在每一次迭代中，让分子做布朗运动。</p>
+<p>下图是在做了10000次迭代后的情形，从图片中的状态已经可以明显看出扩散的痕迹了：</p>
+<p><img src="/images/brownian-motion.png" alt="布朗运动模拟器截图"></p>
+<p>可以点击下面的链接查看属于自己的随机过程：<a href="/html/brownian-motion.html">布朗运动模拟器</a>。</p>
+
+  </div>
+  <div class="post-footer">
+    
+      <ul class="post-tag-list" itemprop="keywords"><li class="post-tag-list-item"><a class="post-tag-list-link" href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" rel="tag">布朗运动</a></li></ul>
+    
+
+    <a href="#top" class="top">Back to Top</a>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    pysnow530@163.com
+  </span>
+</footer>
+    </div>
+  </body>
+</html>
