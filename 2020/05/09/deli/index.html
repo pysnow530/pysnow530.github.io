@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  
+  <title>计算机语言刻意练习实践 - pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  
+  <meta name="keywords" content=编程,刻意练习>
+  
+    <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="pysnow530 的博客" type="application/atom+xml">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+  <body>
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">pysnow530 的博客</a>
+    <div class="subtitle">不要踩坏我的圆</div>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link">About</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+<article class="post">
+  <div class="post-title">
+    <h1 class="article-title">计算机语言刻意练习实践</h1>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2020-05-09</span>
+  </div>
+  <div class="post-content">
+    <p>打算学习一下go语言。</p>
+<p>为什么是go？首先go作为一门编译型语言，同时保证了运行效率和编码效率。同时，它继承了c语言的简单易学，且支持交叉编译，二进制无需其它依赖简单方便。</p>
+<p>但是，我已经有十年的python使用经验，对这门语言的使用，已经变得像说话一样自然（或别扭）￼。习惯了脚本 语言的人，对编译型语言必然是有些不习惯的。</p>
+<p>编程语言作为人与机器的桥梁，应该像人们想象的那样，不必做太多了解，一切都应该是脑袋里想当然的样子。</p>
+<p>我花了一天的时间，学习了基本语法，然后重写了原来的python监控自动拉起脚本，但是还是有些别扭，不过运行得很好。悲伤的是，过了几天后，再来处理这份代码时，我发现已经很难像当初那样顺手，用得少必然会渐渐遗忘。</p>
+<p>后来，我想到一种办法：设定一些低成本的子目标，然后隔三差五地去完成。这有些像打游戏，又有点像一个忠实的老工匠反复打磨一个器具，后来我就真的这么实践了。</p>
+<p>这个小游戏是从4月底开始的，到目前为止持续了有十来天左右的样子。一期的目标主要以实现linux命令为主：</p>
+<ol>
+<li>ls命令</li>
+<li>head命令</li>
+<li>grep命令</li>
+<li>wc命令</li>
+<li>awk命令</li>
+</ol>
+<p>就是这几个简单的小命令工具，从最开始的74分钟，到现在的12分钟完成，有了很大的进步。这时间统计不科学（最开始都不了解相关库，肯定花费很多时间），只是作为参考。到了最后，完成的耗时已经渐渐稳定下来，在经过了8次练习后，代码也已经稳定下来，每次只是重写，代码的空行都不会改变了，当然还没有达到不经思考的效果。</p>
+<p>在练习到第五天时，那时我在编写python代码，在输入for v后，不自觉输入了一个:=。猛然警觉的我意识到，这次可能要成了。</p>
+<p>下面是我的练习数据。</p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">* 20200423 周四                       ls 06:05      head 27:18      grep 05:23     wc 09:13      awk 26:41         74min</span><br><span class="line">* 20200424 周五                       ls 02:51       head 05:25     grep 02:45     wc 08:29      awk 12:03         31min</span><br><span class="line">* 20200425 周六                       ls 03:30      head 11:00      grep 07:10      wc 06:55     awk 26:14        55min</span><br><span class="line">* 20200426 周日                       ls 01:51       head 25:17      grep 07:50      wc 04:06     awk 09:23       48min</span><br><span class="line">* 20200427 周一                       ls 01:30       head 07:10      grep 02:20      wc 03:20    awk 06:10        20min</span><br><span class="line">* 20200428 周二                       ls 01:30       head 07:00     grep 02:20     wc 03:10       awk 05:50        20min</span><br><span class="line">* 20200429 周三                       ls 01:30       head 05:00     grep 02:00     wc 05:20      awk 03:40        17min</span><br><span class="line">* 20200430 周四                       ls 01:00       head 05:30     grep 02:00     wc 03:00      awk 5:00         16min</span><br><span class="line">* 20200504 周一 start with goland     ls 01:30       head 06:00     grep 02:20     wc 03:00      awk 4:10          17min</span><br><span class="line">* 20200505 周二                       ls 01:15        head 04:55     grep 02:10     wc 02:20      awk 03:20        14min</span><br><span class="line">* 20200507 周四                       12min11s</span><br><span class="line">* 20200508 周五                       11min42s</span><br><span class="line">* 20200509 周六                       11min37s</span><br></pre></td></tr></table></figure>
+
+<p>第三天的耗时突然多了起来，一部分时间耗费在了查找新的实现上。当一切都了解后，时间就以一种逐渐减少的方式固定下来了。</p>
+<p>在第9天时，我开始从vim切换到jetbrains的goland，从子任务实现的时间来看，ide并不能提高简单程序的生产力，但是对于复杂些的程序（如awk），确实有很大的帮助。</p>
+<p>后来，我索性不再统计每个子任务的时间，最初设想时间上会更长（因为统计会包含子任务切换时的思考过程），但是结果出乎意料，时间仍在减少。当然，后面的运行使用了默认配置，减少了构建运行的过程，这也是不客观的。</p>
+<p>一期是linux命令，相对简单，二期可能会安排一些网络相关的任务，应该也是不错的练习。其它练习也可以依法炮制，比如算法、美工等的学习，应该是个不错的选择。</p>
+<p>天下武功，无坚不破，唯快不破。</p>
+<p>最后发一张成功的秘诀：</p>
+<p><img src="/images/deli.jpeg" alt="deli"></p>
+
+  </div>
+  <div class="post-footer">
+    
+      <ul class="post-tag-list" itemprop="keywords"><li class="post-tag-list-item"><a class="post-tag-list-link" href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" rel="tag">刻意练习</a></li><li class="post-tag-list-item"><a class="post-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li></ul>
+    
+
+    <a href="#top" class="top">Back to Top</a>
+  </div>
+</article>
+<footer>
+  &copy; 2020
+  <span class="author">
+    pysnow530@163.com
+  </span>
+</footer>
+    </div>
+  </body>
+</html>
