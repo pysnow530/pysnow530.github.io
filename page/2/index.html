@@ -1,50 +1,828 @@
 <!DOCTYPE html>
 <html>
-  <!DOCTYPE html>
-<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-  
-  <title>pysnow530 的博客 - 不要踩坏我的圆</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  
-  <meta name="keywords" content=生活,博客,前端,游戏>
-  
-    <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
-  
-  
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.02">
-  
-  
-    <link rel="alternate" href="/atom.xml " title="pysnow530 的博客" type="application/atom+xml">
+  <meta charset="utf-8">
   
 
+  
+  <title>pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="pysnow530 的博客">
+<meta property="og:url" content="https://pysnow530.github.io/page/2/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pysnow530@163.com">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
   
 <link rel="stylesheet" href="/css/style.css">
 
 <meta name="generator" content="Hexo 4.2.0"></head>
-  <body>
-    <div class="container">
-      <div class="home">
-  <div class="info">
-    <a href="/" class="logo">pysnow530 的博客</a>
-    <div class="subtitle">不要踩坏我的圆</div>
-    <div class="sns">
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
       
-          <a href="/archives">Blog</a>
-      
-          <a href="https://github.com/pysnow530" target="_blank" rel="noopener">GitHub</a>
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不要踩坏我的圆</a>
+        </h2>
       
     </div>
-    <footer>
-  &copy; 2020
-  <span class="author">
-    pysnow530@163.com
-  </span>
-</footer>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
   </div>
-</div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-jango-2-request-and-response" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/25/jango-2-request-and-response/" class="article-date">
+  <time datetime="2020-03-25T12:13:23.000Z" itemprop="datePublished">2020-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/25/jango-2-request-and-response/">django核心处理流程 2. 请求响应逻辑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>web 框架的设计，将每一个资源地址映射到一个处理逻辑。这篇文章将讲述 django 中对请求的解析处理，及处理结果的返回。</p>
+<h3 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h3><p>资源地址对应的处理逻辑，在 django 中叫做视图（view）。</p>
+<p>视图是一个可调用对象，一般为函数。</p>
+<p>请求的上下文被打包到一个叫做 HttpRequest 的对象中，并传入视图函数。函数处理后，将结果打包到一个 HttpResponse 对象，并返回给主调方。</p>
+<p>这里的主调方，其实就是我们的框架了。</p>
+<p>下面是一个比较典型的视图函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">(request, nickname)</span>:</span></span><br><span class="line">    content = <span class="string">f'Hello <span class="subst">&#123;nickname&#125;</span>, welcome to jango.'</span></span><br><span class="line">    response = HttpResponse(content=content)</span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
+
+<p>这个示例函数的结构比较清晰。需要注意的是，参数里有一个 nickname，django 会把资源地址中的匹配参数一并作为视图参数传递过来。</p>
+<p>与该函数绑定的 url 为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">r'/welcome/(?P&lt;nickname&gt;\w+)'</span>, views.welcome]</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 nickname 的来源及解析方式。</p>
+<h3 id="请求上下文"><a href="#请求上下文" class="headerlink" title="请求上下文"></a>请求上下文</h3><p>那么请求的上下文是如何构造出来的呢，下面就是构造的过程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpRequest</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, environ)</span>:</span></span><br><span class="line">        self.method = environ[<span class="string">'REQUEST_METHOD'</span>]</span><br><span class="line">        self.path_info = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">        self.environ = environ</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，HttpRequest 是通过解析一个 environ 字典生成的。environ 字典里包含了请求的上下文信息。至于 environ 从何而来，它实际上是 wsgi 接口定义。我们在下篇文章展开。</p>
+<p>environ 里包含了所有请求相关的信息，上例中的 path_info 实际上就是我们的请求地址了，比如前面的 <code>&#39;/welcome/oog&#39;</code>。</p>
+<p>HttpResponse 也会解析请求参数及 COOKIE 等，这样我们就可以很方便的获取需要的信息了。</p>
+<h3 id="http-响应"><a href="#http-响应" class="headerlink" title="http 响应"></a>http 响应</h3><p>请求被处理完后，视图函数需要返回一个 HttpResponse 对象。该对象包含了需要返回的信息。</p>
+<p>一个 http 请求返回的结果，比较典型的有下面几项：</p>
+<ol>
+<li>status code，它定义了请求被处理的结论，比如 200 表示成功，302 表示该资源需要跳转到其它资源地址等</li>
+<li>body，比如一段 html 代码，或者是一个故事的文本描述</li>
+<li>content type，标识 body 的类型，以方便资源请求方正确理解它。比如 text/html、text/plain 等类型</li>
+</ol>
+<p>HttpResponse类的定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpResponse</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, content, content_type=<span class="string">'plain/text'</span>, status_code=<span class="number">200</span>)</span>:</span></span><br><span class="line">        self.content = content</span><br><span class="line">        self.content_type = content_type</span><br><span class="line">        self.status_code = status_code</span><br></pre></td></tr></table></figure>
+
+<h3 id="请求、响应流程"><a href="#请求、响应流程" class="headerlink" title="请求、响应流程"></a>请求、响应流程</h3><p>现在我们已经有请求解析和响应对象的构造，一个请求过来是如何发生的呢？</p>
+<p>我们先来看 8 行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wsgi_application</span><span class="params">(environ, start_response)</span>:</span></span><br><span class="line">    <span class="string">"""标准wsgi程序"""</span></span><br><span class="line">    request = HttpRequest(environ)</span><br><span class="line">    response = handle_view(request, root_urlconf)</span><br><span class="line"></span><br><span class="line">    status = STATUS_TO_DISPLAY[response.status_code]</span><br><span class="line">    headers = []</span><br><span class="line">    start_response(status, headers)</span><br><span class="line"></span><br><span class="line">    ret = [response.content.encode(<span class="string">'utf-8'</span>)]</span><br><span class="line">    <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+
+<p>代码中，得到 request 后，调用函数并获取 response，然后把关键信息按需要的格式返回即可。</p>
+<p>其中 handle_view() 是一个 10 行函数，功能是根据 url 找到视图函数并执行。具体参见 jango 的源码 <a href="https://github.com/pysnow530/jango" target="_blank" rel="noopener">https://github.com/pysnow530/jango</a>。</p>
+<p>这里的结果渲染部分初看会有点奇怪，这里其实是 wsgi 定义的规范，后面的文章会讲到。</p>
+<p>到这里，我们就已经完成了一个 url 从请求匹配，到视图执行，最后到请求响应的完整过程。文章里讲到的 wsgi 将会在下一篇文章细说。</p>
+<h3 id="一些重要细节"><a href="#一些重要细节" class="headerlink" title="一些重要细节"></a>一些重要细节</h3><p>我们上面看到的视图，都是一些函数的形式。如果看 django 的官方文档，会发现 django 也提供了一种类的方式，类名对应请求名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span><span class="params">(View)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""GET方法"""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""POST方法"""</span></span><br></pre></td></tr></table></figure>
+
+<p>但是不要被外在形式迷惑，类形式的视图本质也是一个可调用对象，只是通过 Welcome.as_view() 包装的语法糖方便使用。具体可参考 django 源码。</p>
+<p>另外一点，http 比例子中讲到的功能要更为丰富，它还涉及了文件的上传下载等功能。具体可参考扩展资源给出的 rfc 文档。</p>
+<h3 id="扩展资料"><a href="#扩展资料" class="headerlink" title="扩展资料"></a>扩展资料</h3><p>http 协议可参考 <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc2616</a>。</p>
+
+      
     </div>
-  </body>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/25/jango-2-request-and-response/" data-id="ckajgeaxt000s0drdhncpcf28" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-jango-1-route" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/22/jango-1-route/" class="article-date">
+  <time datetime="2020-03-22T10:00:45.000Z" itemprop="datePublished">2020-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/22/jango-1-route/">django核心处理流程 1. 路由</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>路由的设计是每一个 web 框架都必须优先考虑的问题，它决定了资源地址在代码中的组织方式。</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>从本质上讲，路由表维护了 url 地址到业务逻辑代码的映射关系。</p>
+<p>在 django 中，为了使 url 规则更为灵活，采用了正则表达式的方式来匹配 url 地址。</p>
+<p>正则表达式是一种模糊匹配，同一个 url 可能会对应多个正则表达式。所以 django 中的路由是一个列表配置。列表中的每一项是一个 <code>(pattern, view)</code> 对。</p>
+<p>为了便于模块化，django 还提供了第二种配置项 <code>(pattern, conf_module)</code>，用于将一组 url 映射到某个前缀下。所以整个路由设计的结构上是一棵树。</p>
+<p>下面是一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># urls.py</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    [<span class="string">'/welcome'</span>, views.welcome],</span><br><span class="line">    [<span class="string">'/api/suburls'</span>, <span class="string">'suburls'</span>],  <span class="comment"># 以/api/suburls作为url前缀，suburls模块中的其它项作为剩余部分</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># suburls.py</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    [<span class="string">'/url1'</span>, views.url1],   <span class="comment"># 实际访问地址为/api/suburls/url1</span></span><br><span class="line">    [<span class="string">'/url2'</span>, views.url2],   <span class="comment"># 实际访问地址为/api/suburls/url2</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>假如 suburls 是一个成熟的模块，我们就可以使用这种方式给该模块分配一个前缀，如此就可以投入使用了。</p>
+<p>下面是一个很经典的例子，将 django 内置的后台管理模块配置到 <code>/admin</code> 下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找算法"><a href="#查找算法" class="headerlink" title="查找算法"></a>查找算法</h3><p>上面提到，django 中的路由实质上是一棵树的结构，所以查找上也是树的遍历算法。由于我们想借助列表结构来说明优先级，这里必然要使用深度遍历。</p>
+<p>我们首先会从 settings 配置找到根 url 模块，然后遍历模块中的 urlpatterns 列表，如果匹配到的是一个模块，就继续匹配模块中的列表。如果最后没有找到可执行的逻辑，就是我们常见的 404 了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># demo/settings.py</span></span><br><span class="line">ROOT_URLCONF = <span class="string">'demo.urls'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># jango/url.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">resolve</span><span class="params">(path_info, urlconf)</span>:</span></span><br><span class="line">    <span class="string">"""匹配请求url，返回匹配项"""</span></span><br><span class="line">    urlconf_module = import_module(urlconf)</span><br><span class="line">    urlpatterns = urlconf_module.urlpatterns</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> pattern <span class="keyword">in</span> urlpatterns:</span><br><span class="line">        regex = pattern[<span class="number">0</span>]</span><br><span class="line">        re_matched = re.match(regex, path_info)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ['hello/', view]</span></span><br><span class="line">        <span class="keyword">if</span> re_matched <span class="keyword">and</span> callable(pattern[<span class="number">1</span>]):</span><br><span class="line">            callback = pattern[<span class="number">1</span>]</span><br><span class="line">            callback_kwargs = re_matched.groupdict()</span><br><span class="line">            groups = re_matched.groups()</span><br><span class="line">            callback_args = groups[:len(groups) - len(callback_kwargs)]</span><br><span class="line">            <span class="keyword">return</span> callback, callback_args, callback_kwargs</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ['api/', 'demo.urls']</span></span><br><span class="line">        <span class="keyword">elif</span> re_matched <span class="keyword">and</span> isinstance(pattern[<span class="number">1</span>], str):</span><br><span class="line">            resolve_match = resolve(path_info[re_matched.end():], pattern[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> resolve_match:</span><br><span class="line">                <span class="keyword">return</span> resolve_match</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，参数 <code>path_info</code> 是需要解析的url。解析后，我们可以获取执行的函数，及前端传过来的 url 参数。后面就可以调用具体函数执行了。</p>
+<p>代码地址可参考 <a href="https://github.com/pysnow530/jango" target="_blank" rel="noopener">https://github.com/pysnow530/jango</a>。</p>
+<h3 id="一些重要细节"><a href="#一些重要细节" class="headerlink" title="一些重要细节"></a>一些重要细节</h3><p>当然，上面的模型只是一个简化，这里提一下原生 django 几个比较重要的细节。</p>
+<p>第一，我们说匹配规则是一个正则表达式，但是 django 已对正则表达式做了封装，提供了更简单直白的用法，比如 <code>/welcome/&lt;name&gt;</code>。更多的限制，必然是一种发展趋势，它让我们更好的关心逻辑代码而非技术。</p>
+<p>第二，为减少封装了解本质，我们把路由中的每一个配置项定义为一个列表，实际 django 中是以一个类来替换的，作用类似，只是抽象程度更高。</p>
+<p>第三，django 支持给路由配置项命名，并在需要时支持将名称反转为 url。如在模板中的 <code>{ % url &#39;api_welcome&#39; &#39;name&#39; % }</code> 或代码中使用 <code>reverse(&#39;api_welcome&#39;, args=(&#39;name&#39;,))</code>，这让修改 url 几乎零成本，是一个优秀的设计。</p>
+<p>说了这么多，路由的核心简单且简洁，就是一个映射表。通过它，我们能找到资源地址对应的逻辑代码。</p>
+<p>下一篇文章，我们来看一下逻辑代码是如何组织及工作的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ckajgeaxt000r0drd70hg8mp8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-read-wukongzhuan" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/16/read-wukongzhuan/" class="article-date">
+  <time datetime="2020-03-16T13:32:14.000Z" itemprop="datePublished">2020-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/16/read-wukongzhuan/">读《悟空传》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>“””<br>有人说《悟空传》颠覆西游，其实我一点儿没觉得颠覆，我觉得我写的就是那个最真实的西游，西游就是一个很悲壮的故事，是一个关于一群人在路上想寻找当年失去的理想的故事，而不是我们一些改编作品里面表现的那样，就是打打妖怪说说笑话那样一个平庸的故事。</p>
+<p>也正是这样，我十分受不了西游里面就只有打妖怪打妖怪，打你妹啊。西游的主题根本就不是打妖怪。妖怪只分两种：一种是当年跟着孙悟空一起反抗天庭的兄弟，像牛魔王之类的，孙悟空必须把当年和他一起战天斗地的结拜兄弟都干掉，就为了成佛，我觉得这就是最大的悲剧；另一种则是神仙安排下来的，不是这个的坐骑就是那个的宠物。这也太恶心了，一边让人去西天一边安排着九九八十一难，就想把你整死。所以整个西游就是一出悲剧，是一场阴谋，不论你怎么做，都是死路一条。你不服从神，不向西走，整死你；你向西走，一路上九九八十一难，都是神安排的，依然整死你。最后到了西天，你以为成功了，结果给你一部经书还是假的，全是白纸；你拿回去退货，送了礼，给你一部有字的，你以为是真的，是真的吗？其实还是假的，因为本来无一物，何处惹尘埃。所谓道不可道，我们说了别人的答案不是你的答案，如果有人要拿答案灌输给你，那不是为了让你聪明，更可能是想让你变傻。</p>
+<p>最后四个人成了佛，成佛以后呢？没有了，什么都没有了。以前活生生的有血有肉有感情有梦想的四个人，一成了佛，就完全消失在这个世界上了。佛是什么？佛就是虚无，四大皆空。什么都没有了，没有感情没有欲望没有思想，当你放弃这些，你就不会痛苦了。但问题是，放弃了这些，人还剩下什么？什么都没了，直接就死了。所以成佛就是消亡，西天就是寂灭，西游就是一场被精心安排成自杀的谋杀。<br>“””</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ckajgeayn00240drdbbcubp9n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-dedao-reader" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/16/dedao-reader/" class="article-date">
+  <time datetime="2020-03-16T13:08:40.000Z" itemprop="datePublished">2020-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/16/dedao-reader/">《得到阅读器》吐槽环节</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>得到阅读器的对外接口，真的是毫无设计感。</p>
+<p>有图为证。</p>
+<p><img src="/images/dedao-reader.jpg" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ckajgeaxn000f0drdcdf6eazb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sky-river-dream" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/03/sky-river-dream/" class="article-date">
+  <time datetime="2020-03-03T15:43:05.000Z" itemprop="datePublished">2020-03-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/03/sky-river-dream/">记一个关于星河的梦</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不是真的星河，大家说的星河是很多星星在夜空中汇聚成一条大河的形状。</p>
+<p>那时候已经是很晚了，感觉四下昏暗暗的。我路过一座桥，桥面却被月光照的很亮。</p>
+<p>不经意间抬起头，发现天上竟然有一条河流在流淌。</p>
+<p>河流很宽，在夜空中有点昏暗，能很清晰的看到水波。河流很长，一眼望不到边际，只是闪烁着流淌了去。</p>
+<p>我呆呆地站在那里，竟然有种不知道从哪里来的感动。</p>
+<p>正当我看得出神时，天空渐渐暗了下来，最后只剩漆黑一片，什么都看不到了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ckajgeayo00290drd4zqp5ius" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-read-the-three-body-problem" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/02/read-the-three-body-problem/" class="article-date">
+  <time datetime="2020-03-02T14:03:05.000Z" itemprop="datePublished">2020-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/02/read-the-three-body-problem/">读《三体》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>《三体》是刘慈欣创作的系列长篇科幻小说，一共分三部分。</p>
+<p>我在一年前就已经开始了阅读，读到第二部分的开头，就读不下去了。原因可能是场景转变太大，一下子没产生读第一部时的兴趣。</p>
+<p>跟一个朋友交流，他也遇到了同样的问题。网上也有人读到放弃，但原因是太多物理知识不好理解。不过我觉得对于一本小说来说，不必要这么较真。</p>
+<p>大约过了大半年，接近19年年终，我又拾起了这部小说，在江西的一段时间，彻底读完。</p>
+<p>没有太体会到大部头，kindle 给人的感觉飘飘忽忽，对字数和厚度没有太大感觉。</p>
+<p>那时坐在三楼的阳台，冬天的阳光有点暖，照得人很舒服，算是比较惬意的一段经历。</p>
+<h2 id="科幻小说"><a href="#科幻小说" class="headerlink" title="科幻小说"></a>科幻小说</h2><p>这是一本科幻小说，也就是科学幻想小说，它的基础是科学，所以有很多内容是真实的，在科学的基础上，开了一些脑洞。</p>
+<p>还有一类小说叫文玄幻小说，这一类就不需要科学基础了。</p>
+<p>之前饺子导演的一部动画片《哪吒》，哪吒从结界偷跑出去了，两个把门的小妖对话，”很玄幻”，”不科学”。对仗之工整，令人吧服。</p>
+<p>小说发生的背景是宇宙，至于具体的故事概要，没有提及的必要，小说嘛。</p>
+<h2 id="优秀小说的一个标准"><a href="#优秀小说的一个标准" class="headerlink" title="优秀小说的一个标准"></a>优秀小说的一个标准</h2><p>《得到》上有一个课程，叫做《跟着李新学编剧》，发刊词里讲到神作跟口水剧的区别，里面讲到一个标准我觉得很好，”一部神作可以让你搞懂一个行业的底层逻辑”。</p>
+<p>这种底层逻辑是需要大量知识积累和大量精力的，从这一点也可以看出作者是否用心去写作或者创作，还是只是赚个流量敷衍了事。</p>
+<p>通过阅读《三体》这部小说，一方面可以跟着作者对人类文明做一些更加深度的思考，同时也可以了解一些宇宙科学知识，是比较值得的一部小说。</p>
+<p>通过这一条标准，很容易联想到《疯子在左，天才在右》这本书，不过不太好对其归类，只是做个参考比较吧。</p>
+<h2 id="对于人类科学的思考"><a href="#对于人类科学的思考" class="headerlink" title="对于人类科学的思考"></a>对于人类科学的思考</h2><p>一个确定的事实是，人类的科学是有局限的，而且是必然不完整的科学。</p>
+<p>所以人类定义的时间才会从大爆炸开始，大爆炸之前是什么，没有人会知道。</p>
+<p>小说里提到的黑域就是一个很有意思的概念，作者说最开始光的速度是无限的，但是我们可以通过一些技术来将某一区域的光速设置一个上限，甚至可以将某一个区域通过这种方式与外部宇宙隔离。</p>
+<p>比如人类现在发现的光速是30万千米，但为什么是30万而不是40万或者50万，如果不是依赖其它物理因素，这在科学上就不是很完美。</p>
+<p>人类永远不可能解开所有的疑惑。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ckajgeayl001z0drddkut4jbf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-read-ruby-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/29/read-ruby-world/" class="article-date">
+  <time datetime="2020-02-29T15:52:50.000Z" itemprop="datePublished">2020-02-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/29/read-ruby-world/">读《松本行宏的程序世界》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这本书在一个月前就已经读完了，对于一个科班生来说，并没有太多新的内容。但是里面有一些很有意思的点，这里顺带写下来，以对之前付出的时间精力有个交待。</p>
+<p>这是一本偏重编程思想的书，作者是 ruby 之父松本行宏。</p>
+<p>作者在书里也说到，这并不是讲 ruby 使用的手册，而更多是使用 ruby 或者其它语言来说明某些思想。</p>
+<p>不过这里还是想说一下自己对 ruby 这门语言的看法。在设计 ruby 语言时，松本行宏从 lisp 里借用了很多思想；而它的成功很大程度借助了 ruby on rails。这也说明了 ruby 有某些性质，更容易实现一个更为灵活易用的 web 框架。</p>
+<p>书中大部分知识点都是一些最为基础、必知必会的内容，记笔记意义不会很大，所以这里只记录一下自己感觉有些意思的地方。</p>
+<h2 id="我为什么开发-ruby"><a href="#我为什么开发-ruby" class="headerlink" title="我为什么开发 ruby"></a>我为什么开发 ruby</h2><p>这实际上是第1章的标题。作者讲自己开发 ruby，最开始是出于兴趣爱好，希望自己能够轻松编程，提高开发效率，不想开源后变得流行并变成了自己的一个职业。</p>
+<p>计算机语言不少，作者学习其它语言，并根据自己的理解设计及发展了 ruby。从某种程度上说，一门语言的设计表现了作者对某些特性的取舍，实际上也是他对编程语言世界的理解。</p>
+<p>作者对自己设计的 ruby 语言提出了 3 个设计原则：</p>
+<ol>
+<li>简洁性</li>
+<li>扩展性</li>
+<li>稳定性</li>
+</ol>
+<p>对于简洁性，作者形容为”能直接运行的伪码式编程语言”。应该算是很直观的描述了，单从结构形式上来说，ruby 编写的代码是比较易读的。</p>
+<p>ruby 意为红宝石，是七月的诞生石。而 perl 音同 pearl，是六月的诞生石。可见 ruby 也从 perl 里选取了一些特性。</p>
+<p>有一个段子说 perl 和 ruby 的作者是语言学家，而 python 的作者是数学家，所以前两者注重一个问题多种解法，而后者注重只提供最优解法。</p>
+<p>实际上松本行宏也给出了答案，他希望使用这门语言是一件很有趣的事。当然，有一些语言也标榜自己的优势是乏味，毕竟做工程嘛。</p>
+<h2 id="对象并非对具体物体的反映"><a href="#对象并非对具体物体的反映" class="headerlink" title="对象并非对具体物体的反映"></a>对象并非对具体物体的反映</h2><p>很多地方说面向对象是对自然界系统的一个模拟，或者说对现实世界物体的模拟。作者说这种说法是错的，我赞同这种观点。</p>
+<p>为什么人们会有这种看法？</p>
+<p>我觉得跟人们过度的类比有关。比如讲到类，大家习惯举一些现实中的例子以简化理解。比如，老师属于人类。</p>
+<p>那么面向对象是什么呢？</p>
+<p>最开始，软件的基本控制结构，只有一个跳转，也就是汇编里的 jmp。实际上现在常用的三种结构也都是使用跳转来实现的。</p>
+<p>随着软件复杂度的上升，这种控制结构可读性很差，对于后期维护也是一个灾难，所以出现了结构化编程。通过将控制结构限定在顺序、分支、循环，来提高可维护性。</p>
+<p>但是对于数据的维护，仍然是裸露在保护之外的，语言层面还没有一个较好的工具手段。这时，面向对象概念就出现了。</p>
+<p>可以说，结构化编程是对控制流程的结构化，而面向对象是对数据的结构化。</p>
+<p>说到这里，想起另一本书里的观念，计算机的一些概念本身就很美，比如变量地址，我们可以试着去理解它，没必要人为多加一层注解（房间号）,试图绕过这种理解。</p>
+<p>当然，从对控制结构的限制，我们也不难看出，通过越来越多的限制，我们确实获得了更多的自由。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面讲了两个我认为很有意思的地方。其它章节大多是技术上的探讨，这里就不缀述了。</p>
+<p>从内容用词看，作者是一个很谦虚且喜欢思考的人。不过书里有一些地方存在重复，这本书是不是作者对旧有创作的二次整理就不肯定的。</p>
+<p>对于科班生来说，大部分内容都是一些基础内容，之前应该都有涉及，不会有太大感受；如果没有学习过这些内容，或想温顾一下，还是可以一读的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ckajgeayi001s0drd7jk8grp6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hexo-migrate" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/28/hexo-migrate/" class="article-date">
+  <time datetime="2020-02-28T14:49:08.000Z" itemprop="datePublished">2020-02-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/28/hexo-migrate/">hexo博客搬迁</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="写博客的经历"><a href="#写博客的经历" class="headerlink" title="写博客的经历"></a>写博客的经历</h2><p>最开始是接触 csdn，偶而记录一些现在看来无关痛痒的技术问题。</p>
+<p>后来买了一台腾讯云的服务器，搭建了 wordpress，开始记录博客。</p>
+<p>奈何服务器维护比较占用精力，而且于我博客互动较少，主要还是利已的。于是开始寻找类似 github page 这样的静态托管服务。</p>
+<p>先是从朋友那里克隆了一份基于 jekyll 的代码，经过了一番折腾，好歹也用起来了，开始记录杂七杂八的东西。其间，也对 jekyll 做了一些扩展性的东西。</p>
+<p>但是克隆到的主题看上去还是有些混乱，之前看过 jekyll 官方文档，说实话并不是很直白（比起 hexo）。遂决定迁移到 hexo。</p>
+<h2 id="hexo-迁移过程"><a href="#hexo-迁移过程" class="headerlink" title="hexo 迁移过程"></a>hexo 迁移过程</h2><p>迁移的整个过程是比较顺利的，hexo 的安装过程极度简单，几行命令就搞定了。</p>
+<p>不过碍于网络问题，初始化时主题下载失败，打开空白，重新下载后 OK。整个过程下载比较慢，网络问题有时真的烦。</p>
+<p>由于 hexo 文件格式与 jekyll 略有不同，简单写了一个 50 行的 python 脚本做了格式转换，比较顺利。</p>
+<h2 id="hexo-体验"><a href="#hexo-体验" class="headerlink" title="hexo 体验"></a>hexo 体验</h2><p>hexo 也有主题跟插件机制，出于简单易用的考虑，后面有需要再做迭代。</p>
+<p>这里使用了默认的 landscape 主题，整体是比较简洁大气的。</p>
+<p>首页默认显示最近的十篇文章，也可以通过 Archive 查看所有按年编排的文章，或者通过 tag 过滤出某一类相关文档。</p>
+<p>2020，博客可以继续写起来了。</p>
+<h2 id="事后记"><a href="#事后记" class="headerlink" title="事后记"></a>事后记</h2><p>记录两个事后发现的问题：</p>
+<ol>
+<li>按照官方提示，接入 travis-ci 后，从 github 不能将分支正常切换到 gh-pages。github 官方在 16年已经 <a href="https://github.blog/2016-08-17-simpler-github-pages-publishing/" target="_blank" rel="noopener">给出说明</a>，2020年更新的 hexo 文档竟然没有修正，英文文档在页底有评论给出了解法。有需要可以参考这个仓库的 ci 文件。</li>
+<li>小金反馈说，在迁移文件时，由于月份和日期在官方格式是双位的，单位会出现问题。这应该是 jekyll 兼容性过高引起的。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/02/28/hexo-migrate/" data-id="ckajgeaxs000o0drd3qff16lc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-read-lisp-paper-recursive" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/30/read-lisp-paper-recursive/" class="article-date">
+  <time datetime="2019-03-30T16:00:00.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/30/read-lisp-paper-recursive/">lisp论文《recursive》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>论文的全称是《Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I》，是人工智能之父John McCarthy在1960年4月发表的。</p>
+<p>之前读过一次，感觉很震撼。这次阅读下来，零零散散地加在一起，包括最后写的一个求值表达式的调试过程，总耗时大概有7个小时。</p>
+<p>虽然时间已经过去60年，作者John McCarthy也已经离开我们7年，数学总归是数学，所以论文的语法，跟现在也不会有太大的差别。</p>
+<p>重要的还是思想，借助文字来了解先驱所处的时代和想法，这也是我读这篇论文的初衷。</p>
+<p>读到这样一篇踏实的论文还是很幸运的，虽然在最开始感到吃力。</p>
+<p>这让我想起了《how to read a book》里讲到阅读的目的，比如看一则新闻，大多时候我们只是在获取更多的信息，对我们的理解能力并没有太大的提升。但是当阅读一篇在我们理解能力之外的文章时，虽然会有些吃力，但是它的回报是远远超过我们付出的。</p>
+<p>系统的介绍论文的内容不是这篇文章的目的，且作者写的比我要详细准确一百万倍有余，我这里记录一下自己比较有感触的地方（意思就是跟这篇论文的内容关系不大 :-p）。</p>
+<p><a id="org4c03370"></a></p>
+<h2 id="lisp并非无所不能"><a href="#lisp并非无所不能" class="headerlink" title="lisp并非无所不能"></a>lisp并非无所不能</h2><p>刚上来就要泼一下冷水了。</p>
+<p>lisp很强大，你可以看我最后从论文里摘抄出来的一个 <em>eval</em> 求值函数的实现，一个可以用自己重写自身的语言，已经不能用强大来形容了。</p>
+<p>lisp最重要的是思想，当然它也支撑了一些很重要的软件，比如emacs、autocad，但它终归不能作为商用软件的语言。</p>
+<p>原因有很多，说一点，它的生态就比一些主流语言差很多，假如出现了一款新型数据库，社区要做语言的第三方库支持，肯定不会优先想到一门非主流语言。</p>
+<p>所以即使lisp很好很强大，它的使用场景也很局限。</p>
+<p><a id="org6a4e274"></a></p>
+<h2 id="阅读这篇论文最大的障碍"><a href="#阅读这篇论文最大的障碍" class="headerlink" title="阅读这篇论文最大的障碍"></a>阅读这篇论文最大的障碍</h2><p>我们记住一个东西或者学会一个东西很容易，但是要忘记就很难了。知识就是这样一个东西。</p>
+<p>这是我最开始阅读时遇到最大的一个障碍，60年，还需要再过12年c语言才会被发明出来，至于java还要再等35年。</p>
+<p>举个例子，如果我们熟悉了现在主流的语言设计，一开始可能会对 <em>S-expression</em> 、 <em>M-expression</em> 感到有些费解。</p>
+<p>所以，我做的第一个尝试就是忘记之前所学的（表面）知识。</p>
+<p>想起了张三丰跟张无忌的对话，这也算是我对这段对话的一个认识吧。</p>
+<p><a id="org18bba9b"></a></p>
+<h2 id="lisp的基础是数学"><a href="#lisp的基础是数学" class="headerlink" title="lisp的基础是数学"></a>lisp的基础是数学</h2><p>最开始有点难，但是当我理解了lisp设计的基础，一些东西就很容易理解了。</p>
+<p>lisp的语言基础，是从数学的基本形式归纳出来的。如何将数学的逻辑和表达式抽象成一个统一的表达形式，是lisp要解决的一个问题。</p>
+<p>有的人说lisp很美，大多时候指的并不是它的表现形式（当然，可能也有人觉得lisp的括弧很美），而是指它的底层结构。这也是它可以很方便地重写自身的原因。</p>
+<p>这种古老的语言（而不是现代的语言），让我更加确信计算机科学是数学的一个分支。</p>
+<p>现代语言的设计，基于计算机的比例变得越来越高。</p>
+<p>一个原因是，数学是一门语言的核心，核心的东西一般都较小，而且现在语言支持的特性越来越庞大，不可避免会有越来越多的非核心的面向计算机的代码。比如，多核心，多线程，有越来越多的计算机术语被发明出来。</p>
+<p><a id="org2aba115"></a></p>
+<h2 id="关于波兰表达式"><a href="#关于波兰表达式" class="headerlink" title="关于波兰表达式"></a>关于波兰表达式</h2><p>波兰表达式（polish notation）和代数表达式（algebraic notation）是两个很典型的数学表达式（还有逆波兰表达式，如emacs的calc）。</p>
+<p>最直观的方式是代数表达式，面向人类。</p>
+<p>波兰表达式的优点在于它的结构更加统一，更易于流程化的处理。还有很重要的一点，它可以做到数据和运算分离，这可能是emacs的calc工具使用逆波兰表达式的原因。</p>
+<p>比如，我们经常会计算一个月内的开销，有时就是一些小花费的总和，这时如果使用波兰表达式就很清楚明了，(+ 30.0 20.0 30.0 40.0)。</p>
+<p><a id="org6f8f2a4"></a></p>
+<h2 id="声名式和命令式（declarative-and-imperative）"><a href="#声名式和命令式（declarative-and-imperative）" class="headerlink" title="声名式和命令式（declarative and imperative）"></a>声名式和命令式（declarative and imperative）</h2><p>这两个概念在60年就已经存在了，不过现在有一些人还是不太清楚。</p>
+<p>一句话，初级领导用命令式，高级领导用声明式。</p>
+<p><a id="org87f196d"></a></p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>是的，内存管理在60年的lisp里就已经实现了。使用lisp的程序员们不需要关心内存释放，甚至都不需要知道存在内存这样的东西（当然，没人不知道）。</p>
+<p>由于lisp的基础很简单，所以lisp内存的实现也很简单。这是一个良性循环。</p>
+<p><a id="orgd6c8ec5"></a></p>
+<h2 id="函数名的设计"><a href="#函数名的设计" class="headerlink" title="函数名的设计"></a>函数名的设计</h2><p>这在现在看来已经是理所当然的了。</p>
+<p>但是在最开始的设计中，如何实现数学中的函数是一个值得被推敲的事情。</p>
+<p>lisp使用了 <em>Church</em> 中定义的 <em>lambda</em> 的原型，把函数实现中的某些参数（形参）和实参绑定，以此为上下文对实现进行求值。</p>
+<p>但是 <em>lambda</em> 不能解决递归的问题，比如辗转相除求最大公约数或者利用牛顿公式求解微分方程。</p>
+<p>函数名的设计可以解决这个问题，即将名称与实现绑定，实现中就可以使用名称来递归自身了。</p>
+<p><a id="orgc3b8729"></a></p>
+<h2 id="lisp中的数据结构"><a href="#lisp中的数据结构" class="headerlink" title="lisp中的数据结构"></a>lisp中的数据结构</h2><p>所谓一生二，二生万物。</p>
+<p>lisp中的基本数据结构只是一个包含两个元素的元组，但是元组可以互相组合，它的表达能力是无穷的（这里的表达能力指的不是可读性，而是表达的内容）。</p>
+<p>而且在形式上有一个莫大的好处，就是它非常适合实现递归的思想。</p>
+<p>这里插播一段代码，比如定义一个函数，将 <em>APPLE</em> 转换为 <em>BOY</em> 。</p>
+<pre><code>(defun replace-apple-to-boy (x)
+  (cond ((atom x) (or (and (eq x &apos;apple) &apos;boy) x))
+    (t (cons (replace-apple-to-boy (car x))
+         (replace-apple-to-boy (cdr x))))))
+
+(replace-apple-to-boy &apos;((apple foo) apple)) ;; =&gt; ((boy foo) boy)</code></pre><p><a id="org47cd5c3"></a></p>
+<h2 id="lisp的学习成本"><a href="#lisp的学习成本" class="headerlink" title="lisp的学习成本"></a>lisp的学习成本</h2><p>是的，学习lisp几乎没有学习成本。主要成本在lisp的思想上，即递归，这几乎是学习所有语言必知必会的东西。</p>
+<p>lisp的基础构建在几个原子操作上，学习的时间应该可以用分钟来计了。</p>
+<p>所以emacs使用elisp来作为扩展语言，甚至很多非计算机专业的人来了兴致也可以敲上几行代码。</p>
+<p>觉得lisp很难的人，很多都是有其它现代语言基础的人。</p>
+<p><a id="org5208a74"></a></p>
+<h2 id="过程中遇到的一些小问题"><a href="#过程中遇到的一些小问题" class="headerlink" title="过程中遇到的一些小问题"></a>过程中遇到的一些小问题</h2><p>html版本有个好处是组织结构更清晰，一章一个链接，不过公式排版差强人意。</p>
+<p>pdf版好一些，但是在eval的定义一块格式还是有问题，特别是嵌套层次深了以后，很难一眼看出自己在哪里。最好是自己重新排版一下。</p>
+<p>网络上还有一些排版更友好一些的版本，不过差别不会太大。</p>
+<p><a id="org5e33078"></a></p>
+<h2 id="附"><a href="#附" class="headerlink" title="附"></a>附</h2><p><a id="orgac04c10"></a></p>
+<h3 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h3><p>这是lisp很强大的一个经典论证，即在语言之上实现该语言的求值器。</p>
+<p>NOTE: 该代码使用了elisp，在其它lisp方言应该也可以正常运行。其中只使用了有限的几个函数（car cdr cons cond eq atom）。</p>
+<pre><code>(defun assoc2 (x y)
+  (cond ((null y) nil)
+    ((eq x (caar y)) (cdar y))
+    (t (assoc2 x (cdr y)))))
+
+(defun append2 (x y)
+  (cond ((null x) y)
+    (t (cons (car x) (append2 (cdr x) y)))))
+
+(defun evcon (c a)
+  (cond ((eval2 (caar c) a) (eval2 (cadar c) a))
+    (t (evcon (cdr c) a))))
+
+(defun evlis (m a)
+  (cond ((null m) nil)
+    (t (cons (eval2 (car m) a) (evlis (cdr m) a)))))
+
+(defun pair (x y)
+  (cond ((and (null x) (null y)) nil)
+    ((and (not (atom x)) (not (atom y))) (cons (cons (car x) (car y)) (pair (cdr x) (cdr y))))))
+
+(defun eval2 (e a)
+  (cond ((atom e) (assoc2 e a))
+    ((atom (car e))
+     (cond ((eq (car e) &apos;QUOTE) (cadr e))
+           ((eq (car e) &apos;ATOM) (atom (eval2 (cadr e) a)))
+           ((eq (car e) &apos;EQ) (eq (eval2 (cadr e) a) (eval2 (caddr e) a)))
+           ((eq (car e) &apos;COND) (evcon (cdr e) a))
+           ((eq (car e) &apos;CAR) (car (eval2 (cadr e) a)))
+           ((eq (car e) &apos;CDR) (cdr (eval2 (cadr e) a)))
+           ((eq (car e) &apos;CONS) (cons (eval2 (cadr e) a) (eval2 (caddr e) a)))
+           (t (eval2 (cons (assoc2 (car e) a) (evlis (cdr e) a)) a))))
+    ((eq (caar e) &apos;LABEL) (eval2 (cons (caddar e) (cdr e)) (cons (cons (cadar e) (car e)) a)))
+    ((eq (caar e) &apos;LAMBDA) (eval2 (caddar e) (append (pair (cadar e) (evlis (cdr e) a)) a)))))</code></pre><p>下面这个例子使用了前面定义的 <em>eval2</em> ，来拼接两个参数里的首元素。</p>
+<pre><code>(eval2 &apos;((LAMBDA (x y) (CONS (CAR x) (CAR y))) (CONS (QUOTE A) (QUOTE B)) (CONS (QUOTE C) (QUOTE D))) nil)  ;; =&gt; (A . C)</code></pre><p>这个函数有一个缺陷，在使用 <em>LABEL</em> 进行递归求值时，会再次对求值后的结果进行二次求值，导致错误。</p>
+<p>论文中提到有一个修正版本，发布在91年的《Artificial and Mathematical Theory of Computation》。在sciencedirect.com上找到一个收费版的地址，没有继续下去了。地址在下方。</p>
+<p>图书管可能有这类书？</p>
+<p><a id="orgb2fe6d3"></a></p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p><a href="http://www-formal.stanford.edu/jmc/recursive.html" target="_blank" rel="noopener">http://www-formal.stanford.edu/jmc/recursive.html</a><br><a href="https://www.sciencedirect.com/book/9780124500105/artificial-and-mathematical-theory-of-computation" target="_blank" rel="noopener">https://www.sciencedirect.com/book/9780124500105/artificial-and-mathematical-theory-of-computation</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/03/30/read-lisp-paper-recursive/" data-id="ckajgeazy004k0drdgolr2wvr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-lilian" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/28/lilian/" class="article-date">
+  <time datetime="2019-03-28T16:00:00.000Z" itemprop="datePublished">2019-03-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/28/lilian/">莉莉安</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="《莉莉安》"><a href="#《莉莉安》" class="headerlink" title="《莉莉安》"></a>《莉莉安》</h2><p>是一个黄昏，天色渐暗，我爬上房顶，等着日落。</p>
+<p>脚下是我自己搭建的木头房子，房顶扁平，有一根藤梯连接到这里。</p>
+<p>四下没人，只有高大的热带树木，另一侧是一片大海。干净的空气，安静有暖风。</p>
+<p>太阳在大海的一侧渐渐落下去，周围越发昏暗，远处一片绯红。</p>
+<p>落莫凄美的夜，远处泛着白光。</p>
+<h2 id="《理想三旬》"><a href="#《理想三旬》" class="headerlink" title="《理想三旬》"></a>《理想三旬》</h2><p>慵懒的下午，窗外下着连绵的雨。是南方的三月。</p>
+<p>陷在陈旧的沙发里，破碎的窗口有风吹进来。淡淡的霉的气息，让人心情舒畅。</p>
+<p>皮革箱丢在一边，被旧衣物围成了一个圈，像是一个倍受尊敬的老伯。</p>
+<p>窗上还牵扯的纸片飘摇不定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/03/28/lilian/" data-id="ckajgeaxw000w0drd011cahhf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">« Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next »</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" rel="tag">刻意练习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" rel="tag">布朗运动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" style="font-size: 10px;">刻意练习</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" style="font-size: 10px;">布朗运动</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 14px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 16px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/22/golang-concurrency/">golang并行编程</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/09/deli/">计算机语言刻意练习实践</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/read-the-programmers-who-created-the-software-revolution/">读《软件故事：谁发明了那些经典的编程语言》</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/23/read-ted-talks/">读《演讲的力量》</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/15/read-what-is-life/">读《生命是什么》</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
 </html>
