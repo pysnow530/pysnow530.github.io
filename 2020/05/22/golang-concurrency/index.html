@@ -15,7 +15,7 @@
 <meta property="og:description" content="关于本文本文主要阐述作者对golang并行编程设计的理解，重在讲解思路而非实际使用。读者可以通过阅读本文，来了解golang中并行设计的关键技术及其作用，知其所以然。 本文并不追求完整和严谨，重点是提供一个学习思路，理清基本概念。使用的细节仍需要参考官方文档。 由于作者没有专门研究过golang的核心实现，所以文中可能存在理解或表述不当之处，欢迎批评指正。 并行需求的背景在计算机诞生之初，系统还是">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-05-22T14:39:40.000Z">
-<meta property="article:modified_time" content="2020-05-23T10:01:12.547Z">
+<meta property="article:modified_time" content="2020-05-24T02:19:29.811Z">
 <meta property="article:author" content="pysnow530@163.com">
 <meta property="article:tag" content="golang">
 <meta name="twitter:card" content="summary">
@@ -103,7 +103,7 @@
 <p>伴随多核技术的出现的，还有相关的计算机编程语言。如何能便利地开发利用多核技术的程序，是这类编程语言要解决的核心问题之一。</p>
 <p>golang标榜的即是该优势，它在语言层面提供了并行机制，并提供了相关语言工具，来简化多核心编程的过程。</p>
 <h3 id="golang中的并行实现：goroutine"><a href="#golang中的并行实现：goroutine" class="headerlink" title="golang中的并行实现：goroutine"></a>golang中的并行实现：goroutine</h3><p>golang实现了一种轻量级的线程，即goroutine，来为用户提供并行编程的支持。</p>
-<p>goroutine由golang的运行时管理，它使用go关键字创建，使用较为简单。它的定义如下：</p>
+<p>goroutine由golang的运行时管理，它使用go关键字创建，使用较为简单。</p>
 <p>下面是一个例子：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    h1 := hash(<span class="string">"hello"</span>)</span><br><span class="line">    fmt.Printf(<span class="string">"hello =&gt; %s\n"</span>, h1)</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">doSomeThing()</span><br></pre></td></tr></table></figure>
 
@@ -152,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/05/22/golang-concurrency/" data-id="ckajgqrku000n19sp29jh5frx" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/05/22/golang-concurrency/" data-id="ckakfovxc000n08mvdqiv9efl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
