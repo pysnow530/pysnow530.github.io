@@ -5,18 +5,19 @@
   
 
   
-  <title>pysnow530 的博客</title>
+  <title>macosx上的平铺式窗口管理器 | pysnow530 的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="布朗运动模拟器       运行     暂停     重置               let WIDTH &#x3D; 530;     let HEIGHT &#x3D; 300;     let N_ATOMS &#x3D; 10000;     let ATOM_RADIUS &#x3D; 2;      let CANVAS &#x3D; document.getElementById(&#39;canvas&#39;);     let CONTE">
-<meta property="og:type" content="website">
-<meta property="og:title" content="pysnow530 的博客">
-<meta property="og:url" content="https://pysnow530.github.io/html/brownian-motion.html">
+  <meta name="description" content="背景在提供图形界面的操作系统里，都会存在一个问题，就是当我们需要查找大量资源时，窗口会变得较多不方便管理。 比如我现在打开的窗口，就包含了编辑博客的编辑器，一个命令终端，一个查找资料的浏览器，一个临时记录信息的备忘录，还有一些其它的软件。 这时会存在两个问题：  应用过多，切换应用时会有很多精力浪费在找目标应用的过程中 窗口布局过乱，重新规划放多个桌面又耗费太多精力，得不尝失  对于窗口的管理，现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macosx上的平铺式窗口管理器">
+<meta property="og:url" content="https://pysnow530.github.io/2020/05/24/macosx-window-tile-manager/index.html">
 <meta property="og:site_name" content="pysnow530 的博客">
-<meta property="og:description" content="布朗运动模拟器       运行     暂停     重置               let WIDTH &#x3D; 530;     let HEIGHT &#x3D; 300;     let N_ATOMS &#x3D; 10000;     let ATOM_RADIUS &#x3D; 2;      let CANVAS &#x3D; document.getElementById(&#39;canvas&#39;);     let CONTE">
+<meta property="og:description" content="背景在提供图形界面的操作系统里，都会存在一个问题，就是当我们需要查找大量资源时，窗口会变得较多不方便管理。 比如我现在打开的窗口，就包含了编辑博客的编辑器，一个命令终端，一个查找资料的浏览器，一个临时记录信息的备忘录，还有一些其它的软件。 这时会存在两个问题：  应用过多，切换应用时会有很多精力浪费在找目标应用的过程中 窗口布局过乱，重新规划放多个桌面又耗费太多精力，得不尝失  对于窗口的管理，现">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-05-24T12:51:02.676Z">
+<meta property="article:published_time" content="2020-05-24T03:14:05.000Z">
 <meta property="article:modified_time" content="2020-05-24T12:51:02.676Z">
 <meta property="article:author" content="pysnow530@163.com">
+<meta property="article:tag" content="效率">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
@@ -70,157 +71,81 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-macosx-window-tile-manager" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/html/brownian-motion.html" class="article-date">
-  <time datetime="2020-05-24T12:51:02.676Z" itemprop="datePublished">2020-05-24</time>
+    <a href="/2020/05/24/macosx-window-tile-manager/" class="article-date">
+  <time datetime="2020-05-24T03:14:05.000Z" itemprop="datePublished">2020-05-24</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      macosx上的平铺式窗口管理器
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h5 style="color: #8c8c8c">布朗运动模拟器</h5>
-
-<div style="padding-bottom: 20px">
-    <button onclick="play()">运行</button>
-    <button onclick="stop()">暂停</button>
-    <button onclick="reset()">重置</button>
-    <span id="time"></span>
-</div>
-
-<canvas id="canvas" width="530px" height="300px" style="border: 1px solid rgba(106,102,103,0.73)"></canvas>
-
-<script>
-    let WIDTH = 530;
-    let HEIGHT = 300;
-    let N_ATOMS = 10000;
-    let ATOM_RADIUS = 2;
-
-    let CANVAS = document.getElementById('canvas');
-    let CONTEXT = CANVAS.getContext('2d');
-
-    let ATOMS = null;
-
-    let TIMER = null;
-    let TIME_UNIT = 1;
-    let TIME_DELTA = null;
-    let TIME_DOM = document.getElementById('time');
-
-    initBackground(WIDTH, HEIGHT);
-
-    /**
-     * 初始化水箱背景
-     */
-    function initBackground(width, height) {
-        CONTEXT.beginPath();
-        CONTEXT.fillStyle = '#a4b7bc';
-        CONTEXT.fillRect(0, 0, width, height)
-        CONTEXT.stroke();
-        CONTEXT.closePath();
-    }
-
-    function reset() {
-        ATOMS = initAtoms(WIDTH, HEIGHT, N_ATOMS);
-        TIME_DELTA = 0;
-        updateTime(TIME_DELTA);
-        return ATOMS;
-    }
-
-    function play() {
-        if (TIMER) {
-            return;
-        }
-
-        ATOMS = ATOMS || reset();
-        TIMER = setInterval(function() {
-            moveAtoms(ATOMS, WIDTH, HEIGHT);
-            drawAtoms(ATOMS, WIDTH, HEIGHT);
-            TIME_DELTA += 1;
-            updateTime(TIME_DELTA);
-        }, TIME_UNIT);
-    }
-
-    function stop() {
-        if (TIMER) {
-            clearInterval(TIMER);
-            TIMER = null;
-        }
-    }
-
-    /**
-     * 在水箱的左侧下部生成原子位置
-     * @param width
-     * @param height
-     * @param n_atoms
-     * @returns {[]}
-     */
-    function initAtoms(width, height, n_atoms) {
-        let atoms = [];
-        for (let i = 0; i < n_atoms; i++) {
-            atoms.push([i % (WIDTH/10), i % (HEIGHT/2) + HEIGHT/2]);
-        }
-        return atoms;
-    }
-
-    /**
-     * 让每个原子向四周随机移动
-     * @param atoms
-     * @param width
-     * @param height
-     * @returns {*}
-     */
-    function moveAtoms(atoms, width, height) {
-        for (let i = 0; i < atoms.length; i++) {
-            let randDir = parseInt(Math.random() * 4);
-            if (randDir === 0 && atoms[i][0] > 0) {  // 左
-                atoms[i][0] -= 1;
-            } else if (randDir === 1 && atoms[i][0] < width-1) {  // 右
-                atoms[i][0] += 1;
-            } else if (randDir === 2 && atoms[i][1] > 0) {  // 上
-                atoms[i][1] -= 1;
-            } else if (randDir === 3 && atoms[i][1] < height-1) {  // 下
-                atoms[i][1] += 1;
-            }
-        }
-        return atoms;
-    }
-
-    /**
-     * 更新原子位置
-     * @param atoms
-     */
-    function drawAtoms(atoms, width, height) {
-        initBackground(width, height);
-
-        CONTEXT.beginPath();
-        for (let i = 0; i < atoms.length; i++) {
-            CONTEXT.moveTo(atoms[i][0], atoms[i][1]);
-            CONTEXT.arc(atoms[i][0], atoms[i][1], ATOM_RADIUS, 0, 2*Math.PI);
-        }
-        CONTEXT.stroke();
-        CONTEXT.closePath();
-    }
-
-    function updateTime(time_delta) {
-        console.log(time_delta)
-        TIME_DOM.innerText = '迭代次数 ' + time_delta;
-        return time_delta;
-    }
-</script>
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在提供图形界面的操作系统里，都会存在一个问题，就是当我们需要查找大量资源时，窗口会变得较多不方便管理。</p>
+<p>比如我现在打开的窗口，就包含了编辑博客的编辑器，一个命令终端，一个查找资料的浏览器，一个临时记录信息的备忘录，还有一些其它的软件。</p>
+<p>这时会存在两个问题：</p>
+<ol>
+<li>应用过多，切换应用时会有很多精力浪费在找目标应用的过程中</li>
+<li>窗口布局过乱，重新规划放多个桌面又耗费太多精力，得不尝失</li>
+</ol>
+<p>对于窗口的管理，现在已经存在一些方案，主要有以下几大类：</p>
+<ol>
+<li>提供窗口管理工具，这类工具一般以快捷键为入口，方便对目标窗口调整大小，设置位置</li>
+<li>加速操作，这类工具一般是牺牲精确度，将移动和修改窗口大小合并为一个操作，如将窗口拉到屏幕边缘自动贴合并调整位置和大小，或直接选择提前准备好的位置，magnet和divvy就属于此类</li>
+<li>平铺式窗口设计，将所有窗口平铺到屏幕</li>
+</ol>
+<p>其中，1和2虽能解决布局问题，但是耗费精力也不小，而且当应用过多时，仍然会有很大一部分精力耗费在切换应用上。目前来看，3似乎是一种比较理想的方式。</p>
+<h3 id="平铺式窗口"><a href="#平铺式窗口" class="headerlink" title="平铺式窗口"></a>平铺式窗口</h3><p>平铺式窗口管理器的设计存在很长一段时间了，最早应该是linux平台先行做的实践。</p>
+<p>原因猜测应该是linux分层外包的协作方式，内核、核心工具、窗口系统、UI系统等都是由不同的开源团队分别完成，这样大家也有更多的精力和空间去做尝试。</p>
+<p>我最早使用的linux上的平铺式窗口管理器是awesome，它将所有的窗口都平铺在电脑的屏幕上，不需要自己去调整窗口的位置和大小或窗口间做切换时的视觉适应，而且可以一眼看到其它应用，可以节省很多的精力。</p>
+<p>不过，平铺式窗口也有一些问题，比如窗口过多而电脑屏幕过小时就会很尴尬，再比如使用一些gui软件如chrome时也会很别扭，所以它较适合用于多个终端的情况。一些软件如tmux、vim split window的设计也有异曲同工之妙。</p>
+<p>mac os x 的情况稍有不同，它的开发模型是大一统，整个系统从内核到上层用户软件的设计都是由苹果公司包揽，所以做窗口管理只能提供有限的能力。但这是足够的，我们极少需要完全从底层自定义整个设计，这是一种偏执。</p>
+<p>该设计的主要目标还是解放人的精力，让我们能够投入到更有价值的事情中。所以下面我以此为基础，探索一下mac os x上的相关实现。</p>
+<h3 id="Amethyst"><a href="#Amethyst" class="headerlink" title="Amethyst"></a>Amethyst</h3><p>这是我在寻找平铺式窗口管理器时找到的一个开源方案，仓库的地址在 <a href="https://github.com/ianyh/Amethyst" target="_blank" rel="noopener">https://github.com/ianyh/Amethyst</a>。</p>
+<p>Amethyst是一个基于xmonad的软件，xmonad运行在linux平台上，类似awesome。</p>
+<p>Amethyst默认提供了十多个布局供用户使用，用户可以使用快捷键来管理窗口布局或窗口大小。</p>
+<p>缺点是，Amethyst提供的用户界面只有快捷键，所以上手难度较大，用户需要自己去寻找符合自己的操作方式。</p>
+<p>比如，我现在的方式是，使用 <code>Widescreen tall</code> 布局，左半屏即是一个主要的工作窗口，其余窗口都竖排在右侧窗口。可以鼠标点击需要切换的窗口，然后快捷键切换到左侧使用。</p>
+<p>默认布局和默认快捷键在官方文档都有，这里就不赘述了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章对操作讲解地较少，对于高度可配的软件来说，具体的使用是见仁见智的事情。</p>
+<p>第一种方案，大多工具只是提供了一个快捷键操作的方式而已，对我的问题没有太大帮助。</p>
+<p>我之前也在第二种方案上试用过很长一段时间，总体来说如果打开的应用较为稳定且数量较少，也是一种不错的方案。使用的工具类似magnet，是一个开源方案，具体工具名称倒记不得了。</p>
+<p>当然工具是一方面，良好的使用习惯也是很重要的，甚至它完全可以取代大部分效率提升工具。真正的效率提升还是在人，工具只是在为人打补丁而已。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/html/brownian-motion.html" data-id="ckal2910v000353qcdh5j3m0r" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/05/24/macosx-window-tile-manager/" data-id="ckal2911m001253qc514pep6u" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li></ul>
+
     </footer>
   </div>
   
     
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/22/golang-concurrency/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">golang并行编程</div>
+    </a>
+  
+</nav>
+
   
 </article>
 

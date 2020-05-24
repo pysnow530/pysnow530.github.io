@@ -70,6 +70,110 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux-command-iostat" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/01/linux-command-iostat/" class="article-date">
+  <time datetime="2016-06-01T16:00:00.000Z" itemprop="datePublished">2016-06-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/01/linux-command-iostat/">Linux命令之iostat</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>iostat来自sysstat工具包，可以查看CPU和系统磁盘IO的统计信息。本文主要介绍iostat的主要命令参数和输出的部分解释。意在帮助不熟悉的用户入境，高级用户可以直接查看man page。</p>
+</blockquote>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code>iostat [ options ] [ &lt;interval&gt; [ &lt;count&gt; ] ]</code></pre><ul>
+<li><code>opions</code> 选项</li>
+<li><code>interval</code> 每隔多少秒统计一次</li>
+<li><code>count</code> 连续统计多少次</li>
+</ul>
+<p><strong>注意</strong>：如果没有提供<code>interval</code>和<code>count</code>选项，则系统只统计一次。统计结果是上次统计（如果没有统计过，则是系统启动时间）到本次统计的数据。</p>
+<h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><p>执行<code>iostat</code>的输出如下：</p>
+<pre><code>Linux 3.16.0-4-586 (oogway)     06/02/2016     _i686_    (1 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           2.19    0.00    0.39    0.18    0.00   97.24
+
+Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+sda               1.74        24.40         3.32     222286      30252</code></pre><h4 id="第一行：系统信息"><a href="#第一行：系统信息" class="headerlink" title="第一行：系统信息"></a>第一行：系统信息</h4><p>系统信息的输出和<code>uname -a</code>的输出类似。</p>
+<ul>
+<li><code>Linux</code> 内核名称</li>
+<li><code>3.16.0-4-586</code> 内核发行版本</li>
+<li><code>oogway</code> 主机名</li>
+<li><code>06/02/2016</code> 当天日期</li>
+<li><code>_i686_</code> 机器硬件名</li>
+<li><code>1 CPU</code> CPU个数</li>
+</ul>
+<h4 id="第二行：CPU利用率"><a href="#第二行：CPU利用率" class="headerlink" title="第二行：CPU利用率"></a>第二行：CPU利用率</h4><p>CPU利用率的信息和<code>top</code>里的CPUT信息类似。</p>
+<ul>
+<li><code>%user</code> 没有修改nice的任务的用户态时间占比</li>
+<li><code>%nice</code> 修改过nice的任务的用户态时间占比</li>
+<li><code>%system</code> 系统态时间占比</li>
+<li><code>%iowait</code> 等待IO的时间占比</li>
+<li><code>%steal</code> 虚拟cpu等待supervisor的时间占比</li>
+<li><code>%idle</code> 空闲时间占比</li>
+</ul>
+<h4 id="第四行：设备的读写信息"><a href="#第四行：设备的读写信息" class="headerlink" title="第四行：设备的读写信息"></a>第四行：设备的读写信息</h4><ul>
+<li><code>tps</code> 每秒读写请求次数</li>
+<li><code>kB_read/s</code> 读取速度</li>
+<li><code>kB_wrtn/s</code> 写入速度</li>
+<li><code>kB_read</code> 读取量</li>
+<li><code>kB_wrtn</code> 写入量</li>
+</ul>
+<h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><h4 id="统计次数及频率"><a href="#统计次数及频率" class="headerlink" title="统计次数及频率"></a>统计次数及频率</h4><p>如果我们希望每一秒统计一次数据，连续统计10次，可以<code>iostat 1 10</code>。</p>
+<h4 id="查看扩展统计信息"><a href="#查看扩展统计信息" class="headerlink" title="查看扩展统计信息"></a>查看扩展统计信息</h4><p>可以使用<code>-x</code>参数查看扩展的统计信息。</p>
+<p>如<code>iostat -x</code>输出如下：</p>
+<pre><code>Linux 3.16.0-4-586 (oogway)     06/02/2016     _i686_    (1 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           2.65    0.00    0.39    0.18    0.00   96.79
+
+Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+sda               0.56     0.37    1.21    0.30    20.00     3.66    31.28     0.01    3.79    2.85    7.63   1.74   0.26</code></pre><p>统计信息多了的这几项分别是：</p>
+<ul>
+<li><code>rrqm/s</code> 每秒读请求合并数</li>
+<li><code>wrqm/s</code> 每秒写请求合并数</li>
+<li><code>r/s</code> 每秒完成的读请求数</li>
+<li><code>w/s</code> 每秒完成的写请求数</li>
+<li><code>rkB/s</code> 读取速率，同<code>kB_read/s</code></li>
+<li><code>wkB/s</code> 写入速率，同<code>kB_write/s</code></li>
+<li><code>avgrq-sz</code> 请求的平均扇区数</li>
+<li><code>avgqu-sz</code> 请求的平均队列长度</li>
+<li><code>await</code> IO请求的平均耗时</li>
+<li><code>r_await</code> 读请求的平均耗时（ms）</li>
+<li><code>w_await</code> 写请求的平均耗时（ms）</li>
+<li><code>svctm</code> IO请求的平均服务耗时（该指标在未来将被移除）</li>
+<li><code>%util</code> 单位时间内IO请求占比。当达到100%时，说明系统IO已饱和（RAID和SSD除外）。公式(r/s+w/s) * (svctm/1000)。如果做了RAID或使用了SSD，这个值就不可靠了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2016/06/01/linux-command-iostat/" data-id="ckal2911j000y53qc7wbw11eb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-linux-command-top" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/05/31/linux-command-top/" class="article-date">
@@ -158,7 +262,7 @@ KiB Swap:   976892 total,        0 used,   976892 free.   126516 cached Mem
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/05/31/linux-command-top/" data-id="ckakg9ggq00102wqacaqp25fu" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2016/05/31/linux-command-top/" data-id="ckal2911k001053qcaauk7dfq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/top/" rel="tag">top</a></li></ul>
@@ -256,7 +360,7 @@ waste time: 4.29153442383e-05</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2016/05/25/python-decorator/" data-id="ckakg9ggy001c2wqagcu2e7mu" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2016/05/25/python-decorator/" data-id="ckal2911v001d53qced4h3fu2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
@@ -286,7 +390,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" rel="tag">刻意练习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" rel="tag">布朗运动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/" rel="tag">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/" rel="tag">programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E4%BD%93/" rel="tag">三体</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" rel="tag">人类文明</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" rel="tag">刻意练习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" rel="tag">墨水屏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" rel="tag">布朗运动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%97%E5%88%B0/" rel="tag">得到</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E6%83%B3/" rel="tag">思想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%98%9F%E7%A9%BA/" rel="tag">星空</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" rel="tag">松本行宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" rel="tag">科幻小说</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A5%BF%E6%B8%B8/" rel="tag">西游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag">证书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6/" rel="tag">读书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
     </div>
   </div>
 
@@ -296,7 +400,7 @@ waste time: 4.29153442383e-05</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" style="font-size: 10px;">刻意练习</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" style="font-size: 10px;">布朗运动</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 14px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 16px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/%E4%B8%89%E4%BD%93/" style="font-size: 10px;">三体</a> <a href="/tags/%E4%BA%BA%E7%B1%BB%E6%96%87%E6%98%8E/" style="font-size: 10px;">人类文明</a> <a href="/tags/%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0/" style="font-size: 10px;">刻意练习</a> <a href="/tags/%E5%A2%A8%E6%B0%B4%E5%B1%8F/" style="font-size: 10px;">墨水屏</a> <a href="/tags/%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8/" style="font-size: 10px;">布朗运动</a> <a href="/tags/%E5%BE%97%E5%88%B0/" style="font-size: 10px;">得到</a> <a href="/tags/%E6%80%9D%E6%83%B3/" style="font-size: 10px;">思想</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%98%9F%E7%A9%BA/" style="font-size: 10px;">星空</a> <a href="/tags/%E6%9D%BE%E6%9C%AC%E8%A1%8C%E5%AE%8F/" style="font-size: 10px;">松本行宏</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%A7%91%E5%B9%BB%E5%B0%8F%E8%AF%B4/" style="font-size: 10px;">科幻小说</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%A5%BF%E6%B8%B8/" style="font-size: 10px;">西游</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 10px;">证书</a> <a href="/tags/%E8%AF%BB%E4%B9%A6/" style="font-size: 14px;">读书</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 10px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 16px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
     </div>
   </div>
 
@@ -318,6 +422,10 @@ waste time: 4.29153442383e-05</code></pre>
       <ul>
         
           <li>
+            <a href="/2020/05/24/macosx-window-tile-manager/">macosx上的平铺式窗口管理器</a>
+          </li>
+        
+          <li>
             <a href="/2020/05/22/golang-concurrency/">golang并行编程</a>
           </li>
         
@@ -331,10 +439,6 @@ waste time: 4.29153442383e-05</code></pre>
         
           <li>
             <a href="/2020/04/23/read-ted-talks/">读《演讲的力量》</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/15/read-what-is-life/">读《生命是什么》</a>
           </li>
         
       </ul>
