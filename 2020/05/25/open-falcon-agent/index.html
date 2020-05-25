@@ -5,20 +5,22 @@
   
 
   
-  <title>唠唠python(2) -- 初识ABC | pysnow530 的博客</title>
+  <title>open-falcon 监控上报 | pysnow530 的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一周又过去了，时间过的真快。冰心奶奶说昙花只在夜里开，而且花期极短，开放时能听到“簌簌”的声音。时间有没有声音呢？  重新认识计算机语言python的作者叫“吉多”（听起来像名贵犬种）。 我们之前说“吉多创造了python语言，并教会了计算机使用这门语言”，其实这样说法不太准确。 事实上，计算机只认得一种叫做不可描述的语言，而且我们人类是无法搞懂的。所谓的教会计算机使用一门语言，其实是我们请了一">
+  <meta name="description" content="监控平台应用背景监控平台被形象地称为运维之眼，没有它软件产品的上线及后期维护将像摸虾一样。 从监控的对象来划分，监控又可分为基础监控和业务监控。 基础监控偏重基础组件和基础资源的监控，一般指标比较固定，很大程度上可默认采集。 业务监控偏重具体服务的指标监控，较为灵活，一般为具体业务自己定义。 监控平台在整个上线的各个过程中都是有帮助的，它使用的场合有以下几项：  提供服务上线的参考，如可观察新特性">
 <meta property="og:type" content="article">
-<meta property="og:title" content="唠唠python(2) -- 初识ABC">
-<meta property="og:url" content="https://pysnow530.github.io/2017/03/03/python-abc/index.html">
+<meta property="og:title" content="open-falcon 监控上报">
+<meta property="og:url" content="https://pysnow530.github.io/2020/05/25/open-falcon-agent/index.html">
 <meta property="og:site_name" content="pysnow530 的博客">
-<meta property="og:description" content="一周又过去了，时间过的真快。冰心奶奶说昙花只在夜里开，而且花期极短，开放时能听到“簌簌”的声音。时间有没有声音呢？  重新认识计算机语言python的作者叫“吉多”（听起来像名贵犬种）。 我们之前说“吉多创造了python语言，并教会了计算机使用这门语言”，其实这样说法不太准确。 事实上，计算机只认得一种叫做不可描述的语言，而且我们人类是无法搞懂的。所谓的教会计算机使用一门语言，其实是我们请了一">
+<meta property="og:description" content="监控平台应用背景监控平台被形象地称为运维之眼，没有它软件产品的上线及后期维护将像摸虾一样。 从监控的对象来划分，监控又可分为基础监控和业务监控。 基础监控偏重基础组件和基础资源的监控，一般指标比较固定，很大程度上可默认采集。 业务监控偏重具体服务的指标监控，较为灵活，一般为具体业务自己定义。 监控平台在整个上线的各个过程中都是有帮助的，它使用的场合有以下几项：  提供服务上线的参考，如可观察新特性">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2017-03-03T16:00:00.000Z">
+<meta property="og:image" content="https://pysnow530.github.io/images/open-falcon.png">
+<meta property="article:published_time" content="2020-05-25T13:37:01.000Z">
 <meta property="article:modified_time" content="2020-05-25T15:08:27.224Z">
 <meta property="article:author" content="pysnow530@163.com">
-<meta property="article:tag" content="python">
+<meta property="article:tag" content="open-falcon">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pysnow530.github.io/images/open-falcon.png">
   
     <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
   
@@ -71,10 +73,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-python-abc" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-open-falcon-agent" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/03/python-abc/" class="article-date">
-  <time datetime="2017-03-03T16:00:00.000Z" itemprop="datePublished">2017-03-04</time>
+    <a href="/2020/05/25/open-falcon-agent/" class="article-date">
+  <time datetime="2020-05-25T13:37:01.000Z" itemprop="datePublished">2020-05-25</time>
 </a>
     
   </div>
@@ -85,7 +87,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      唠唠python(2) -- 初识ABC
+      open-falcon 监控上报
     </h1>
   
 
@@ -93,63 +95,50 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>一周又过去了，时间过的真快。冰心奶奶说昙花只在夜里开，而且花期极短，开放时能听到“簌簌”的声音。时间有没有声音呢？</p>
-</blockquote>
-<h2 id="重新认识计算机语言"><a href="#重新认识计算机语言" class="headerlink" title="重新认识计算机语言"></a>重新认识计算机语言</h2><p>python的作者叫“吉多”（听起来像名贵犬种）。</p>
-<p>我们之前说“吉多创造了python语言，并教会了计算机使用这门语言”，其实这样说法不太准确。</p>
-<p>事实上，计算机只认得一种叫做<code>不可描述</code>的语言，而且我们人类是无法搞懂的。所谓的教会计算机使用一门语言，其实是我们请了一个翻译，将我们能认识的语言翻译成计算机能懂的<code>不可描述</code>语言。</p>
-<h2 id="请个翻译"><a href="#请个翻译" class="headerlink" title="请个翻译"></a>请个翻译</h2><p>“请翻译”，就是我们在计算机中装一个翻译软件，跟<code>有道词典</code>这种翻译工具类似。区别是，<code>有道词典</code>翻译给我们自己，<code>python翻译器</code>翻译给计算机。</p>
-<p>请个python翻译很简单，如果你是windows（瘟到死）系统，<a href="https://www.python.org/ftp/python/2.7.2/python-2.7.2.msi" target="_blank" rel="noopener">戳此链接</a>，就可以从官方下载到一个安装包，双击就可以安装了。</p>
-<p>如果不是windows系统，恭喜你，你的系统已经默认安装python了。</p>
-<h2 id="跟计算机打个招呼"><a href="#跟计算机打个招呼" class="headerlink" title="跟计算机打个招呼"></a>跟计算机打个招呼</h2><p>记得自己在幼儿园时，看到其他小朋友玩得不亦乐乎，非常想跟他们一起玩耍，却因生性羞怯，扭捏着不好意思向前。很多时候，我拒怕新东西，拒绝探索这个世界。但真当我们迈出了第一步，世界在我们心中的印象就更加清晰了。</p>
-<p>打招呼，虽然是交往的一小步，却是我们人生的一大步。</p>
-<p>计算机刚诞生的时候，它是个庞然大物。跟这个怪物打招呼，可不是件容易的事。</p>
-<p>但世界在发展，现今已有各种各样的计算机语言，沟通变得前所未有的简单。</p>
-<p>就我们使用的python语言来说，与计算机沟通只需要简单两步就可以了。</p>
+        <h3 id="监控平台应用背景"><a href="#监控平台应用背景" class="headerlink" title="监控平台应用背景"></a>监控平台应用背景</h3><p>监控平台被形象地称为运维之眼，没有它软件产品的上线及后期维护将像摸虾一样。</p>
+<p>从监控的对象来划分，监控又可分为基础监控和业务监控。</p>
+<p>基础监控偏重基础组件和基础资源的监控，一般指标比较固定，很大程度上可默认采集。</p>
+<p>业务监控偏重具体服务的指标监控，较为灵活，一般为具体业务自己定义。</p>
+<p>监控平台在整个上线的各个过程中都是有帮助的，它使用的场合有以下几项：</p>
 <ol>
-<li><p>安装一个翻译器。如果你是windows系统，下载链接已在上面给出，如果你已经下载并安装，恭喜你第一步已经完成了；非windows用户可以直接跳过这一步。</p>
-</li>
-<li><p>唤醒这个翻译器。这一步也非常简单。对于windows系统，点击<code>开始</code> -&gt; <code>运行</code>，输入<code>cmd</code>并键入<code>回车</code>，这时系统会打开一个神秘的黑色窗口；如果是其它系统的用户，找到一个叫做<code>终端</code>的软件打开，也是一个黑色窗口。然后，在黑色窗口里，输入<code>python</code>并键入<code>回车</code>，如果出现下面的文字，表明已经成功唤醒我们的python翻译器了。</p>
-</li>
+<li>提供服务上线的参考，如可观察新特性上线后的各项指标是否正常，作为稳定运行的依据</li>
+<li>出现事故后，可作为定位问题的参考，让排查问题更方便</li>
+<li>监控服务及资源的使用情况，为优化或扩容做准备</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Python 2.7.13 (default, Dec 17 2016, 23:03:43)</span><br><span class="line">[GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.42.1)] on darwin</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>其中，12基础监控和业务监控兼有，一般方式为基础监控缩小范围，业务监控更准确地查找。业务监控一般会配合日志平台一起提供帮助。</p>
+<p>3涉及到具体IaaS层资源，基础监控可以提供更多帮助。</p>
+<h3 id="常见架构设计"><a href="#常见架构设计" class="headerlink" title="常见架构设计"></a>常见架构设计</h3><p>市面监控平台多以agent上报的方式采集数据，由于监控平台读多写少的缘故，上报链路中间多可插入一个消息队列或代理。</p>
+<p>由于采集端已有监控数据，告警平台多与监控平台整合，这样一个采集，一个消费，就会方便很多。</p>
+<h3 id="open-falcon"><a href="#open-falcon" class="headerlink" title="open-falcon"></a>open-falcon</h3><p>open-falcon是小米的监控平台，open-falcon之前，小米使用的是zabbix。</p>
+<p>open-falcon的架构图如下所示：</p>
+<p><img src="/images/open-falcon.png" alt="open-falcon架构图"></p>
+<p>乍一看挺复杂，捊一捊就比较清晰了。</p>
+<p><strong>数据上报链路</strong>：绿色粗线即为数据上报链路，数据从App产生或由agent采集，然后发送到transfer，transfer再将数据分发给judge和graph。judge即为告警判定模块，graph存储监控数据。</p>
+<p><strong>配置下发链路</strong>：橙色虚线为配置下发链接，portal为配置存储中心。为了加速配置的下发，同时减小portal的压力，hbs会将portal缓存一份到自己的内存，在需要的时候会下发给agent（监控配置）和judge（告警配置）。</p>
+<p><strong>监控查看链路</strong>：蓝色虚线部分为监控查看链路，graph是监控数据的存储组件，出于负载均衡的考虑，graph可能有多个实例，query组件负责整合多个实例的结果，供dashboard读取。dashboard为通往用户的web界面。</p>
+<p>open-falcon中的大部分组件都是可以水平扩展的，transfer、judge和graph都是可能会出现瓶颈的组件。官网有一个机器量与瓶颈及应对的对应关系，很有参考价值。</p>
+<h3 id="agent-采集上报"><a href="#agent-采集上报" class="headerlink" title="agent 采集上报"></a>agent 采集上报</h3><p>agent 是数据采集和上报端，更接近数据，比较重要。</p>
+<p>agent 默认已提供机器的大部分基础监控，<code>modules/funcs/</code> 下可以看到监控的列表，cpu、内存、磁盘、负载、网络io等，涵盖了绝大部分机器相关监控。</p>
+<p>agent 每隔一段会将 metrics 上报到 transfer，metrics 是一个列表，下面是一个比较典型的 metric 结构：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MetricValue <span class="keyword">struct</span> &#123;</span><br><span class="line">	Endpoint  <span class="keyword">string</span>      <span class="string">`json:"endpoint"`</span></span><br><span class="line">	Metric    <span class="keyword">string</span>      <span class="string">`json:"metric"`</span></span><br><span class="line">	Value     <span class="keyword">interface</span>&#123;&#125; <span class="string">`json:"value"`</span></span><br><span class="line">	Step      <span class="keyword">int64</span>       <span class="string">`json:"step"`</span></span><br><span class="line">	Type      <span class="keyword">string</span>      <span class="string">`json:"counterType"`</span></span><br><span class="line">	Tags      <span class="keyword">string</span>      <span class="string">`json:"tags"`</span></span><br><span class="line">	Timestamp <span class="keyword">int64</span>       <span class="string">`json:"timestamp"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>这一坨东西我们不用理会，只要确保不是<code>Bad command or file name</code>或者是带有<code>error</code>字眼的语句，就表明我们已启动成功了。</p>
-<p>失败了怎么办？可以搜索一下或者给我发邮件，我会对你负责的！</p>
-<p>现在输入一个<code>&quot;hello&quot;</code>看会发生什么。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &quot;hello&quot;</span><br><span class="line">&#39;hello&#39;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>这里说一下 Type，主要有 GAUGE 和 COUNTER 两种。GAUGE 为实际的测量值，如内存使用率；COUNTER 为计数值，上报时会计算差值，比较典型的如磁盘读请求次数（linux内核提供的值为总计，我们希望了解的是上一分钟及这一分钟的读请求次数）。</p>
+<p>在扩展性方面，agent 还提供了另外两种采集方式，http push 上报的方式和 plugin 采集。这两种方式都是以 MetricValue 为上报的基础数据结构。</p>
+<p><strong>push</strong> 方式，agent 会在本机提供一个 http 服务，应用可将数据以 http 请求的方式上报给 agent。http 提供了很大的灵活性，应用可整合上报功能来集成业务监控。</p>
+<p><strong>plugin</strong> 方式，需要提供一个包含采集脚本的仓库。所谓采集脚本，即是指本地可运行的脚本，该脚本会输出 MetricValue 结构的 json 数据，agent 将定期执行并将输出上报给 transfer。</p>
+<p>下面是官方提供的一个 python 采集脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/open-falcon/plugin/blob/master/demo/60_plugin.py</span></span><br><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">data = [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">'metric'</span>: <span class="string">'plugins.xx'</span>,</span><br><span class="line">            <span class="string">'endpoint'</span>: <span class="string">'host-001.bj'</span>,</span><br><span class="line">            <span class="string">'timestamp'</span>: int(time.time()),</span><br><span class="line">            <span class="string">'step'</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">'value'</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">'counterType'</span>: <span class="string">'GAUGE'</span>,</span><br><span class="line">            <span class="string">'tags'</span>: <span class="string">'idc=aa'</span></span><br><span class="line">            &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">'metric'</span>: <span class="string">'plugins.yy'</span>,</span><br><span class="line">            <span class="string">'endpoint'</span>: <span class="string">'host-002.bj'</span>,</span><br><span class="line">            <span class="string">'timestamp'</span>: int(time.time()),</span><br><span class="line">            <span class="string">'step'</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">'value'</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">'counterType'</span>: <span class="string">'GAUGE'</span>,</span><br><span class="line">            <span class="string">'tags'</span>: <span class="string">'idc=bb'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">print(json.dumps(data))</span><br></pre></td></tr></table></figure>
 
-<p>我们输入了一个<code>&quot;hello&quot;</code>，它又回给了我们一个<code>&#39;hello&#39;</code>。</p>
-<p>这样无聊的结果也真是令人感动，完全没有一波三折的快感，跟琐碎的生活一样枯燥。</p>
-<h2 id="无聊的背后有什么有意思的东西"><a href="#无聊的背后有什么有意思的东西" class="headerlink" title="无聊的背后有什么有意思的东西"></a>无聊的背后有什么有意思的东西</h2><p>太他妈没劲了。</p>
-<p>非也。</p>
-<p>我们刚才跟计算机打了个招呼，神奇的是，他听懂了，并回应了我们。而无聊的是，我们给他什么，他就回给我们什么。</p>
-<p>我们看到了<code>&gt;&gt;&gt;</code>这个符号，它的意思是，“跟我说点什么吧，我在听着呢”。多忠诚！</p>
-<p>我们输入的<code>hello</code>两边有一对<code>&quot;</code>号，这表明我们在说一句话，而不是要计算机帮我们做个算数题。</p>
-<p>那现在我们可以让他帮我们做算数题吗？当然可以！</p>
-<h2 id="学习简单算术"><a href="#学习简单算术" class="headerlink" title="学习简单算术"></a>学习简单算术</h2><p>刚才我们给计算机一句话，他又把这句话回复给了我们。有点无聊。</p>
-<p>下面我们来做点更有意义的事，让计算机帮我们做个算数题。</p>
-<p>我女朋友帮我举了个例子：我们需要一种元器件956包，每包10000个，每个0.0016元，那么总共需要多少钱呢？</p>
-<p>好便宜啊！嗯，我觉得是个好例子，python已经开始辅助我们工作了。</p>
-<p>在我的印象里，10以内的加减乘除运算是最开始接触的算术题，部分甚至可以借用手脚辅助完成。说到乘除法，小九九还算简单，更像是语言，靠记忆。但是100以内的乘除法，对我来说已经有相当的难度了。</p>
-<p>我记忆还算不错，对于加减乘除，当初还有一句口决，叫做<code>先乘除后加减</code>，如果先加减怎么办呢，用括弧<code>()</code>。</p>
-<p>我们可算是非常幸运的，在甚至还不明白为什么要学这种鸟玩意的很多年前，就已经掌握了算数的基本原则。python里面的简单算术，甚至都不需要我们再学一遍了。</p>
-<p>现在，我们只需要告诉<code>python翻译器</code>元器件总价格的计算公式，python就可以翻译给计算机做运算了。我们来试一下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 956 * 10000 * 0.0016</span><br><span class="line">15296.0</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
-
-<p>哇噻，我们的计算机计算非常迅速，一下子就帮我们算出了答案。果真是人如其名，这是一只战斗鸡。</p>
-<p>记得以前，我参加<code>珠心算</code>那会儿，试题里有很大一部分，是多个多位数字求和，做得多了很容易出现一种自我怀疑：好像有一位记错了？不过对计算机来说，只要我们输入的正确，可以完全相信它的计算结果。我们负责精确地表达，它负责精确地执行。</p>
-<p>上面虽然只有乘法，但<code>+ - x ÷</code>聪明的我们已无师自通了（其实多年前，我们就已经掌握了）。需要注意的是，计算机语言多用<code>*</code>来代表<code>x</code>，而用<code>/</code>来代表<code>÷</code>。</p>
-<p>举个例子，<code>(0.31 + 0.43) * ((0.26 + 0.45 - 0.31) / 0.47)</code>，看明白了这个公式计算的是什么，我就不用再叨叨了。</p>
+<p>NOTE: 需要注意的是，为了避免 plugin 全量上报造成干扰，plugin 上报需要在 dashboard/portal 中指定启用哪些上报脚本。</p>
+<p>第三方监控多以 push 方式上报，有了上面两种扩展的上报方式，即可以实现其它基础监控或者业务监控。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/03/python-abc/" data-id="ckammllzh001861nx4njlgtlg" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/05/25/open-falcon-agent/" data-id="ckammllze001661nx5l56gaud" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li></ul>
 
     </footer>
   </div>
@@ -157,19 +146,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/03/04/python-script-file/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          唠唠python(3) -- 保存计算过程
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/02/25/python-context/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/05/24/macosx-window-tile-manager/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">唠唠python(1) -- 开学典礼</div>
+      <div class="article-nav-title">macosx上的平铺式窗口管理器</div>
     </a>
   
 </nav>
