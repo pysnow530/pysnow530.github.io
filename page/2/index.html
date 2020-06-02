@@ -70,6 +70,54 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-brownian-motion" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/02/brownian-motion/" class="article-date">
+  <time datetime="2020-04-02T13:24:56.000Z" itemprop="datePublished">2020-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/02/brownian-motion/">布朗运动的计算机模拟</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>布朗运动是指悬浮在液体或气体中的微粒所做的永不停息的无规则运动。</p>
+<p>薛定谔在《生命是什么》中描述高锰酸钾的扩散现象，他说虽然高锰酸钾看上去是从高浓度向低浓度扩散，但并非是分子的冲撞造成的，本质上是分子的无规则随机运动。</p>
+<p>这里的无规则随机运动是指，分子在某一时刻的运动方向，是完全随机的，不受液体浓度的影响。</p>
+<p>看上去似乎难以置信，但正是由于高浓度+随机运动，才产生了一种从高浓度流向低浓度的观察效果。</p>
+<p>书中给出了一个解释，假设其中有一薄膜，由于分子运动随机，左右运动的概率是相等的，但假设左侧浓度更高，向右运动穿过薄膜的分子必然更多。</p>
+<p>本文试图通过计算机模拟的方式，来呈现分子的运动。</p>
+<p>在试验中，我们有一个正方体水箱，开始时，在水箱的左下方矩形区域放置高锰酸钾溶液，然后在每一次迭代中，让分子做布朗运动。</p>
+<p>下图是在做了10000次迭代后的情形，从图片中的状态已经可以明显看出扩散的痕迹了：</p>
+<p><img src="/images/brownian-motion.png" alt="布朗运动模拟器截图"></p>
+<p>可以点击下面的链接查看属于自己的随机过程：<a href="/html/brownian-motion.html">布朗运动模拟器</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/04/02/brownian-motion/" data-id="ckaxz8jee000621q1ex6xfjd1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-spring-rain" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/28/spring-rain/" class="article-date">
@@ -102,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/28/spring-rain/" data-id="ckapdhmqm002m25q3ciui6udn" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/28/spring-rain/" data-id="ckaxz8jg7002m21q10a7wf3fw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
@@ -192,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/27/python-function-colorize/" data-id="ckapdhmpx001l25q3eg8ygrp3" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/27/python-function-colorize/" data-id="ckaxz8jfo001l21q13cp0cq6u" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -275,7 +323,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/26/jango-3-wsgi/" data-id="ckapdhmpa000t25q30l3a5yvf" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/26/jango-3-wsgi/" data-id="ckaxz8jeu000t21q10r8x7mic" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li></ul>
@@ -356,7 +404,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/25/jango-2-request-and-response/" data-id="ckapdhmp9000r25q3cqn1dshf" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/25/jango-2-request-and-response/" data-id="ckaxz8jet000r21q1hfpg73j0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
@@ -418,7 +466,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ckapdhmp8000q25q3e08lbc3r" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ckaxz8jes000q21q172fv7774" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
@@ -459,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ckapdhmqi002c25q36whf80qv" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ckaxz8jg1002c21q167o5f73y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -500,7 +548,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ckapdhmp1000f25q3cs9l4ue7" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ckaxz8jek000f21q1ezfqc2n9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
@@ -544,7 +592,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ckapdhmqk002h25q31wz4goy2" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ckaxz8jg3002h21q1cvun8kzp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -601,78 +649,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ckapdhmqh002725q31efk5bu4" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ckaxz8jg0002721q1acdzer6a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-read-ruby-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/02/29/read-ruby-world/" class="article-date">
-  <time datetime="2020-02-29T15:52:50.000Z" itemprop="datePublished">2020-02-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/29/read-ruby-world/">读《松本行宏的程序世界》</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这本书在一个月前就已经读完了，对于一个科班生来说，并没有太多新的内容。但是里面有一些很有意思的点，这里顺带写下来，以对之前付出的时间精力有个交待。</p>
-<p>这是一本偏重编程思想的书，作者是 ruby 之父松本行宏。</p>
-<p>作者在书里也说到，这并不是讲 ruby 使用的手册，而更多是使用 ruby 或者其它语言来说明某些思想。</p>
-<p>不过这里还是想说一下自己对 ruby 这门语言的看法。在设计 ruby 语言时，松本行宏从 lisp 里借用了很多思想；而它的成功很大程度借助了 ruby on rails。这也说明了 ruby 有某些性质，更容易实现一个更为灵活易用的 web 框架。</p>
-<p>书中大部分知识点都是一些最为基础、必知必会的内容，记笔记意义不会很大，所以这里只记录一下自己感觉有些意思的地方。</p>
-<h2 id="我为什么开发-ruby"><a href="#我为什么开发-ruby" class="headerlink" title="我为什么开发 ruby"></a>我为什么开发 ruby</h2><p>这实际上是第1章的标题。作者讲自己开发 ruby，最开始是出于兴趣爱好，希望自己能够轻松编程，提高开发效率，不想开源后变得流行并变成了自己的一个职业。</p>
-<p>计算机语言不少，作者学习其它语言，并根据自己的理解设计及发展了 ruby。从某种程度上说，一门语言的设计表现了作者对某些特性的取舍，实际上也是他对编程语言世界的理解。</p>
-<p>作者对自己设计的 ruby 语言提出了 3 个设计原则：</p>
-<ol>
-<li>简洁性</li>
-<li>扩展性</li>
-<li>稳定性</li>
-</ol>
-<p>对于简洁性，作者形容为”能直接运行的伪码式编程语言”。应该算是很直观的描述了，单从结构形式上来说，ruby 编写的代码是比较易读的。</p>
-<p>ruby 意为红宝石，是七月的诞生石。而 perl 音同 pearl，是六月的诞生石。可见 ruby 也从 perl 里选取了一些特性。</p>
-<p>有一个段子说 perl 和 ruby 的作者是语言学家，而 python 的作者是数学家，所以前两者注重一个问题多种解法，而后者注重只提供最优解法。</p>
-<p>实际上松本行宏也给出了答案，他希望使用这门语言是一件很有趣的事。当然，有一些语言也标榜自己的优势是乏味，毕竟做工程嘛。</p>
-<h2 id="对象并非对具体物体的反映"><a href="#对象并非对具体物体的反映" class="headerlink" title="对象并非对具体物体的反映"></a>对象并非对具体物体的反映</h2><p>很多地方说面向对象是对自然界系统的一个模拟，或者说对现实世界物体的模拟。作者说这种说法是错的，我赞同这种观点。</p>
-<p>为什么人们会有这种看法？</p>
-<p>我觉得跟人们过度的类比有关。比如讲到类，大家习惯举一些现实中的例子以简化理解。比如，老师属于人类。</p>
-<p>那么面向对象是什么呢？</p>
-<p>最开始，软件的基本控制结构，只有一个跳转，也就是汇编里的 jmp。实际上现在常用的三种结构也都是使用跳转来实现的。</p>
-<p>随着软件复杂度的上升，这种控制结构可读性很差，对于后期维护也是一个灾难，所以出现了结构化编程。通过将控制结构限定在顺序、分支、循环，来提高可维护性。</p>
-<p>但是对于数据的维护，仍然是裸露在保护之外的，语言层面还没有一个较好的工具手段。这时，面向对象概念就出现了。</p>
-<p>可以说，结构化编程是对控制流程的结构化，而面向对象是对数据的结构化。</p>
-<p>说到这里，想起另一本书里的观念，计算机的一些概念本身就很美，比如变量地址，我们可以试着去理解它，没必要人为多加一层注解（房间号）,试图绕过这种理解。</p>
-<p>当然，从对控制结构的限制，我们也不难看出，通过越来越多的限制，我们确实获得了更多的自由。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面讲了两个我认为很有意思的地方。其它章节大多是技术上的探讨，这里就不缀述了。</p>
-<p>从内容用词看，作者是一个很谦虚且喜欢思考的人。不过书里有一些地方存在重复，这本书是不是作者对旧有创作的二次整理就不肯定的。</p>
-<p>对于科班生来说，大部分内容都是一些基础内容，之前应该都有涉及，不会有太大感受；如果没有学习过这些内容，或想温顾一下，还是可以一读的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ckapdhmqe002025q39a9rbqeb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
 
     </footer>
   </div>
@@ -731,6 +711,10 @@
       <ul>
         
           <li>
+            <a href="/2020/05/29/zabbix/">zabbix监控方案</a>
+          </li>
+        
+          <li>
             <a href="/2020/05/26/open-falcon-judge/">open-falcon 告警判定</a>
           </li>
         
@@ -744,10 +728,6 @@
         
           <li>
             <a href="/2020/05/22/golang-concurrency/">golang并行编程</a>
-          </li>
-        
-          <li>
-            <a href="/2020/05/09/deli/">计算机语言刻意练习实践</a>
           </li>
         
       </ul>
