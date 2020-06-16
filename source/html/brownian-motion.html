@@ -1,0 +1,128 @@
+<h5 style="color: #8c8c8c">布朗运动模拟器</h5>
+
+<div style="padding-bottom: 20px">
+    <button onclick="play()">运行</button>
+    <button onclick="stop()">暂停</button>
+    <button onclick="reset()">重置</button>
+    <span id="time"></span>
+</div>
+
+<canvas id="canvas" width="530px" height="300px" style="border: 1px solid rgba(106,102,103,0.73)"></canvas>
+
+<script>
+    let WIDTH = 530;
+    let HEIGHT = 300;
+    let N_ATOMS = 10000;
+    let ATOM_RADIUS = 2;
+
+    let CANVAS = document.getElementById('canvas');
+    let CONTEXT = CANVAS.getContext('2d');
+
+    let ATOMS = null;
+
+    let TIMER = null;
+    let TIME_UNIT = 1;
+    let TIME_DELTA = null;
+    let TIME_DOM = document.getElementById('time');
+
+    initBackground(WIDTH, HEIGHT);
+
+    /**
+     * 初始化水箱背景
+     */
+    function initBackground(width, height) {
+        CONTEXT.beginPath();
+        CONTEXT.fillStyle = '#a4b7bc';
+        CONTEXT.fillRect(0, 0, width, height)
+        CONTEXT.stroke();
+        CONTEXT.closePath();
+    }
+
+    function reset() {
+        ATOMS = initAtoms(WIDTH, HEIGHT, N_ATOMS);
+        TIME_DELTA = 0;
+        updateTime(TIME_DELTA);
+        return ATOMS;
+    }
+
+    function play() {
+        if (TIMER) {
+            return;
+        }
+
+        ATOMS = ATOMS || reset();
+        TIMER = setInterval(function() {
+            moveAtoms(ATOMS, WIDTH, HEIGHT);
+            drawAtoms(ATOMS, WIDTH, HEIGHT);
+            TIME_DELTA += 1;
+            updateTime(TIME_DELTA);
+        }, TIME_UNIT);
+    }
+
+    function stop() {
+        if (TIMER) {
+            clearInterval(TIMER);
+            TIMER = null;
+        }
+    }
+
+    /**
+     * 在水箱的左侧下部生成原子位置
+     * @param width
+     * @param height
+     * @param n_atoms
+     * @returns {[]}
+     */
+    function initAtoms(width, height, n_atoms) {
+        let atoms = [];
+        for (let i = 0; i < n_atoms; i++) {
+            atoms.push([i % (WIDTH/10), i % (HEIGHT/2) + HEIGHT/2]);
+        }
+        return atoms;
+    }
+
+    /**
+     * 让每个原子向四周随机移动
+     * @param atoms
+     * @param width
+     * @param height
+     * @returns {*}
+     */
+    function moveAtoms(atoms, width, height) {
+        for (let i = 0; i < atoms.length; i++) {
+            let randDir = parseInt(Math.random() * 4);
+            if (randDir === 0 && atoms[i][0] > 0) {  // 左
+                atoms[i][0] -= 1;
+            } else if (randDir === 1 && atoms[i][0] < width-1) {  // 右
+                atoms[i][0] += 1;
+            } else if (randDir === 2 && atoms[i][1] > 0) {  // 上
+                atoms[i][1] -= 1;
+            } else if (randDir === 3 && atoms[i][1] < height-1) {  // 下
+                atoms[i][1] += 1;
+            }
+        }
+        return atoms;
+    }
+
+    /**
+     * 更新原子位置
+     * @param atoms
+     */
+    function drawAtoms(atoms, width, height) {
+        initBackground(width, height);
+
+        CONTEXT.beginPath();
+        for (let i = 0; i < atoms.length; i++) {
+            CONTEXT.moveTo(atoms[i][0], atoms[i][1]);
+            CONTEXT.arc(atoms[i][0], atoms[i][1], ATOM_RADIUS, 0, 2*Math.PI);
+        }
+        CONTEXT.stroke();
+        CONTEXT.closePath();
+    }
+
+    function updateTime(time_delta) {
+        console.log(time_delta)
+        TIME_DOM.innerText = '迭代次数 ' + time_delta;
+        return time_delta;
+    }
+</script>
