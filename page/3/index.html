@@ -70,6 +70,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-jango-1-route" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/22/jango-1-route/" class="article-date">
+  <time datetime="2020-03-22T10:00:45.000Z" itemprop="datePublished">2020-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/22/jango-1-route/">django核心处理流程 1. 路由</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>路由的设计是每一个 web 框架都必须优先考虑的问题，它决定了资源地址在代码中的组织方式。</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>从本质上讲，路由表维护了 url 地址到业务逻辑代码的映射关系。</p>
+<p>在 django 中，为了使 url 规则更为灵活，采用了正则表达式的方式来匹配 url 地址。</p>
+<p>正则表达式是一种模糊匹配，同一个 url 可能会对应多个正则表达式。所以 django 中的路由是一个列表配置。列表中的每一项是一个 <code>(pattern, view)</code> 对。</p>
+<p>为了便于模块化，django 还提供了第二种配置项 <code>(pattern, conf_module)</code>，用于将一组 url 映射到某个前缀下。所以整个路由设计的结构上是一棵树。</p>
+<p>下面是一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># urls.py</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    [<span class="string">'/welcome'</span>, views.welcome],</span><br><span class="line">    [<span class="string">'/api/suburls'</span>, <span class="string">'suburls'</span>],  <span class="comment"># 以/api/suburls作为url前缀，suburls模块中的其它项作为剩余部分</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># suburls.py</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    [<span class="string">'/url1'</span>, views.url1],   <span class="comment"># 实际访问地址为/api/suburls/url1</span></span><br><span class="line">    [<span class="string">'/url2'</span>, views.url2],   <span class="comment"># 实际访问地址为/api/suburls/url2</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>假如 suburls 是一个成熟的模块，我们就可以使用这种方式给该模块分配一个前缀，如此就可以投入使用了。</p>
+<p>下面是一个很经典的例子，将 django 内置的后台管理模块配置到 <code>/admin</code> 下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找算法"><a href="#查找算法" class="headerlink" title="查找算法"></a>查找算法</h3><p>上面提到，django 中的路由实质上是一棵树的结构，所以查找上也是树的遍历算法。由于我们想借助列表结构来说明优先级，这里必然要使用深度遍历。</p>
+<p>我们首先会从 settings 配置找到根 url 模块，然后遍历模块中的 urlpatterns 列表，如果匹配到的是一个模块，就继续匹配模块中的列表。如果最后没有找到可执行的逻辑，就是我们常见的 404 了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># demo/settings.py</span></span><br><span class="line">ROOT_URLCONF = <span class="string">'demo.urls'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># jango/url.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">resolve</span><span class="params">(path_info, urlconf)</span>:</span></span><br><span class="line">    <span class="string">"""匹配请求url，返回匹配项"""</span></span><br><span class="line">    urlconf_module = import_module(urlconf)</span><br><span class="line">    urlpatterns = urlconf_module.urlpatterns</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> pattern <span class="keyword">in</span> urlpatterns:</span><br><span class="line">        regex = pattern[<span class="number">0</span>]</span><br><span class="line">        re_matched = re.match(regex, path_info)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ['hello/', view]</span></span><br><span class="line">        <span class="keyword">if</span> re_matched <span class="keyword">and</span> callable(pattern[<span class="number">1</span>]):</span><br><span class="line">            callback = pattern[<span class="number">1</span>]</span><br><span class="line">            callback_kwargs = re_matched.groupdict()</span><br><span class="line">            groups = re_matched.groups()</span><br><span class="line">            callback_args = groups[:len(groups) - len(callback_kwargs)]</span><br><span class="line">            <span class="keyword">return</span> callback, callback_args, callback_kwargs</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ['api/', 'demo.urls']</span></span><br><span class="line">        <span class="keyword">elif</span> re_matched <span class="keyword">and</span> isinstance(pattern[<span class="number">1</span>], str):</span><br><span class="line">            resolve_match = resolve(path_info[re_matched.end():], pattern[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> resolve_match:</span><br><span class="line">                <span class="keyword">return</span> resolve_match</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，参数 <code>path_info</code> 是需要解析的url。解析后，我们可以获取执行的函数，及前端传过来的 url 参数。后面就可以调用具体函数执行了。</p>
+<p>代码地址可参考 <a href="https://github.com/pysnow530/jango" target="_blank" rel="noopener">https://github.com/pysnow530/jango</a>。</p>
+<h3 id="一些重要细节"><a href="#一些重要细节" class="headerlink" title="一些重要细节"></a>一些重要细节</h3><p>当然，上面的模型只是一个简化，这里提一下原生 django 几个比较重要的细节。</p>
+<p>第一，我们说匹配规则是一个正则表达式，但是 django 已对正则表达式做了封装，提供了更简单直白的用法，比如 <code>/welcome/&lt;name&gt;</code>。更多的限制，必然是一种发展趋势，它让我们更好的关心逻辑代码而非技术。</p>
+<p>第二，为减少封装了解本质，我们把路由中的每一个配置项定义为一个列表，实际 django 中是以一个类来替换的，作用类似，只是抽象程度更高。</p>
+<p>第三，django 支持给路由配置项命名，并在需要时支持将名称反转为 url。如在模板中的 <code>{ % url &#39;api_welcome&#39; &#39;name&#39; % }</code> 或代码中使用 <code>reverse(&#39;api_welcome&#39;, args=(&#39;name&#39;,))</code>，这让修改 url 几乎零成本，是一个优秀的设计。</p>
+<p>说了这么多，路由的核心简单且简洁，就是一个映射表。通过它，我们能找到资源地址对应的逻辑代码。</p>
+<p>下一篇文章，我们来看一下逻辑代码是如何组织及工作的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/03/22/jango-1-route/" data-id="ckoaj5gjf000w2erd6pj1329o" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-read-wukongzhuan" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/16/read-wukongzhuan/" class="article-date">
@@ -99,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ckk0tacn4002h1htvg6hk6zvg" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/read-wukongzhuan/" data-id="ckoaj5gkq002i2erd9d4tgj8a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -140,7 +202,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ckk0tacli000h1htvaxbo3mjx" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/16/dedao-reader/" data-id="ckoaj5gj5000j2erdflnaggfx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
@@ -184,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ckk0tacn7002m1htvcarubq13" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/03/sky-river-dream/" data-id="ckoaj5gks002n2erd9zsj0ivh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -241,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ckk0tacn2002c1htv7t2e8h7t" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/02/read-the-three-body-problem/" data-id="ckoaj5gkg002d2erd9ifb4qrj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -309,7 +371,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ckk0tacmy00241htvfsw86m0k" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/02/29/read-ruby-world/" data-id="ckoaj5gkd00262erd4lmc6rdr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -364,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/02/28/hexo-migrate/" data-id="ckk0taclq000r1htv65toerri" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/02/28/hexo-migrate/" data-id="ckoaj5gjc000v2erd5frha9e9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li></ul>
@@ -507,7 +569,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/30/read-lisp-paper-recursive/" data-id="ckk0taco4004s1htv3rw339os" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2019/03/30/read-lisp-paper-recursive/" data-id="ckoaj5glp004w2erd5a6bcp8s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li></ul>
@@ -554,7 +616,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/28/lilian/" data-id="ckk0taclx000y1htvgvb9hxw9" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2019/03/28/lilian/" data-id="ckoaj5gjj00112erd8uh0c6m7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
@@ -653,122 +715,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/22/gtd-practice/" data-id="ckk0taco1004k1htv7lps3twf" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2019/03/22/gtd-practice/" data-id="ckoaj5glm004o2erdhjgb6c3y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-emacs-keymap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/15/emacs-keymap/" class="article-date">
-  <time datetime="2019-03-15T16:00:00.000Z" itemprop="datePublished">2019-03-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/emacs-keymap/">emacs keymaps</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
-<li><a href="#org3ccc4a1">emacs中的keymaps</a><ol>
-<li><a href="#orga3cd1b5">keymap结构体</a></li>
-<li><a href="#org78e4ee3">行为覆盖</a></li>
-<li><a href="#org149d732">两个特化的问题</a><ol>
-<li><a href="#org274f6e1">prefix keys</a></li>
-<li><a href="#orgff2bd97">mode继承</a></li>
-</ol>
-</li>
-<li><a href="#orgdeccdc1">结束</a></li>
-</ol>
-</li>
-</ol>
-<p><a id="org3ccc4a1"></a></p>
-<h1 id="emacs中的keymaps"><a href="#emacs中的keymaps" class="headerlink" title="emacs中的keymaps"></a>emacs中的keymaps</h1><p>emacs具有很高的可配置性，从keybinding，customize，到UI，再到各种第三方package。</p>
-<p>keybinding是学习emacs的过程中必经的一环，很难相信有人会不加修改地使用原生的emacs按键行为。</p>
-<p>当然，keybinding由来以久。甚至在很多现代的软件中，给它取了一个更激动人心的名字，叫做快捷键，像是一项了不起的发明。其实在emacs里，是最最基础的一项功能。</p>
-<p>在这篇文章里，我将尝试从底层的概念开始，讲解emacs里的键绑定机制，以让读者可以自由地定制emacs里的按键，并知其所以然。</p>
-<p><a id="orga3cd1b5"></a></p>
-<h2 id="keymap结构体"><a href="#keymap结构体" class="headerlink" title="keymap结构体"></a>keymap结构体</h2><p>emacs的keybinding有一个基石，或者说设计原则，那就是每一个按键都绑定到了一个函数。从键盘输入，到鼠标，再到菜单，无一不在这个指导原则之下。</p>
-<p>试想一下，如果我们来实现这样一个功能，必然是需要一个结构体来关联按键和功能函数的。这个结构体，可以帮助我们快速找到一个按键对应的功能函数。</p>
-<p>emacs里使用的列表叫做keymap（大部分编辑器都使用这种称谓）。我们可以使用(keymapp)来检查一个结构是否是标准keymap，实际上它是通过检查列表的第一个元素是否是’keymap来判定的。</p>
-<pre><code>(keymapp &apos;(keymap xxxx))  ;; t</code></pre><p>我们可以找一个keymap来看一下它的结构：</p>
-<p>M-x describe-variable <ret> org-mode-map</p>
-<pre><code>(keymap
- (25 . org-yank)
- (11 . org-kill-line)
- (5 . org-end-of-line)
- (1 . org-beginning-of-line)
- ;; ...
-)</code></pre><p>如上面的代码片段所示，首元素以后的其它元素（cons），由按键和绑定的函数组成。如果我们对25求值，可以看到它对应的按键就是?\C-y。</p>
-<p>当然，(key . func-map)只是一种最简形式。比如，我们还需要支持一些按键序列，例如C-x C-f，这个结构就需要扩展一下了。后面再说。</p>
-<p>emacs为keymap操作提供了丰富的函数，可以使用下面的例子创建一个keymap，并添加C-;映射：</p>
-<pre><code>(setq map (make-sparse-keymap))      ;; (keymap)
-(define-key map &quot;\C-x&quot; &apos;c-x-func)
-map  ;; (keymap (24 . c-x-func))  24 =&gt; ?C-x</code></pre><p><a id="org78e4ee3"></a></p>
-<h2 id="行为覆盖"><a href="#行为覆盖" class="headerlink" title="行为覆盖"></a>行为覆盖</h2><p>在上面的例子中，我们已经创建了一个keymap并绑定了C-x的行为。但是它现在只是一个值，如何将其应用到我们的emacs中呢？</p>
-<p>不急，要回答这个问题，我们要首先了解，当一个按键按下后，emacs是如何找到它绑定的函数的。</p>
-<p>我们知道，在vim中绑定一个按键，可以使用:map命令，如果首参给个<buffer>，它将会作用到当前buffer而不修改全局keymap。（插播一句，由于vimscript只是一个专一化的脚本语言，vim的map行为是在vim内部执行的。我们还不能在vimscript层面可以直观地获取它对应的map）</p>
-<p>emacs也存在这种类似<buffer>的参数。当然，keymap的查找被定义为更严格的一个逻辑顺序。</p>
-<p>说了这么多，emacs查找按键的顺序有三个：</p>
-<ol>
-<li>查找一个神秘但对我们并不重要的map。</li>
-<li>查找’minor-mode-map-alist。</li>
-<li>查找(current-local-map)。一般会由major-mode设定。</li>
-<li>查找(current-global-map)。一般会等于global-map变量，是emacs的默认全局配置。</li>
-</ol>
-<p>好吧，如果你真的对1感兴趣，其实它是一个粒度更细的map，它会绑定到一个buffer里指定的某些文本。如果这个解释不能满足你，可以看一下text-property相关的手册。</p>
-<p>2、3不言而喻了，需要说明的一点是，如果我们知道某个mode的名字，可以很方便地找到它对应的map变量，如org-mode对应的keymap为org-mode-map。</p>
-<p>现在我们知道了keymap可以定义的多个层级，text-property -&gt; minor-mode -&gt; major-mode -&gt; global-map。</p>
-<p>上面我们讲到一个(define-key)函数，可用来修改keymap变量里的某个绑定。现在你应该已经知道网上某个家伙emacs配置里的代码片段是什么含义了：</p>
-<pre><code>(define-key &apos;global-map &quot;C-x C-e&quot; &apos;func)</code></pre><p><a id="org149d732"></a></p>
-<h2 id="两个特化的问题"><a href="#两个特化的问题" class="headerlink" title="两个特化的问题"></a>两个特化的问题</h2><p>主要的内容已经讲完了，下面再赠送两个额外的内容。</p>
-<p><a id="org274f6e1"></a></p>
-<h3 id="prefix-keys"><a href="#prefix-keys" class="headerlink" title="prefix keys"></a>prefix keys</h3><p>我想试着绕开这个内容，但是发现做不到。如果真正碰到了，会感觉很迷惑，不如两笔带一下。</p>
-<p>我们上面提到，keymap的元素不一定是(key . map-func)的形式，比如C-x C-f，它实际上是两个序列的组合。在emacs中使用这样的形式来定义：(key . keymap2)，即它的map-func是另一个keymap。</p>
-<p>举个例子，假设我们想在全局的keymap下，定义一个前缀输入为C-;的序列，让它在我们输入C-; 2时，在2的后面添加一个;（只是试验，毫无价值）。</p>
-<pre><code>(defun append-semicolon ()
-  (interactive)
-  (self-insert-command 1)
-  (insert &quot;;&quot;))
-
-(setq ctl-semicolon-map (make-sparse-keymap))
-(define-key ctl-semicolon-map &quot;2&quot; &apos;append-semicolon)
-
-(define-key global-map (kbd &quot;C-;&quot;) ctl-semicolon-map)</code></pre><p>这时，如果我们输入一个C-; 2时，编辑器里就会输入一个2;。</p>
-<p>需要注意，此时，如果我们修改global-map的C-; 3，修改的实际上是ctl-semicolon-map。</p>
-<pre><code>(define-key global-map (kbd &quot;C-; 3&quot;) &apos;append-semicolon)
-ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicolon))</code></pre><p>emacs里的C-x等序列就是这样定义的。</p>
-<p><a id="orgff2bd97"></a></p>
-<h3 id="mode继承"><a href="#mode继承" class="headerlink" title="mode继承"></a>mode继承</h3><p>emacs里的mode是有继承关系的，例如所有的编程语言mode都 <strong>应该</strong> 继承自 <em>prog-mode</em> ，所以针对编程语言的通用keymap，可以直接修改 <em>prog-mode-map</em> 。</p>
-<p>具体的细节，可以查看mode设计的手册。</p>
-<p><a id="orgdeccdc1"></a></p>
-<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上的内容就可以把整个keymap串起来了，如果有什么地方不了解，所有需要的知识都在 <code>C-h i</code> 里。尽情查阅吧。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2019/03/15/emacs-keymap/" data-id="ckk0tacll000l1htv6zhcfbzr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
 
     </footer>
   </div>
@@ -781,7 +731,7 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">« Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next »</a>
+    <a class="extend prev" rel="prev" href="/page/2/">« Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next »</a>
   </nav>
 
 </section>
@@ -795,7 +745,7 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
     </div>
   </div>
 
@@ -805,7 +755,7 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
     </div>
   </div>
 
@@ -814,7 +764,7 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -827,7 +777,11 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
       <ul>
         
           <li>
-            <a href="/2021/01/17/20210117-org-mode-again/">20210117-org-mode-again</a>
+            <a href="/2021/05/04/20210117-org-mode-again/">20210117-org-mode-again</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/04/2021-05-05-massive-distributed-operation/">不同体量的服务处理手法是完全不一样的</a>
           </li>
         
           <li>
@@ -840,10 +794,6 @@ ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicol
         
           <li>
             <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/21/learn-vuejs-in-one-day/">如果只有一天，如何学习vuejs？</a>
           </li>
         
       </ul>
