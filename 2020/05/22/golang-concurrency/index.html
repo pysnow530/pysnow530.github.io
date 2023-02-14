@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>golang并行编程 | pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="关于本文本文主要阐述作者对golang并行编程设计的理解，重在讲解思路而非实际使用。读者可以通过阅读本文，来了解golang中并行设计的关键技术及其作用，知其所以然。 本文并不追求完整和严谨，重点是提供一个学习思路，理清基本概念。使用的细节仍需要参考官方文档。 由于作者没有专门研究过golang的核心实现，所以文中可能存在理解或表述不当之处，欢迎批评指正。 并行需求的背景在计算机诞生之初，系统还是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang并行编程">
+<meta property="og:url" content="https://pysnow530.github.io/2020/05/22/golang-concurrency/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="关于本文本文主要阐述作者对golang并行编程设计的理解，重在讲解思路而非实际使用。读者可以通过阅读本文，来了解golang中并行设计的关键技术及其作用，知其所以然。 本文并不追求完整和严谨，重点是提供一个学习思路，理清基本概念。使用的细节仍需要参考官方文档。 由于作者没有专门研究过golang的核心实现，所以文中可能存在理解或表述不当之处，欢迎批评指正。 并行需求的背景在计算机诞生之初，系统还是">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-22T14:39:40.000Z">
+<meta property="article:modified_time" content="2023-02-14T13:20:06.833Z">
+<meta property="article:author" content="pysnow530@163.com">
+<meta property="article:tag" content="golang">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-golang-concurrency" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/22/golang-concurrency/" class="article-date">
+  <time datetime="2020-05-22T14:39:40.000Z" itemprop="datePublished">2020-05-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      golang并行编程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="关于本文"><a href="#关于本文" class="headerlink" title="关于本文"></a>关于本文</h3><p>本文主要阐述作者对golang并行编程设计的理解，重在讲解思路而非实际使用。读者可以通过阅读本文，来了解golang中并行设计的关键技术及其作用，知其所以然。</p>
+<p>本文并不追求完整和严谨，重点是提供一个学习思路，理清基本概念。使用的细节仍需要参考官方文档。</p>
+<p>由于作者没有专门研究过golang的核心实现，所以文中可能存在理解或表述不当之处，欢迎批评指正。</p>
+<h3 id="并行需求的背景"><a href="#并行需求的背景" class="headerlink" title="并行需求的背景"></a>并行需求的背景</h3><p>在计算机诞生之初，系统还是批处理的方式。彼时，碍于性能和基础工具的不完善，一台计算机同时只能跑一个任务。</p>
+<p>后来出现了能在一台计算机上同时跑多个任务的多任务操作系统，*nix系统是典型代表。</p>
+<p>但是多任务同时也只能有一个任务在运行，只是硬件性能足够高时，多任务切换快速，让人类看上去像是多个任务在并行处理。</p>
+<p>再后来，硬件进一步升级，出现了多核CPU的技术，这时计算机真正具有了并行处理的能力。</p>
+<p>伴随多核技术的出现的，还有相关的计算机编程语言。如何能便利地开发利用多核技术的程序，是这类编程语言要解决的核心问题之一。</p>
+<p>golang标榜的即是该优势，它在语言层面提供了并行机制，并提供了相关语言工具，来简化多核心编程的过程。</p>
+<h3 id="golang中的并行实现：goroutine"><a href="#golang中的并行实现：goroutine" class="headerlink" title="golang中的并行实现：goroutine"></a>golang中的并行实现：goroutine</h3><p>golang实现了一种轻量级的线程，即goroutine，来为用户提供并行编程的支持。</p>
+<p>goroutine由golang的运行时管理，它使用go关键字创建，使用较为简单。</p>
+<p>下面是一个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    h1 := hash(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;hello =&gt; %s\n&quot;</span>, h1)</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">doSomeThing()</span><br></pre></td></tr></table></figure>
+
+<p>如果CPU有多个核心，golang会将耗时的hash计算自动分配到单独的核心，以充分利用多核心的优势。</p>
+<p>但是这里有一个很明显的问题，上例中我们只是把计算结果打印出来，大多时候这不是我们想要的。我们想把计算的结果返回到主进程，供后面使用。</p>
+<p>这就涉及到多个逻辑单元间的通信问题，有这么几个类似的总是，函数间参数的传递，goroutine间的数据通信，及进程间的数据通信，其实说的是同一个问题。</p>
+<p>当然实现手段是多样的，golang提供了一种channel技术来解决goroutine间通信的问题（关键字CSP）。</p>
+<h3 id="goroutine间的通信：channel"><a href="#goroutine间的通信：channel" class="headerlink" title="goroutine间的通信：channel"></a>goroutine间的通信：channel</h3><p>我们先来考查一下编程语言函数中的数据通信，来更好的理解数据通信的方式。</p>
+<ol>
+<li>一个比较简单易得的方式是使用全局变量，在语言层面来说，这是一个可行的设计。但是当把它放到并行的场景下时，它的缺点就非常明显了，为了保证数据的一致性，需要引入锁机制或者一些其它的同步机制，这就使问题变得更为复杂。</li>
+<li>另一个可行的方式是把数据作为参数传递给具体的变量，类比于逻辑单元间的消息传递（实际上在object-c中即是把普遍意义上的函数调用定义为信号传递，本质类似，只是不同的看待方式）。这种方式的问题是，需要底层来提供支持，比如linux的管道。</li>
+</ol>
+<p>下面我们再来看一下上面两种方式在golang多个goroutine间的实现：</p>
+<p>全局变量必然是行得通的。我们使用锁机制来保证数据的一致性，下面是示例代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mutex sync.RWMutex</span><br><span class="line"><span class="keyword">var</span> y <span class="type">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mutex.Lock()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		y = <span class="number">4</span></span><br><span class="line">		mutex.Unlock()</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	mutex.RLock()</span><br><span class="line">	fmt.Println(y)</span><br><span class="line">	mutex.RUnlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式即是golang中提供的channel工具，它的操作方式有点类似linux中的管道，数据从一端流入，另一端流出。它是一个内置的数据结构，基本使用如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">ch &lt;- <span class="number">3</span></span><br><span class="line">i := &lt;-ch</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了具有1个元素的channel，写入元素时会阻塞当前goroutine，并等待其它goroutine读取该元素（还可以指定channel元素个数来为其添加缓存，这里不展开）。</p>
+<p>使用channel工具来重写上面的代码会更为简洁，可读性更好。下面是重构后的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	y := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		y &lt;- <span class="number">4</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	fmt.Println(&lt;-y)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码确实简洁了许多，需要注意的是，go func()中的 <code>y &lt;- 4</code> 语句会阻塞该goroutine，直到最后 <code>&lt;-y</code> 将数据读出后，go func()才会继续执行。</p>
+<p>golang中有一个原则性的表述，可以看出其对使用channel来进行数据通信的倾向：</p>
+<blockquote>
+<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
+</blockquote>
+<h3 id="goroutine协同：select"><a href="#goroutine协同：select" class="headerlink" title="goroutine协同：select"></a>goroutine协同：select</h3><p>现在我们已经有了多个goroutine间通信的工具，但是这个工具是阻塞的，有时我们希望能更灵活地处理channel的状态，如指定3秒的超时时间。</p>
+<p>goroutine提供了一个select工具来解决这类问题，这个select跟linux中的select有些类似，监控多个目标，如果监控到某个目标达到了我们期望的状态，就做某类操作。</p>
+<p>golang中的select跟switch有着一样的结构，而且都使用case关键字来处理多分支，不同的是select处理的是channel的输入输出。</p>
+<p>假如我们定义了两个channel，并由两个goroutine来分别写channel数据，select的处理结构类似下面这种：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">    doSomeThing()</span><br><span class="line"><span class="keyword">case</span> &lt;-ch2:</span><br><span class="line">    doOtherThing()</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    allIsBlocking()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序会检测ch1和ch2中是否有写入数据，并随机选择一个有写入数据的分支执行，注意这里是随机。如果没有，执行default分支。具体执行过程更复杂些，具体可点击文章底部的链接查看。</p>
+<p>可以使用下面的例子来检测超时：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	blockCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	timeoutCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second*<span class="number">3</span>)  <span class="comment">// 1</span></span><br><span class="line">		blockCh &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second*<span class="number">1</span>)  <span class="comment">// 2</span></span><br><span class="line">		timeoutCh &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-blockCh:</span><br><span class="line">		fmt.Println(<span class="string">&quot;block routine is finished!&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> &lt;-timeoutCh:</span><br><span class="line">		fmt.Println(<span class="string">&quot;block routine is timeout!&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于1处的goroutine执行太慢（3秒），程序将在等待一秒后，打印”block routine is timeout!”并退出。</p>
+<p>case语句同时支持写入和读出，具体可以参考官方文档。</p>
+<h3 id="辅助工具"><a href="#辅助工具" class="headerlink" title="辅助工具"></a>辅助工具</h3><p>golang还为并行编程提供了更为丰富的工具，使并行编程的过程更为便利，下面列举一些比较常用的工具。这里省去了示例代码。</p>
+<p>goroutine会在主进程退出时自动退出，如果我们想让主进程等待goroutine的运行，可以使用sync.WaitGroup()工具。</p>
+<p>超时检测的情况比较多，time包借助运行时，实现了一个更为高效的超时检测，time.After()，另外，time.Tick()可以定期写channel配置for实现周期性任务。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a target="_blank" rel="noopener" href="https://golang.org/ref/spec">https://golang.org/ref/spec</a><br><a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html">https://golang.org/doc/effective_go.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/22/golang-concurrency/" data-id="cle4a0ewe000sufiyd6ig2uoz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/24/macosx-window-tile-manager/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          macosx上的平铺式窗口管理器
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/26/read-the-programmers-who-created-the-software-revolution/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">读《软件故事：谁发明了那些经典的编程语言》</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/14/doggy/">狗子</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCLK447MR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRCLK447MR');
+  </script>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

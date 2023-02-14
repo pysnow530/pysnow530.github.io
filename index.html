@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="pysnow530 的博客">
+<meta property="og:url" content="https://pysnow530.github.io/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pysnow530@163.com">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2021-05-05-massive-distributed-operation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/05/05/2021-05-05-massive-distributed-operation/" class="article-date">
+  <time datetime="2021-05-04T16:00:00.000Z" itemprop="datePublished">2021-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我跟我媳妇有时候会选择自己在家做饭。我帮她剥蒜，一颗一颗干干净净。</p>
+<p>我们结婚的时候，全村人都到了，几十桌，请了做饭师傅，在祠堂举行。</p>
+<p>我们去帮忙，搬搬桌子洗洗菜啥的。</p>
+<p>蒜蓉基围虾需要很多大蒜。我们围在姑姑旁边，姑姑从袋子里掏出一捧蒜，放在地上，用刀背一拍，就交给我们处理了。</p>
+<p>被刀拍过的蒜格外好剥，我们总能在吃饭前把大蒜处理好。</p>
+<p>但是会不会有点脏呢？当然没有用手剥干净了。但是实际效果差别不大。</p>
+<p>在我的技术生涯中，曾经有一段时间工作内容是开发新特性，并且维护平台的稳定性。那时我总能把每个问题跟进到底，处理的滴水不漏。</p>
+<p>后来我有机会运维一些比较大的系统，开始引入SLA，从一种新的角度去对待自己的工作内容。</p>
+<p>我们说4个9，这意味着我们要处理的请求量非常大了。我开始慢慢意识到不能像以前一样把系统打造得滴水不漏，事必躬亲，各种小概率导致的意外开始逐渐瓦解某种完整的印象。失控开始相继出现。</p>
+<p>如果最后我们能良好的生存下来，必然需要某种平衡，从杂多的处理事项中识别出哪些更为重要。这是一种与对待小规模系统完全不同的思路。</p>
+<p>现在，我们在学着享受在失控边缘的这种状态。而且可以确信的是，飘摇不定也是一种稳定的状态。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2021/05/05/2021-05-05-massive-distributed-operation/" data-id="cle4a0evx0003ufiy50b82lnj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-20210117-org-mode-again" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/01/17/20210117-org-mode-again/" class="article-date">
+  <time datetime="2021-01-16T16:00:00.000Z" itemprop="datePublished">2021-01-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
+<li><a href="#orgbce1b22">这段日子org-mode去了哪里？</a></li>
+<li><a href="#org0c55a52">这段日子我去了哪里？</a></li>
+<li><a href="#org1a1b4c8">为什么要重新使用org-mode？</a><ol>
+<li><a href="#org3f950bc">诉求</a></li>
+<li><a href="#org369386b">场景举例</a></li>
+</ol>
+</li>
+<li><a href="#org78e3835">结论</a></li>
+</ol>
+<p>为什么会有这样一篇文章呢？</p>
+<p>由于某些原因，我希望能借助到org-mode的执行能力。本来只是想写一个测试文档，后来一想来都来了，写篇正经点的文章也没什么不可以。所以就有了这样一篇文章。</p>
+<p><a id="orgbce1b22"></a></p>
+<h1 id="这段日子org-mode去了哪里？"><a href="#这段日子org-mode去了哪里？" class="headerlink" title="这段日子org-mode去了哪里？"></a>这段日子org-mode去了哪里？</h1><p>矛盾，真的很矛盾。</p>
+<p>遇到很多的事情总是一致地相似，尝试过很多工具，最后结论就是，没有银弹。</p>
+<p>很久之前重度依赖org-mode，着迷于它简单的格式。</p>
+<p>使用它来应用gtd，记录时间，记录文章。因为org-mode很难跨平台提供手机端支持，一度为它提供了网页端来记录我使用手机打游戏的时间。</p>
+<p>最后是什么原因失败了呢？我发现有一些软件已经做到了这些，虽然收费，但是物有所值。</p>
+<p>那一段时间我换了软件，换了平台，emacs被我遗弃了。</p>
+<p><a id="org0c55a52"></a></p>
+<h1 id="这段日子我去了哪里？"><a href="#这段日子我去了哪里？" class="headerlink" title="这段日子我去了哪里？"></a>这段日子我去了哪里？</h1><p>去了哪里当然是说我在做什么，文章里突然消失了。虽然只有我自己意识到自己是否消失。</p>
+<p>这段时间发生了一些事，行业也不是很景气，新冠也改变了自己的一些行为方式。换了个工作环境，新环境的融入耗费了一些精力。</p>
+<p>在感觉一切就要复苏的时候，我回来了。</p>
+<p><a id="org1a1b4c8"></a></p>
+<h1 id="为什么要重新使用org-mode？"><a href="#为什么要重新使用org-mode？" class="headerlink" title="为什么要重新使用org-mode？"></a>为什么要重新使用org-mode？</h1><p><a id="org3f950bc"></a></p>
+<h2 id="诉求"><a href="#诉求" class="headerlink" title="诉求"></a>诉求</h2><p>那为什么又要使用org-mode呢？</p>
+<p>这次不是因为gtd了，而是想要借一下org-mode的可执行手册的能力。</p>
+<p>为什么需要可执行手册呢？</p>
+<p>这要从几个月前说起了。。。此处陷入回忆，节奏放缓。。。</p>
+<p>我之前的工作以编码为主，换到新环境后做起了SRE，众所周知，SRE岗位做的事情有很大一部分是琐事。</p>
+<p>部门还处在建设之初，虽然各个事项已经手册化，但是频繁在手册与服务器间切换是很不容易的。可执行手册成为了我的救命稻草。</p>
+<p><a id="org369386b"></a></p>
+<h2 id="场景举例"><a href="#场景举例" class="headerlink" title="场景举例"></a>场景举例</h2><p>我举一个比较常用的场景，比如我要在运维机器上执行命令探测远端机器的一个接口服务，普通模式下要登录运维机，然后将手册里的命令粘贴到终端执行。</p>
+<p>比如，我可以定义远程执行函数如下：</p>
+<pre><code>(defvar foo-service-hosts &apos;(&quot;127.0.0.1&quot; &quot;192.168.1.101&quot;))
+(defun run-on-ops (cmd)
+  &quot;Run CMD on ops server.&quot;
+  (format &quot;I am the cmd (%s) result.&quot; cmd))</code></pre><p>然后在相关操作手册里使用下面的结构：</p>
+<p>检测服务器请求是否正常：</p>
+<pre><code>(run-on-ops (format &quot;curl %s/api/v1/hello&quot; (first foo-service-hosts)))</code></pre><p>这样就可以把大部分操作留在文档里，避免一些接触服务器的操作。理想情况下，就可以完全不直接接触服务器了。</p>
+<p><a id="org78e3835"></a></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>后面又会把org-mode使用起来了，不过是使用它的另一个能力。先练习使用起来再说。</p>
+<p>好了，我要去找导出为markdown的命令了，然后把这个文章更新到github。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2021/01/17/20210117-org-mode-again/" data-id="cle4a0ew10005ufiyfgaq6vax" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-doggy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/14/doggy/" class="article-date">
+  <time datetime="2020-11-14T05:52:17.000Z" itemprop="datePublished">2020-11-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/14/doggy/">狗子</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为什么？</p>
+<p>初冬清晨里，</p>
+<p>热带的太阳把地面烤得暖洋洋，</p>
+<p>一只狗子眯着眼躺在地上翻滚。</p>
+<p>而我，</p>
+<p>不能。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/11/14/doggy/" data-id="cle4a0ewc000mufiy7gqu9ijl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-thinking-of-standing" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/08/thinking-of-standing/" class="article-date">
+  <time datetime="2020-11-08T02:51:52.000Z" itemprop="datePublished">2020-11-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们有太多的时间是处于站立的状态，即使在工作之后也是如此。</p>
+<p>但是我们有几时曾感受到大地的厚实，他的纹理与外表形状。</p>
+<p>一块木头，他的纹理、色泽、温度，也不是每个人都感受得到的。</p>
+<p>这或许是区别暴发户的一个好手段，是否能对环境有细致体贴的感受，敏锐的区别各个环境的差异，才能真正明白什么是高端享受。</p>
+<p>所谓不是所有人都懂得某样东西某件事的价值，其实也在于我们的敏锐程度是不一样的。</p>
+<p>那就伸出手，抚摸一下大理石的温度与纹理，感受他给手指带来的反馈。</p>
+<p>那就站起身来，好好感受一下大地的厚实与沉稳吧！</p>
+<p>多了鞋子的障碍？没关系，脱掉鞋袜，踩踏一番，磨擦一番，大地总会回应我们的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/11/08/thinking-of-standing/" data-id="cle4a0ex7003gufiyfkyobfrc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-gtd-practice-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/26/gtd-practice-2/" class="article-date">
+  <time datetime="2020-09-26T06:34:53.000Z" itemprop="datePublished">2020-09-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p><a href="/2019/03/22/gtd-practice/">上回</a> 总结反思自己的gtd实践还是19年的3月份，转眼已过去一年半，来到了2020年的下半年。</p>
+<p>在之前的反思中，我回顾了自己对于时间这个概念在不同时期的理解及应对方式，然后介绍了自己对任务类型的理解，及在org-mode中的简单应用。</p>
+<p>org-mode很强大，但是在现实场景中，需要自己去做一些额外工作，比如手机端和电脑端的同步、手机端的使用体验等，都是比较大的问题。</p>
+<p>在使用一段时间后，我也自己写过一个兼容org的gtd工具，但是后面还是因为使用成本过高而终止了很长一段时间。</p>
+<p>再一次用起gtd工具是几个月前，契机是有一些事情需要跟踪处理。时间很多和事情很多两种极端情况都是gtd大展身手的好时候。</p>
+<p>虽然我也买了嘀嗒清单的vip，但是我相信工具应该是脱离实现的。所以在这里借一篇文章再次对gtd作一番梳理和思考。</p>
+<h2 id="解决的问题域"><a href="#解决的问题域" class="headerlink" title="解决的问题域"></a>解决的问题域</h2><p>首先，工具的存在是为了解决问题的，我们当然要明确gtd的存在是为了解决什么问题。</p>
+<p>解放大脑几乎是所有工具都会尝试解决的问题，这也是把制造工具作为人类与其他动物有别的一个原因。</p>
+<p>当然，大脑功能很多，我们要明确的是，gtd要解放的，是大脑的记忆和注意力。</p>
+<p>记忆是很好理解的，gtd首先是具备任务记录功能的，包括一些其它的电脑存储设备也可以很好地解决记忆容量的问题，比如磁盘文件等。</p>
+<p>解放注意力是gtd有别于存储的一个重要特性，这里说的其实就是gtd的规划和调度的能力，我们需要一种工具让我们日益复杂的任务管理变得简单。</p>
+<p>这里，我再来一句个人对gtd解决问题的理解，<strong>gtd是一种解放大脑存储负担，并方便我们安排调度任务的工具</strong>。</p>
+<h2 id="工具手段"><a href="#工具手段" class="headerlink" title="工具手段"></a>工具手段</h2><p>解放大脑负担是很简单的，大部分计算机存储部件都可以解决。协助我们安排调度任务则是一个需要一系列工具来协助的过程。</p>
+<p>首先，我们的第一个强有力的工具就是流程化。当把复杂的任务抽象成一个流程框架后，整体过程就变得有章法可寻，一切新事物也变得似曾相识。</p>
+<p>我说一下我个人的实践情况，可能跟标准gtd有些微差别，工具嘛，进行个人定制才是达到最佳效果。</p>
+<p>gtd会定义一个收件箱的概念，它是一个暂存区或者缓冲区，有一些临时性的任务会被临时放置其中。为什么需要暂存？因为这样可以最大限度得减少上下文切换的开销。</p>
+<p>比较常见的暂存区可以由一些工具来充当，比如记事本或者邮箱的草稿箱等。</p>
+<p>暂存区的任务只用作暂存，是需要定期做处理的，具体的时间因人而易。比如我每天晚上都会清理下当天的暂存区。</p>
+<p>清理就是为这些暂存任务添加属性的过程，比如这个任务是个人任务还是工作相关的任务，它的紧急程度是怎么样的，是否要加入近期的待办中，等等一类的属性。</p>
+<p>其中比较重要的属性是排期，因为我们说gtd很重要的一个作用就是协助我们进行任务的排期调度。</p>
+<p>排期可能有周期属性，比如连续某几天都要处理某件事；或者只是在某个时间点花较少的时间经历做个确认；或者压根就没有排期，这一类一般是不重要的任务，大多实践者会选择在空闲时选取不重要但想做的任务来做。</p>
+<p>有了收件箱和任务清理，还有一个阶段就是定期对所有任务进行复盘，比如每周检查一下是否有遗漏的任务或者随着时间推移有的任务优化程度下降等。</p>
+<p>这实际上是一个闭环的过程，而且整个过程的步骤都比较有章法，可以大大减缓个人的心智负担。</p>
+<h2 id="一些实践"><a href="#一些实践" class="headerlink" title="一些实践"></a>一些实践</h2><p>现实是复杂的，所以工具需要反复打磨以符合现实中个人的要求。当然，一个子工具的概念和使用上的思考也可以帮助我们做出更好的优化改进。</p>
+<p>下面是我对一些子工具的思考，它们是gtd这个系统中的一部分，使用熟练能够让整个系统运转更流畅更高效。</p>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>我个人有尝试过优先级方面的设定，但是一来优先级的变化频率比较高，二来优化级的设定比较耗费精力（任务属性往往比较多，且优化级不好量化），所以后面就省掉了优化级的维护。</p>
+<p>但是优先级的存在可以帮助我们对未排期的任务做排序，如果不对优先级做排序，我们就需要替代的手段。</p>
+<p>个人经验是通过标签+排期来区分优先级程度，因为这两个工具往往更贴近实际，标签有语义，排期有实际的操作时间。</p>
+<p>比如个人成长标签一般是重要不紧急的，而某些重要项目当前比较紧急，那它的关联任务一般也会较为紧急。</p>
+<p>如果一些任务比较紧急，我们就要提前为它们确认排期，未确认排期的任务再经过下个循环评估紧急程度。</p>
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><p>标签其实也是一个很有意思的设计模式，它可以提供强大的灵活性，让用户可以根据自己的情况灵活定制。</p>
+<p>从数据结构上来说，标签是一个多对多的关系，一个标签可以贴到多个任务上，一个任务也可以贴多个标签。这样我们就可以很方便地使用标签对任务做过滤。</p>
+<p>我的个人经验是，对标签做一个层级管理，这样方便对整个层级做统计和任务间的快速区分，任务标签只用二级。按照优先级里讲的方法，也是间接地设置了优化级及查看方式。</p>
+<p>通过标签颜色，就可以在日历视图中很方便地看到自己一个月内的任务分布情况，如个人任务和工作任务的占比、时间分布等。</p>
+<h3 id="排期"><a href="#排期" class="headerlink" title="排期"></a>排期</h3><p>上面说到用排期来指标任务的紧急程度，其实排期也可以有更为灵活的处理。</p>
+<p>比如我们最近要做某个任务，但是并没有确定具体时间。其实就是一个deadline任务，那我们可以把它安排到明天或者后天，来提醒自己到明天或后天再来评估排期。</p>
+<p>对排期分类的思考也是比较有用的，我在上篇gtd文章中也做过一些分类。现在看法更简单些了，要思考的无非两点，要不要排期，排在哪一天，当然也可能是排在哪一段时间。</p>
+<p>我之前还有具体时间段的划分，org-mode也有这类工具，比如上午10点-11点看书。但是目前来看，至少对我个人来说，粒度过细是不可取的，因为没有足够的掌控空间。这个还是需要结合自己的时间特点，场景很重要。</p>
+<h2 id="我该用什么工具？"><a href="#我该用什么工具？" class="headerlink" title="我该用什么工具？"></a>我该用什么工具？</h2><p>还是要选择自己感觉顺眼的工具，心情好，什么都好。</p>
+<p>当然，它可能需要有一些比较明显的特点，对我来说，下面几点比较重要：</p>
+<ol>
+<li>界面美观：上面已经说过，使用工具时工具反馈给我们的心情变化比较重要</li>
+<li>功能覆盖：不一定全，但是一定要直接或间接满足自己的需要，且整个过程顺畅</li>
+<li>足够灵活：工具是要贴合人的，而现实是复杂的，这就需要工具有一定的定制能力可以随场景发生一定程度的变化</li>
+<li>全平台支持：这个应该算是目前软件的标配了，手机电脑需要互通是一项基本且重要的能力</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/09/26/gtd-practice-2/" data-id="cle4a0ewe000tufiyhik418q6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-learn-vuejs-in-one-day" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/21/learn-vuejs-in-one-day/" class="article-date">
+  <time datetime="2020-06-21T11:44:29.000Z" itemprop="datePublished">2020-06-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/21/learn-vuejs-in-one-day/">如果只有一天，如何学习vuejs？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-树靶：从入门到精通？"><a href="#1-树靶：从入门到精通？" class="headerlink" title="1. 树靶：从入门到精通？"></a>1. 树靶：从入门到精通？</h3><p>伴随着计算机技术的发展，我们总是能听到或看到《n天从入门到精通》系列丛书，精通一词总能给人带来一阵兴奋，好像找到了武功秘籍，练后就登峰造极。</p>
+<p>但这多半只是换来脑中一热，只是精通招式，还是不能为我所用创造出令自己满意的效果。</p>
+<p>这篇文章必然不属于该系列，”一天”这个限制并不想蒙蔽读者，而只是为了创造一个极限条件，时间有限不能全部照顾到，逼迫我们去思考什么才是最重要的。</p>
+<p>打蛇打七寸，当真屡试不爽。但是每个人都有自己的学习方式，并不一定对所有人都有效。不以为然者尽可以把这当作另一种思路借鉴。</p>
+<p>下面我们就来看看，一天时间，能把哪些重要的东西学到手。</p>
+<h3 id="2-探路：我眼中的vuejs是怎样的？"><a href="#2-探路：我眼中的vuejs是怎样的？" class="headerlink" title="2. 探路：我眼中的vuejs是怎样的？"></a>2. 探路：我眼中的vuejs是怎样的？</h3><p>首先，我要做些铺垫，来说明一下我眼中的vuejs是个什么工具，用以解决什么问题。</p>
+<p>计算机语言发展史，在我看来就是一个抽象层次不断升级的历史。</p>
+<p>最开始的面向过程编程，比如c语言，实际上是将功能逻辑封闭到了函数，是对过程的抽象。这是第一层。</p>
+<p>但是过程虽然做了抽象，数据却还是游离在代码中，面向对象编程即是再将数据跟逻辑一起封装为一个整体，即对象。这是第二层。</p>
+<p>这两者都是代码层面，复用程度也还是有限。于是出现了一些第三方模块，复用程度较面向对象又高了一个层次。这是第三层。</p>
+<p>再上一层就涉及到具体功能设计了，比如django的contrib.admin，即是django将整个功能以插件方式使用的极好例子，这些代码已可以完整提供功能模块了。这是第四层。</p>
+<p>当然，上面还有更高明的设计，IaaS、SaaS、PaaS更是提供了整个运行时的能力，直接申请运行时即可使用，简单方便，程度又高了一层。这是第五层。</p>
+<p>vuejs的设计介于第三层和第四层之间，虽说提供了某种层次的抽象，类似第三方模块，但是它更提供了抽象的解决方案。这正是它跟jQuery这类 <strong>js库</strong> 的差别所在。</p>
+<p>更具体得说，vuejs实现了一个叫做component的前端复用粒度，并提供了一整套框架来使component足够灵活以满足绝大多数需求。</p>
+<p>我们下面便来看一下vuejs中的component是如何达到抽象复用的。</p>
+<h3 id="3-观详：vuejs中的component设计"><a href="#3-观详：vuejs中的component设计" class="headerlink" title="3. 观详：vuejs中的component设计"></a>3. 观详：vuejs中的component设计</h3><p>这里的标题是component设计，而不是”component如何编写”，如何编写并不十分重要，我们想要知道的是，它是怎么设计来满足我们目标的。</p>
+<p>为什么是它满足我们的目标而不是我们去学习它的使用？因为我们的思考是第一位的，否则很容易在这纷繁的世界中迷失，人云易云。</p>
+<p>那我们就先设计一个框架，让vuejs实现这个框架（奇怪，竟然是vuejs来贴合我们的思考，而不是我们去学习了）。</p>
+<p>那我们现在就来思考，如何设计一个可以复用的component，满足我们复用的需求。</p>
+<p>。。。</p>
+<p>经过了几分钟的思考，我认为一个可复用的组件，要满足以下几个条件：</p>
+<ul>
+<li>属性：我们可以利用属性来定义一个组件的外观，或者交互方式</li>
+<li>输出：component不光好看（或不好看），可能还能输出某种状态或数据，比如一个获取输入的组件，我们需要从组件中获取输入的内容</li>
+<li>控制：component需要提供一些对外接口，以便我们对它进行控制</li>
+<li>感知：有时component需要主动将自己的内部状态通知出来。跟被动控制不同的是，感知是component主动通知外部的行为</li>
+</ul>
+<p>现在，我们只需要拿着这份药方去vuejs抓药就可以了。下面是我们找到的药品的位置：</p>
+<ul>
+<li>属性：vuejs中明显地提供了属性的定义及访问方式，component中使用 <code>props</code> 来指定其支持哪些属性，使用方可以通过 <code>:prop=&quot;config.prop&quot;</code> 传入属性</li>
+<li>输出：输出的实现有些技巧，后面我们专列一个小节来说明</li>
+<li>控制：想要控制某个component，必先获取它对应的句柄（与之对应的某个变量）。vuejs为组件的使用提供了一个 <code>ref</code> 属性，可通过 <code>this.refs</code> 变量引用到，直接调用其函数</li>
+<li>感知：主动通知的实现方式，一般为信号（linux进程）和事件（js），但本质是相同的，都是底层提供一种通信方式。vuejs提供了 <code>$emit()</code> 函数，用以向component使用方发送通知</li>
+</ul>
+<h3 id="4-试剑：不跑起来不算验收通过"><a href="#4-试剑：不跑起来不算验收通过" class="headerlink" title="4. 试剑：不跑起来不算验收通过"></a>4. 试剑：不跑起来不算验收通过</h3><p>上面的实现描述不够直观，还是要看到代码才能更清楚明白。下面我们就创建一个项目来验证上面的设计。</p>
+<p>这里我们先编写一个简单的用例，一个用以显示文本的component，同时可通过一个api来修改字体大小。</p>
+<p>我们先安装vue命令行工具，并用其创建一个脚手架项目：</p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br><span class="line">vue create component-demo</span><br></pre></td></tr></table></figure>
+
+<p>然后我们创建一个component，该component可定义显示一行文本，可通过一个属性来设置文本颜色。同时，我们提供两个接口以供使用方调整字体大小。</p>
+<p>先看使用方的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- src/App.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Label</span> <span class="attr">color</span>=<span class="string">&quot;green&quot;</span> <span class="attr">text</span>=<span class="string">&quot;hello&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;label1&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;enlarge&quot;</span>&gt;</span>enlarge<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;diminish&quot;</span>&gt;</span>diminish<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;App&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">components</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title class_">Label</span></span></span><br><span class="line"><span class="language-javascript">  &#125;,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">enlarge</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">label1</span>.<span class="title function_">enlarge</span>()</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">diminish</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">label1</span>.<span class="title function_">diminish</span>()</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是component的定义：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- src/components/Label.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">:style</span>=<span class="string">&quot;&#123;color: color, &#x27;font-size&#x27;: fontSize + &#x27;px&#x27;&#125;&quot;</span>&gt;</span>&#123;&#123; text &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;Label&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">props</span>: [<span class="string">&#x27;color&#x27;</span>, <span class="string">&#x27;text&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">fontSize</span>: <span class="number">18</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">enlarge</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">this</span>.<span class="property">fontSize</span> += <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">diminish</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">this</span>.<span class="property">fontSize</span> -= <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-转锋：同步数据给父component"><a href="#5-转锋：同步数据给父component" class="headerlink" title="5. 转锋：同步数据给父component"></a>5. 转锋：同步数据给父component</h3><p>上面的组件已可以很好的工作了，但是它并没有覆盖到我们上面给出的四个条件，我对比了一下，缺少 <code>输出</code> 和 <code>感知</code> 两个条件，这两个条件实现的技术实际是同一个。</p>
+<p>vuejs提供了一种通信方式，可以向父component发送数据，原型为 <code>$emit( eventName, […args] )</code>，eventName为事件名，是一个字符串，可为该事件提供参数 args。</p>
+<p>如果我们是直接看vuejs的官方教程，官方指出v-model可以实现数据的双向绑定（数据显示&lt;=&gt;数据变量这两个方向）。官方也给出了v-model背后的诀窍：</p>
+<blockquote>
+<p>你可以用 v-model 指令在表单 input、textarea 及 select 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。</p>
+</blockquote>
+<blockquote>
+<p>text 和 textarea 元素使用 value property 和 input 事件；</p>
+</blockquote>
+<p>下面的代码更直白一些：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;data&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--等同于下面的代码--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-bind</span>=<span class="string">&quot;data&quot;</span> <span class="attr">v-on:input</span>=<span class="string">&quot;data = $event.target.value&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>即是如此，我们便可以通过包装一个input，并给上层上送input事件来通知上层更新数据了。下面是一个片段：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--父component--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">InputComponent</span> <span class="attr">v-model</span>=<span class="string">&quot;data&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--子component--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">v-bind</span>=<span class="string">&quot;data&quot;</span> <span class="attr">v-on:input</span>=<span class="string">&quot;$emit(&#x27;input&#x27;, data)&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然，框架里还提供了一个model属性，可以修改v-model绑定的属性（这里默认为value）和事件（这里默认为input）。这算是个彩蛋了。</p>
+<p>如果要更细致的使用，还需要了解一下生命周期的概念，不过这对于使用来说并不是最核心最要紧的。</p>
+<h3 id="6-回首：再来看n天精通系列"><a href="#6-回首：再来看n天精通系列" class="headerlink" title="6. 回首：再来看n天精通系列"></a>6. 回首：再来看n天精通系列</h3><p>我相信n天精通是存在的，但是这不是必然的。比起精通，能够产生有实际价值的产品，才是更令人兴奋的。</p>
+<p>所以，n天能精通也罢，不能精通也罢，并不是那么重要。</p>
+<p>网上看到一个朋友的说法，我觉得说得挺好：工具是帮助我们解决问题的，而不是让人成为大牛的。</p>
+<p>精通和有效，必然有先后。我觉得大可先让学习有效，真正到了一定程度，自然便精通了。</p>
+<p>有了上面的学习，我们就可以触类旁通，继续学习相关知识，一边学习、一边享受学习的成果，不也是一件很快乐的事吗？</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/06/21/learn-vuejs-in-one-day/" data-id="cle4a0ewi0013ufiy48hy0c1q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-zabbix" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/29/zabbix/" class="article-date">
+  <time datetime="2020-05-29T13:14:51.000Z" itemprop="datePublished">2020-05-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/29/zabbix/">zabbix监控方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="概况"><a href="#概况" class="headerlink" title="概况"></a>概况</h3><p>zabbix是一个老牌的开源分布式监控方案，它是由Alexei Vladishev在2000年左右创建（PS: 那时我刚好升初中 😀），最早主要用来监控网络和服务器的健康度和完整性。</p>
+<p>如果按照中国的法律，到现在的2020年，zabbix已经成年。</p>
+<p>经过近20年的发展，zabbix已由最初的网络和服务器监控扩展到应用监控和web监控等更丰富的监控目标，数据库支持已从mysql覆盖到了elasticsearch、oracle等更多的第三方数据库，告警函数也从最初的6个增加到了5.0版本的29个。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>zabbix的架构比较典型，分为采集端、展示端、告警端。采集端主要通过agent采集信息，并上报到server，数据存储在mysql等数据库中。</p>
+<p>下面是zabbix数据采集端接入zabbix的架构图：</p>
+<p><img src="/images/zabbix-proxy.png" alt="zabbix-proxy"></p>
+<p>为了性能的考虑，zabbix有类似elk等架构的典型特点，agent和server间支持加入一个proxy来均衡负载。</p>
+<p>2019年的4.4版本中，官方开始提供基于golang的agent2作为上报端，性能和维护性上也会好很多。未来有望取代c版本的agent。</p>
+<h3 id="agent2源码解读"><a href="#agent2源码解读" class="headerlink" title="agent2源码解读"></a>agent2源码解读</h3><p>这里以5.2.0alpha1为准，来分析一下agent2的核心实现。代码对应哈希86c3d82，agent2对应的代码在src/go下。</p>
+<p>zabbix同时支持主动上报和被动请求两种，主动上报是agent主动发起的上报，而被动请求是由server端发起。</p>
+<p>agent2代码量比较庞大，但是目录结构和处理逻辑比较清晰。核心代码主要集中在internal/agent中。</p>
+<p>从agent2的总体设计来看，整个执行逻辑分为scheduler.Manager、server.Connector、ServerListener三个主要逻辑（goroutine启动），主程序对三个goroutine进行监控。</p>
+<p>其中，SchedulerManager负责数据采集、配置更新的调度；ServerConnecter用于与server的连接，负责更新监控项配置；ServerListener主要监控server端发起的被动请求。</p>
+<p>这里以三个小条目来分别讨论agent2的实现，分别是监控项同步、plugin机制以及一个简单的plugin实现。</p>
+<h4 id="监控项同步"><a href="#监控项同步" class="headerlink" title="监控项同步"></a>监控项同步</h4><p>server端启动时会监听一个端口（默认10051），agent2会定期从该端口拉取监控项，默认每两分钟拉取一次。</p>
+<p>前面说过，拉取是由server.Connector来做的，它从server端获取配置项后，做一些简单处理，并将其包装为updateRequest，然后将配置作为input输入到scheduler.Manager中。</p>
+<p>scheduler.Manager的数据结构如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Manager <span class="keyword">struct</span> &#123;</span><br><span class="line">	input       <span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	plugins     <span class="keyword">map</span>[<span class="type">string</span>]*pluginAgent</span><br><span class="line">	pluginQueue pluginHeap</span><br><span class="line">	clients     <span class="keyword">map</span>[<span class="type">uint64</span>]*client</span><br><span class="line">	aliases     *alias.Manager</span><br><span class="line">	<span class="comment">// number of active tasks (running in their own goroutines)</span></span><br><span class="line">	activeTasksNum <span class="type">int</span></span><br><span class="line">	<span class="comment">// number of seconds left on shutdown timer</span></span><br><span class="line">	shutdownSeconds <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>input是一个输入源，上面server.Connector即是将updateRequest发送到Manager.input。</p>
+<p>Manager会一直监听Manager.input，检测到*updateRequest后，会将updateRequests中包含的配置更新到plugins字段中，后面会根据plugins做收集和上报。</p>
+<p>额外补充个，input还有两类输入，<code>performer</code>、<code>*queryRequest</code>，<code>performer</code> 对应监控采集事件，而 <code>*queryRequest</code> 对应被动请求的事件。</p>
+<p>需要注意的是，虽然agent2默认支持很多监控项，但是它们不会主动采集。只有server端配置了监控项的指标才会被采集上报。</p>
+<h4 id="plugin机制"><a href="#plugin机制" class="headerlink" title="plugin机制"></a>plugin机制</h4><p>agent2中，plugin机制为plugin预留了多种接口可供实现不同阶段和功能的逻辑，如下：</p>
+<ul>
+<li>Collector：定期收集指标。一般与Exporter结合，以便将收集的指标上报给server</li>
+<li>Exporter：上报指标数据到server。Exporter是这几个接口中唯一一个可以并行处理的接口</li>
+<li>Runner：可在该接口实现初始化和清理操作</li>
+<li>Watcher：可实现自定义的指标采集调度方式</li>
+<li>Configurator：处理配置内容，如配置的有效性判断</li>
+</ul>
+<p>plugin可以选择实现其中的一组或多组接口，来提供不同功能的处理。</p>
+<p>agent2提供了一个指标注册函数，来注册plugin及其支持的指标，接口定义如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RegisterMetrics</span><span class="params">(impl Accessor, name <span class="type">string</span>, params ...<span class="type">string</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其中，impl即为实现了plugin接口的结构体，下面将使用一个例子来展示如何注册。</p>
+<p>scheduler.Manager在初始化时，会将支持的plugins信息写入Manager.plugins。上面说的配置项也会更新到这里。plugins字段是一个核心字段。</p>
+<h3 id="插件示例"><a href="#插件示例" class="headerlink" title="插件示例"></a>插件示例</h3><p>这里给出一个利用插件机制实现的简单插件，该插件提供了两个metric分别生成一个随机整数和一个随机浮点数。</p>
+<p>该插件只实现了Exporter接口，并在init()中注册了该插件及两个监控项。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Plugin <span class="keyword">struct</span> &#123;</span><br><span class="line">	plugin.Base</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(Plugin)</span></span> Export(key <span class="type">string</span>, params []<span class="type">string</span>, context plugin.ContextProvider) (<span class="keyword">interface</span>&#123;&#125;, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">switch</span> key &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;test.randint&quot;</span>:</span><br><span class="line">		<span class="keyword">return</span> rand.Int(), <span class="literal">nil</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;test.randfloat&quot;</span>:</span><br><span class="line">		<span class="keyword">return</span> rand.Float32(), <span class="literal">nil</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.New(fmt.Sprintf(<span class="string">&quot;Unknown metric %s!&quot;</span>, key))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> rand.Int(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> impl Plugin</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	plugin.RegisterMetrics(&amp;impl, <span class="string">&quot;test&quot;</span>,</span><br><span class="line">		<span class="string">&quot;test.randint&quot;</span>, <span class="string">&quot;Export random int.&quot;</span>,</span><br><span class="line">		<span class="string">&quot;test.randfloat&quot;</span>, <span class="string">&quot;Export random float.&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>plugins下有plugins_darwin.go、plugins_linux.go、plugins_windows，里面分别配置了不同操作系统下支持的监控项，把test插件记录进去即可支持该监控了。</p>
+<h3 id="zabbix优缺点"><a href="#zabbix优缺点" class="headerlink" title="zabbix优缺点"></a>zabbix优缺点</h3><p>作为一个老牌监控方案，zabbix提供的默认监控比较全面，而且技术上有一定积累，运行比较稳定。zabbix的部署相对比较简单。</p>
+<p>zabbix的数据库多为mysql等结构型数据库或者elasticsearch等文档型数据库，缺少对时序数据库的支持。</p>
+<p>虽然官网也有集成influxdb的方案（链接见参考部分），但都不是官方集成，且需要与其它平台结合使用。最受欢迎的方案3年也只有60个star，可见这种方式并不十分招人待见。</p>
+<p>网上也有人提出使用postgresql的tsdb扩展，但是如果没有使用历史，而性能又比较关键的前提下，大家还是会比较关注数据落到何种db。</p>
+<p>也有一些方案使用了混搭的方式来寻找出路，比如使用zabbix的采集端，使用grafana来作展示等，方案也是多种多样。这也可见监控相关产品的思路都已比较成熟，各有亮点，解耦也比较彻底。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li>Zabbix + InfluxDB：<a target="_blank" rel="noopener" href="https://www.zabbix.com/integrations/influxdb">https://www.zabbix.com/integrations/influxdb</a></li>
+<li>Zabbix，时间序列数据和TimescaleDB: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66076630">https://zhuanlan.zhihu.com/p/66076630</a></li>
+<li>Writing plugins: <a target="_blank" rel="noopener" href="https://www.zabbix.com/documentation/4.4/manual/concepts/agent2/writing_plugins">https://www.zabbix.com/documentation/4.4/manual/concepts/agent2/writing_plugins</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/29/zabbix/" data-id="cle4a0ex9003nufiyfcqzdkt9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-open-falcon-judge" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/26/open-falcon-judge/" class="article-date">
+  <time datetime="2020-05-26T12:24:04.000Z" itemprop="datePublished">2020-05-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/26/open-falcon-judge/">open-falcon 告警判定</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h3><p>上一篇文章 《<a href="/2020/05/25/open-falcon-agent/">open-falcon 监控上报</a>》中讲了open-falcon的设计以及监控上报的逻辑，这篇文章呈接上篇，继续探讨告警判定的逻辑。</p>
+<p>监控数据是一个写多读少的数据，几乎每时每刻都在写，但是查看的时间一般很短。用户不可能一直盯着它，告警即是做为另一个入口补充进来的。告警如何配置、如何触发，如何优雅的通知到接收人，是告警要解决的问题。</p>
+<p>在设计告警时，可能会存在几个坑，一是告警过多，如阈值设置太低，而没有做告警收敛就会遇到这种情况，既耗费了用户的精力，还有可能把告警通道阻塞；二是告警失效，如果后端发送如短信超载被禁就会出现该种情况。</p>
+<p>第一种情况，告警过多一般会设置告警收敛，如一条告警告了几次就不要再告了，或者过一段时间再告，防止接收人被告警信息淹没；同时，一些不重要的告警可以设置告警屏蔽，先屏蔽它一小时，一小时后再来处理。</p>
+<p>第二种情况，在确保告警通道稳定的情况下，最好提供多种方案，短信、微信、邮箱、钉钉，一个挂了还有另外的补全。同时，可发送多个相关人员，A没注意到B也可以处理。</p>
+<p>下面主要从以下几个方面说一下open-falcon的告警逻辑：</p>
+<ul>
+<li>数据链路：agent 采集的数据是如何流转到告警判定模块的</li>
+<li>判定规则：judge 如何判定一份监控数据是否异常</li>
+<li>告警配置：open-falcon 中是如何管理告警配置的</li>
+</ul>
+<h3 id="数据链路"><a href="#数据链路" class="headerlink" title="数据链路"></a>数据链路</h3><p>上篇文章中讲到，agent 组件会以多种方式（builtins、plugin、push）采集监控数据。open-falcon组件间多以rpc协议通信，agent通过rpc把采集到的数据上传到transfer，再由transfer分发给judge。</p>
+<p>这里judge可以部署多个节点来分担负载，transfer会通过一致性哈希来决定将信息分发到哪个judge节点。</p>
+<p>judge即是告警判定组件，它会从hbs中获取portal的监控规则配置，然后判断推送过来的数据是否应该告警，并将告警信息写入redis。</p>
+<p>后端的alarm从redis中取告警信息，并通过不同的告警通道转发出去。</p>
+<h3 id="判定规则"><a href="#判定规则" class="headerlink" title="判定规则"></a>判定规则</h3><p>judge 的判定条件有两种，一种是 strategy，它通过绑定告警模板到某个主机组生效；另一种是 expression，它可以监控非主机的情况。</p>
+<p>这两种方式的实现核心是一样的，这里以机器监控为例。</p>
+<p>假设我们希望定义一个告警规则，某个主机组中的主机，如果负载连续3次上报均大于4，则告警。我们会在该主机组绑定的告警模板下，添加一条判定规则：load.1min all(#3) &gt; 4。</p>
+<p>其中all为聚合函数，all(#3) &gt; 4 意思是最近三次的值均大于4。open-falcon 提供了多种聚合函数，目前可以支持的聚合函数有：max, min, all, sum, avg, diff, pdiff, lookup, stddev。</p>
+<p>该规则下发到judge后，被 <code>ParseFuncFromString()</code> 函数解析为一个包含判定逻辑的结构体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Function <span class="keyword">interface</span> &#123;</span><br><span class="line">	Compute(L *SafeLinkedList) (vs []*model.HistoryData, leftValue <span class="type">float64</span>, isTriggered <span class="type">bool</span>, isEnough <span class="type">bool</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>all聚合函数对应的逻辑结构体如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> AllFunction <span class="keyword">struct</span> &#123;</span><br><span class="line">	Function</span><br><span class="line">	Limit      <span class="type">int</span></span><br><span class="line">	Operator   <span class="type">string</span></span><br><span class="line">	RightValue <span class="type">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this AllFunction)</span></span> Compute(L *SafeLinkedList) (vs []*model.HistoryData, leftValue <span class="type">float64</span>, isTriggered <span class="type">bool</span>, isEnough <span class="type">bool</span>) &#123;</span><br><span class="line">	vs, isEnough = L.HistoryData(this.Limit)</span><br><span class="line">	<span class="keyword">if</span> !isEnough &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	isTriggered = <span class="literal">true</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; this.Limit; i++ &#123;</span><br><span class="line">		isTriggered = checkIsTriggered(vs[i].Value, this.Operator, this.RightValue)</span><br><span class="line">		<span class="keyword">if</span> !isTriggered &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	leftValue = vs[<span class="number">0</span>].Value</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该函数可以判定历史数据是否触发告警规则，触发则生成一条 event，event 结构如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 机器监控和实例监控都会产生Event，共用这么一个struct</span></span><br><span class="line"><span class="keyword">type</span> Event <span class="keyword">struct</span> &#123;</span><br><span class="line">	Id          <span class="type">string</span>            <span class="string">`json:&quot;id&quot;`</span></span><br><span class="line">	Strategy    *Strategy         <span class="string">`json:&quot;strategy&quot;`</span></span><br><span class="line">	Expression  *Expression       <span class="string">`json:&quot;expression&quot;`</span></span><br><span class="line">	Status      <span class="type">string</span>            <span class="string">`json:&quot;status&quot;`</span> <span class="comment">// OK or PROBLEM</span></span><br><span class="line">	Endpoint    <span class="type">string</span>            <span class="string">`json:&quot;endpoint&quot;`</span></span><br><span class="line">	LeftValue   <span class="type">float64</span>           <span class="string">`json:&quot;leftValue&quot;`</span></span><br><span class="line">	CurrentStep <span class="type">int</span>               <span class="string">`json:&quot;currentStep&quot;`</span></span><br><span class="line">	EventTime   <span class="type">int64</span>             <span class="string">`json:&quot;eventTime&quot;`</span></span><br><span class="line">	PushedTags  <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span> <span class="string">`json:&quot;pushedTags&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="告警管理"><a href="#告警管理" class="headerlink" title="告警管理"></a>告警管理</h3><p>前面提到过，open-falcon的告警规则是绑定到主机组的，这也是为了简化告警的配置。数台机器怎么配都不是问题，但是当机器增长到上千上万台，不分组管理是不现实的。</p>
+<p>上面还提到一个 expression 的告警配置，这个配置比较适合于业务告警的场景，摆脱了主机组等实体的限制，更为灵活机动。</p>
+<h3 id="一些补充"><a href="#一些补充" class="headerlink" title="一些补充"></a>一些补充</h3><p>值得一提的是，transfer 的后端支持比较丰富，目前还支持 tsdb 和 influxdb 数据库，可灵活使用后端来完成定制化的功能。</p>
+<p>judge 的判定规则是基于阈值的，难以做一些同比环比类的告警，不过可以通过其它方式来自主实现，应该不是很大的问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/26/open-falcon-judge/" data-id="cle4a0ewn001lufiy7nq3eppt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-open-falcon-agent" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/25/open-falcon-agent/" class="article-date">
+  <time datetime="2020-05-25T13:37:01.000Z" itemprop="datePublished">2020-05-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/25/open-falcon-agent/">open-falcon 监控上报</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="监控平台应用背景"><a href="#监控平台应用背景" class="headerlink" title="监控平台应用背景"></a>监控平台应用背景</h3><p>监控平台被形象地称为运维之眼，没有它软件产品的上线及后期维护将像摸虾一样。</p>
+<p>从监控的对象来划分，监控又可分为基础监控和业务监控。</p>
+<p>基础监控偏重基础组件和基础资源的监控，一般指标比较固定，很大程度上可默认采集。</p>
+<p>业务监控偏重具体服务的指标监控，较为灵活，一般为具体业务自己定义。</p>
+<p>监控平台在整个上线的各个过程中都是有帮助的，它使用的场合有以下几项：</p>
+<ol>
+<li>提供服务上线的参考，如可观察新特性上线后的各项指标是否正常，作为稳定运行的依据</li>
+<li>出现事故后，可作为定位问题的参考，让排查问题更方便</li>
+<li>监控服务及资源的使用情况，为优化或扩容做准备</li>
+</ol>
+<p>其中，12基础监控和业务监控兼有，一般方式为基础监控缩小范围，业务监控更准确地查找。业务监控一般会配合日志平台一起提供帮助。</p>
+<p>3涉及到具体IaaS层资源，基础监控可以提供更多帮助。</p>
+<h3 id="常见架构设计"><a href="#常见架构设计" class="headerlink" title="常见架构设计"></a>常见架构设计</h3><p>市面监控平台多以agent上报的方式采集数据，由于监控平台写多读少的缘故，上报链路中间多可插入一个消息队列或代理。</p>
+<p>由于采集端已有监控数据，告警平台多与监控平台整合，这样一个采集，一个消费，就会方便很多。</p>
+<h3 id="open-falcon"><a href="#open-falcon" class="headerlink" title="open-falcon"></a>open-falcon</h3><p>open-falcon是小米的监控平台，open-falcon之前，小米使用的是zabbix。</p>
+<p>open-falcon的架构图如下所示：</p>
+<p><img src="/images/open-falcon.png" alt="open-falcon架构图"></p>
+<p>乍一看挺复杂，捊一捊就比较清晰了。</p>
+<p><strong>数据上报链路</strong>：绿色粗线即为数据上报链路，数据从App产生或由agent采集，然后发送到transfer，transfer再将数据分发给judge和graph。judge即为告警判定模块，graph存储监控数据。</p>
+<p><strong>配置下发链路</strong>：橙色虚线为配置下发链接，portal为配置存储中心。为了加速配置的下发，同时减小portal的压力，hbs会将portal缓存一份到自己的内存，在需要的时候会下发给agent（监控配置）和judge（告警配置）。</p>
+<p><strong>监控查看链路</strong>：蓝色虚线部分为监控查看链路，graph是监控数据的存储组件，出于负载均衡的考虑，graph可能有多个实例，query组件负责整合多个实例的结果，供dashboard读取。dashboard为通往用户的web界面。</p>
+<p>open-falcon中的大部分组件都是可以水平扩展的，transfer、judge和graph都是可能会出现瓶颈的组件。官网有一个机器量与瓶颈及应对的对应关系，很有参考价值。</p>
+<h3 id="agent-采集上报"><a href="#agent-采集上报" class="headerlink" title="agent 采集上报"></a>agent 采集上报</h3><p>agent 是数据采集和上报端，更接近数据，比较重要。</p>
+<p>agent 默认已提供机器的大部分基础监控，<code>modules/funcs/</code> 下可以看到监控的列表，cpu、内存、磁盘、负载、网络io等，涵盖了绝大部分机器相关监控。</p>
+<p>agent 每隔一段会将 metrics 上报到 transfer，metrics 是一个列表，下面是一个比较典型的 metric 结构：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MetricValue <span class="keyword">struct</span> &#123;</span><br><span class="line">	Endpoint  <span class="type">string</span>      <span class="string">`json:&quot;endpoint&quot;`</span></span><br><span class="line">	Metric    <span class="type">string</span>      <span class="string">`json:&quot;metric&quot;`</span></span><br><span class="line">	Value     <span class="keyword">interface</span>&#123;&#125; <span class="string">`json:&quot;value&quot;`</span></span><br><span class="line">	Step      <span class="type">int64</span>       <span class="string">`json:&quot;step&quot;`</span></span><br><span class="line">	Type      <span class="type">string</span>      <span class="string">`json:&quot;counterType&quot;`</span></span><br><span class="line">	Tags      <span class="type">string</span>      <span class="string">`json:&quot;tags&quot;`</span></span><br><span class="line">	Timestamp <span class="type">int64</span>       <span class="string">`json:&quot;timestamp&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里说一下 Type，主要有 GAUGE 和 COUNTER 两种。GAUGE 为实际的测量值，如内存使用率；COUNTER 为计数值，上报时会计算差值，比较典型的如磁盘读请求次数（linux内核提供的值为总计，我们希望了解的是上一分钟及这一分钟的读请求次数）。</p>
+<p>在扩展性方面，agent 还提供了另外两种采集方式，http push 上报的方式和 plugin 采集。这两种方式都是以 MetricValue 为上报的基础数据结构。</p>
+<p><strong>push</strong> 方式，agent 会在本机提供一个 http 服务，应用可将数据以 http 请求的方式上报给 agent。http 提供了很大的灵活性，应用可整合上报功能来集成业务监控。</p>
+<p><strong>plugin</strong> 方式，需要提供一个包含采集脚本的仓库。所谓采集脚本，即是指本地可运行的脚本，该脚本会输出 MetricValue 结构的 json 数据，agent 将定期执行并将输出上报给 transfer。</p>
+<p>下面是官方提供的一个 python 采集脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/open-falcon/plugin/blob/master/demo/60_plugin.py</span></span><br><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">data = [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;metric&#x27;</span>: <span class="string">&#x27;plugins.xx&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;endpoint&#x27;</span>: <span class="string">&#x27;host-001.bj&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span>: <span class="built_in">int</span>(time.time()),</span><br><span class="line">            <span class="string">&#x27;step&#x27;</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">&#x27;value&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">&#x27;counterType&#x27;</span>: <span class="string">&#x27;GAUGE&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags&#x27;</span>: <span class="string">&#x27;idc=aa&#x27;</span></span><br><span class="line">            &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;metric&#x27;</span>: <span class="string">&#x27;plugins.yy&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;endpoint&#x27;</span>: <span class="string">&#x27;host-002.bj&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span>: <span class="built_in">int</span>(time.time()),</span><br><span class="line">            <span class="string">&#x27;step&#x27;</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">&#x27;value&#x27;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">&#x27;counterType&#x27;</span>: <span class="string">&#x27;GAUGE&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags&#x27;</span>: <span class="string">&#x27;idc=bb&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(json.dumps(data))</span><br></pre></td></tr></table></figure>
+
+<p>NOTE: 需要注意的是，为了避免 plugin 全量上报造成干扰，plugin 上报需要在 dashboard/portal 中指定启用哪些上报脚本。</p>
+<p>第三方监控多以 push 方式上报，有了上面两种扩展的上报方式，即可以实现其它基础监控或者业务监控。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>open-falcon 算是国内比较成熟的监控产品，虽说多组件的方式部署可能较为庞杂，但 falcon-plus 对 open-falcon 的组件做了整合，部署难度已经下降了好几个数量级，安装已经不再是大问题。</p>
+<p>open-falcon 以 golang 和 python 为主要开发语言。提供水平扩展的组件多为 golang 开发，可单独打包，降低了部署的难度；web 端以 python 为主，开发效率较高。各取所长。组件粒度较细，解耦也较彻底，二次开发难度较小。</p>
+<p>push 上报方式是许多监控产品采用的方式，较为灵活通用，可满足扩展的需要。其它监控如 mysql 或者具体业务的监控等也可基于此方式实现。</p>
+<p>另外，open-falcon 组件内部多使用 rpc 协议沟通，效率也是比较高的。有时间再展开写一写。</p>
+<p>除了监控数据，另一块是告警判定逻辑。后面来补充。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/25/open-falcon-agent/" data-id="cle4a0ewn001jufiyf4gk2d9q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-macosx-window-tile-manager" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/24/macosx-window-tile-manager/" class="article-date">
+  <time datetime="2020-05-24T03:14:05.000Z" itemprop="datePublished">2020-05-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/24/macosx-window-tile-manager/">macosx上的平铺式窗口管理器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在提供图形界面的操作系统里，都会存在一个问题，就是当我们需要查找大量资源时，窗口会变得较多不方便管理。</p>
+<p>比如我现在打开的窗口，就包含了编辑博客的编辑器，一个命令终端，一个查找资料的浏览器，一个临时记录信息的备忘录，还有一些其它的软件。</p>
+<p>这时会存在两个问题：</p>
+<ol>
+<li>应用过多，切换应用时会有很多精力浪费在找目标应用的过程中</li>
+<li>窗口布局过乱，重新规划放多个桌面又耗费太多精力，得不尝失</li>
+</ol>
+<p>对于窗口的管理，现在已经存在一些方案，主要有以下几大类：</p>
+<ol>
+<li>提供窗口管理工具，这类工具一般以快捷键为入口，方便对目标窗口调整大小，设置位置</li>
+<li>加速操作，这类工具一般是牺牲精确度，将移动和修改窗口大小合并为一个操作，如将窗口拉到屏幕边缘自动贴合并调整位置和大小，或直接选择提前准备好的位置，magnet和divvy就属于此类</li>
+<li>平铺式窗口设计，将所有窗口平铺到屏幕</li>
+</ol>
+<p>其中，1和2虽能解决布局问题，但是耗费精力也不小，而且当应用过多时，仍然会有很大一部分精力耗费在切换应用上。目前来看，3似乎是一种比较理想的方式。</p>
+<h3 id="平铺式窗口"><a href="#平铺式窗口" class="headerlink" title="平铺式窗口"></a>平铺式窗口</h3><p>平铺式窗口管理器的设计存在很长一段时间了，最早应该是linux平台先行做的实践。</p>
+<p>原因猜测应该是linux分层外包的协作方式，内核、核心工具、窗口系统、UI系统等都是由不同的开源团队分别完成，这样大家也有更多的精力和空间去做尝试。</p>
+<p>我最早使用的linux上的平铺式窗口管理器是awesome，它将所有的窗口都平铺在电脑的屏幕上，不需要自己去调整窗口的位置和大小或窗口间做切换时的视觉适应，而且可以一眼看到其它应用，可以节省很多的精力。</p>
+<p>不过，平铺式窗口也有一些问题，比如窗口过多而电脑屏幕过小时就会很尴尬，再比如使用一些gui软件如chrome时也会很别扭，所以它较适合用于多个终端的情况。一些软件如tmux、vim split window的设计也有异曲同工之妙。</p>
+<p>mac os x 的情况稍有不同，它的开发模型是大一统，整个系统从内核到上层用户软件的设计都是由苹果公司包揽，所以做窗口管理只能提供有限的能力。但这是足够的，我们极少需要完全从底层自定义整个设计，这是一种偏执。</p>
+<p>该设计的主要目标还是解放人的精力，让我们能够投入到更有价值的事情中。所以下面我以此为基础，探索一下mac os x上的相关实现。</p>
+<h3 id="Amethyst"><a href="#Amethyst" class="headerlink" title="Amethyst"></a>Amethyst</h3><p>这是我在寻找平铺式窗口管理器时找到的一个开源方案，仓库的地址在 <a target="_blank" rel="noopener" href="https://github.com/ianyh/Amethyst">https://github.com/ianyh/Amethyst</a>。</p>
+<p>Amethyst是一个基于xmonad的软件，xmonad运行在linux平台上，类似awesome。</p>
+<p>Amethyst默认提供了十多个布局供用户使用，用户可以使用快捷键来管理窗口布局或窗口大小。</p>
+<p>缺点是，Amethyst提供的用户界面只有快捷键，所以上手难度较大，用户需要自己去寻找符合自己的操作方式。</p>
+<p>比如，我现在的方式是，使用 <code>Widescreen tall</code> 布局，左半屏即是一个主要的工作窗口，其余窗口都竖排在右侧窗口。可以鼠标点击需要切换的窗口，然后快捷键切换到左侧使用。</p>
+<p>默认布局和默认快捷键在官方文档都有，这里就不赘述了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章对操作讲解地较少，对于高度可配的软件来说，具体的使用是见仁见智的事情。</p>
+<p>第一种方案，大多工具只是提供了一个快捷键操作的方式而已，对我的问题没有太大帮助。</p>
+<p>我之前也在第二种方案上试用过很长一段时间，总体来说如果打开的应用较为稳定且数量较少，也是一种不错的方案。使用的工具类似magnet，是一个开源方案，具体工具名称倒记不得了。</p>
+<p>当然工具是一方面，良好的使用习惯也是很重要的，甚至它完全可以取代大部分效率提升工具。真正的效率提升还是在人，工具只是在为人打补丁而已。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/24/macosx-window-tile-manager/" data-id="cle4a0ewm001eufiy4dnu97ct" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next »</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/14/doggy/">狗子</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCLK447MR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRCLK447MR');
+  </script>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

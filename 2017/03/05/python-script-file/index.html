@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>唠唠python(3) -- 保存计算过程 | pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="昨天的文章，我们学会了跟计算机进行简单的语言交流和用计算机来做简单的算术。我们发现，计算机用来做简单的算术还是很方便的。但不知你是否注意到了，每次当我们退出翻译器时，我们之前的数据就消失了。   消失比错误更可怕，它代表着我们已不能确定对错，而且就算错了，错误的根源也无从找起。   多可怕！  奇怪的翻译器在上一篇文章里，我们通过实验，得知，在python翻译器里输入&quot;hello&amp;qu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="唠唠python(3) -- 保存计算过程">
+<meta property="og:url" content="https://pysnow530.github.io/2017/03/05/python-script-file/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="昨天的文章，我们学会了跟计算机进行简单的语言交流和用计算机来做简单的算术。我们发现，计算机用来做简单的算术还是很方便的。但不知你是否注意到了，每次当我们退出翻译器时，我们之前的数据就消失了。   消失比错误更可怕，它代表着我们已不能确定对错，而且就算错了，错误的根源也无从找起。   多可怕！  奇怪的翻译器在上一篇文章里，我们通过实验，得知，在python翻译器里输入&quot;hello&amp;qu">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-14T13:20:06.839Z">
+<meta property="article:author" content="pysnow530@163.com">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python-script-file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/05/python-script-file/" class="article-date">
+  <time datetime="2017-03-04T16:00:00.000Z" itemprop="datePublished">2017-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      唠唠python(3) -- 保存计算过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>昨天的文章，我们学会了跟计算机进行简单的语言交流和用计算机来做简单的算术。我们发现，计算机用来做简单的算术还是很方便的。但不知你是否注意到了，每次当我们退出翻译器时，我们之前的数据就消失了。</p>
+</blockquote>
+<blockquote>
+<p>消失比错误更可怕，它代表着我们已不能确定对错，而且就算错了，错误的根源也无从找起。</p>
+</blockquote>
+<blockquote>
+<p>多可怕！</p>
+</blockquote>
+<h2 id="奇怪的翻译器"><a href="#奇怪的翻译器" class="headerlink" title="奇怪的翻译器"></a>奇怪的翻译器</h2><p>在上一篇文章里，我们通过实验，得知，在python翻译器里输入<code>&quot;hello&quot;</code>，翻译器给我们回复了一个<code>&#39;hello&#39;</code>。有的朋友可能已经注意到了，输出的<code>hello</code>两边有一对<code>&#39;</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &quot;hello&quot;</span><br><span class="line">&#x27;hello&#x27;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>不对呀，我们输入的是<code>&quot;</code>，结果里带的却是<code>&#39;</code>？！</p>
+<p>先别慌，我们说在python里，一句许两边要带<code>&quot;</code>，实际上，<code>&#39;</code>和<code>&quot;</code>在python里面功能是一样的。没错，<code>&quot;hello&quot;</code>和<code>&#39;hello&#39;</code>并没有什么本质的区别。</p>
+<p>那现在问题来了：</p>
+<ol>
+<li>为什么python的输出里要带一对<code>&#39;</code>呢？</li>
+<li>我就是不想看到这个<code>&#39;</code>，怎么办？</li>
+</ol>
+<h2 id="跟计算机打招呼和做算术题是一码事"><a href="#跟计算机打招呼和做算术题是一码事" class="headerlink" title="跟计算机打招呼和做算术题是一码事"></a><code>跟计算机打招呼</code>和<code>做算术题</code>是一码事</h2><p>没错，在python翻译器看来，在对待这两者时，处理方式是一样的。</p>
+<p>想想我们在做<code>1+1</code>时，翻译器做了什么？它把我们输入的文字翻译给计算机，并将结果显示给我们。</p>
+<p>那当我们输入<code>&quot;hello&quot;</code>时，翻译器又做了什么？它把我们输入的文字翻译给计算机，并将结果显示给我们。</p>
+<p>看到了吗，这两个答案其实是一致的。不同之处在于值本身，一个值是一句话，而另一个值是一个数字。</p>
+<p>试想，如果把<code>&quot;hello&quot;</code>换成<code>&quot;1&quot;</code>，而翻译器显示了一个<code>1</code>，我们就不知道这是一句话还是一个数字了。所以，结果，跟我们的猜想一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &quot;1&quot;</span><br><span class="line">&#x27;1&#x27;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>现在问题1的答案已经很清晰了，为什么python的输出里要带一对<code>&#39;</code>呢？这代表求值的结果是一句话，而非一个数字或者其它什么。</p>
+<h2 id="主动地表达我们的意图"><a href="#主动地表达我们的意图" class="headerlink" title="主动地表达我们的意图"></a>主动地表达我们的意图</h2><p>对，是时候表达我们的想法了。</p>
+<p>之前，我们是把python翻译器当作一个计算器，对一句话的计算也好，对一个算术表达式的计算也罢。</p>
+<p>对一句话求值，所得的结果是一句话。为了表明它是一句话，结果的两边加了一对<code>&#39;</code>。</p>
+<p>现在，我们要对计算机提出更高的要求。我们不需要计算机帮我们对一句话求值，我们想直接把一句话显示到屏幕上。这也就是问题2的答案，显示意味着我们不再需要知道这是一句话或一个数字，而是想知道这个值表达的是什么。<code>&quot;1&quot;</code>或<code>1</code>你都给我显示1就好了，我知道是什么意思。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; print &quot;hello&quot;</span><br><span class="line">hello</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们告诉翻译器，帮我们显示一句话<code>&quot;hello&quot;</code>，计算机显示给我们一个没有<code>&quot;</code>的<code>hello</code>。</p>
+<p>需要注意的是，这里的<code>print &quot;hello&quot;</code>仍然会求值并将值显示出来。但因为这里的值是空的，所以我们只看到了<code>hello</code>。</p>
+<p><strong><code>hello</code>是求值<code>过程中</code>产生的输出，而求值没有结果</strong>。</p>
+<h2 id="保存我们的计算过程"><a href="#保存我们的计算过程" class="headerlink" title="保存我们的计算过程"></a>保存我们的计算过程</h2><p>前面说，我们有时需要查错，所以需要<code>保存计算过程</code>。</p>
+<p><code>保存计算过程</code>还有一个更重要的意义，因为我们的目标，是让计算机帮我们更高效的工作，如果不能重复的使用我们之前使用过的计算过程，意味着工作不仅没有高效起来，反而更加低效了。</p>
+<p>所以保存我们的计算过程，就显得十分之必要。</p>
+<p>从前面我们输入过的代码来看（对，我们已经是在写代码了），代码的表现形式非常简单，都是文字，或者说文本。也就是说，只要我们把以上的代码记录到文本文件里面就完成了保存计算过程的目标。</p>
+<p>保存计算过程就是这么简单。</p>
+<p>不过这里还有几点需要补充说明一下：</p>
+<ol>
+<li>对文件名的要求：文件名要以<code>.py</code>结尾，以表明文件里存放着用python语言写成的”小诗”或”文章”。如果你不知道什么名字好听，<code>a.py</code>或者<code>b.py</code>都是不错的选择。</li>
+<li>执行时要注意，执行的结果，更遵循<code>主动地表达我们的意图</code>，而不是直接求值并显示值。这里可能不太好理解，在python翻译器里求值时，翻译器会直接显示求值结果，但是，当直接执行保存在文件里的代码时，求值结果不会再直接显示，而是需要我们使用前面提到的<code>print</code>来告诉计算机显示。</li>
+</ol>
+<h2 id="重复使用计算过程"><a href="#重复使用计算过程" class="headerlink" title="重复使用计算过程"></a>重复使用计算过程</h2><p>我们先来实践一下<code>保存我们的计算过程</code>。</p>
+<p>还记得<a href="/2017/03/04/python-abc.html">上一篇文章</a>中提到的那个<code>神密的黑色窗口</code>吗。打开黑色窗口后，输入<code>notepad a.py</code>（windows）或<code>nano a.py</code>（其它系统）并回车，这会创建一个新的名为<code>a.py</code>的文件。打开文件后输入以下内容并保存。这样，我们的计算过程就被保存到了<code>a.py</code>这个文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print &quot;hello&quot;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们就可以使用这个计算过程了。</p>
+<p>在黑色窗口内输入<code>python a.py</code>并回车，即可看到类似我们之前的输出了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; python a.py</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>这个命令跟之前请出翻译时使用的命令，唯一区别在于这里多了一个文件名。</p>
+<p>只是显示一个<code>&quot;hello&quot;</code>，未免显得单调乏味。但是实际上，这代表着我们已经可以完成一个简单系统<code>hello</code>的从开发到运行的整个过程了。</p>
+<p>当然，这还远远不够。我们需要这个系统能接收用户的输入（有可能是按钮点击、文字输入或者游戏手柄按键输入等），并可以通过复杂的计算过程，最后得到我们想要的结果(有可能是一个处理过的excel文件，或者一张图片，一封邮件等)。</p>
+<p>当然，丰富多样的输入，复杂计算，不同载体的输出，也都是十分简单的。想想我们输出<code>hello</code>的过程吧，与此大同小异，只是对一些新鲜事物更熟悉的过程。</p>
+<p>下一篇，我们就来利用已经学过的知识，与计算机这个古板的老朋友一起合作，来抽象一部分我们繁琐的工作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/05/python-script-file/" data-id="cle4a0ewz002aufiyf0mif3ht" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/11/new-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          我的世界(1) - 第一个夜晚
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/04/python-abc/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">唠唠python(2) -- 初识ABC</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/14/doggy/">狗子</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCLK447MR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRCLK447MR');
+  </script>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

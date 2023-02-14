@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="pysnow530 的博客">
+<meta property="og:url" content="https://pysnow530.github.io/page/4/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="鲁迅曰过，好记性不如烂笔头子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pysnow530@163.com">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-emacs-keymap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/16/emacs-keymap/" class="article-date">
+  <time datetime="2019-03-15T16:00:00.000Z" itemprop="datePublished">2019-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/16/emacs-keymap/">emacs keymaps</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
+<li><a href="#org3ccc4a1">emacs中的keymaps</a><ol>
+<li><a href="#orga3cd1b5">keymap结构体</a></li>
+<li><a href="#org78e4ee3">行为覆盖</a></li>
+<li><a href="#org149d732">两个特化的问题</a><ol>
+<li><a href="#org274f6e1">prefix keys</a></li>
+<li><a href="#orgff2bd97">mode继承</a></li>
+</ol>
+</li>
+<li><a href="#orgdeccdc1">结束</a></li>
+</ol>
+</li>
+</ol>
+<p><a id="org3ccc4a1"></a></p>
+<h1 id="emacs中的keymaps"><a href="#emacs中的keymaps" class="headerlink" title="emacs中的keymaps"></a>emacs中的keymaps</h1><p>emacs具有很高的可配置性，从keybinding，customize，到UI，再到各种第三方package。</p>
+<p>keybinding是学习emacs的过程中必经的一环，很难相信有人会不加修改地使用原生的emacs按键行为。</p>
+<p>当然，keybinding由来以久。甚至在很多现代的软件中，给它取了一个更激动人心的名字，叫做快捷键，像是一项了不起的发明。其实在emacs里，是最最基础的一项功能。</p>
+<p>在这篇文章里，我将尝试从底层的概念开始，讲解emacs里的键绑定机制，以让读者可以自由地定制emacs里的按键，并知其所以然。</p>
+<p><a id="orga3cd1b5"></a></p>
+<h2 id="keymap结构体"><a href="#keymap结构体" class="headerlink" title="keymap结构体"></a>keymap结构体</h2><p>emacs的keybinding有一个基石，或者说设计原则，那就是每一个按键都绑定到了一个函数。从键盘输入，到鼠标，再到菜单，无一不在这个指导原则之下。</p>
+<p>试想一下，如果我们来实现这样一个功能，必然是需要一个结构体来关联按键和功能函数的。这个结构体，可以帮助我们快速找到一个按键对应的功能函数。</p>
+<p>emacs里使用的列表叫做keymap（大部分编辑器都使用这种称谓）。我们可以使用(keymapp)来检查一个结构是否是标准keymap，实际上它是通过检查列表的第一个元素是否是’keymap来判定的。</p>
+<pre><code>(keymapp &apos;(keymap xxxx))  ;; t</code></pre><p>我们可以找一个keymap来看一下它的结构：</p>
+<p>M-x describe-variable <ret> org-mode-map</p>
+<pre><code>(keymap
+ (25 . org-yank)
+ (11 . org-kill-line)
+ (5 . org-end-of-line)
+ (1 . org-beginning-of-line)
+ ;; ...
+)</code></pre><p>如上面的代码片段所示，首元素以后的其它元素（cons），由按键和绑定的函数组成。如果我们对25求值，可以看到它对应的按键就是?\C-y。</p>
+<p>当然，(key . func-map)只是一种最简形式。比如，我们还需要支持一些按键序列，例如C-x C-f，这个结构就需要扩展一下了。后面再说。</p>
+<p>emacs为keymap操作提供了丰富的函数，可以使用下面的例子创建一个keymap，并添加C-;映射：</p>
+<pre><code>(setq map (make-sparse-keymap))      ;; (keymap)
+(define-key map &quot;\C-x&quot; &apos;c-x-func)
+map  ;; (keymap (24 . c-x-func))  24 =&gt; ?C-x</code></pre><p><a id="org78e4ee3"></a></p>
+<h2 id="行为覆盖"><a href="#行为覆盖" class="headerlink" title="行为覆盖"></a>行为覆盖</h2><p>在上面的例子中，我们已经创建了一个keymap并绑定了C-x的行为。但是它现在只是一个值，如何将其应用到我们的emacs中呢？</p>
+<p>不急，要回答这个问题，我们要首先了解，当一个按键按下后，emacs是如何找到它绑定的函数的。</p>
+<p>我们知道，在vim中绑定一个按键，可以使用:map命令，如果首参给个<buffer>，它将会作用到当前buffer而不修改全局keymap。（插播一句，由于vimscript只是一个专一化的脚本语言，vim的map行为是在vim内部执行的。我们还不能在vimscript层面可以直观地获取它对应的map）</p>
+<p>emacs也存在这种类似<buffer>的参数。当然，keymap的查找被定义为更严格的一个逻辑顺序。</p>
+<p>说了这么多，emacs查找按键的顺序有三个：</p>
+<ol>
+<li>查找一个神秘但对我们并不重要的map。</li>
+<li>查找’minor-mode-map-alist。</li>
+<li>查找(current-local-map)。一般会由major-mode设定。</li>
+<li>查找(current-global-map)。一般会等于global-map变量，是emacs的默认全局配置。</li>
+</ol>
+<p>好吧，如果你真的对1感兴趣，其实它是一个粒度更细的map，它会绑定到一个buffer里指定的某些文本。如果这个解释不能满足你，可以看一下text-property相关的手册。</p>
+<p>2、3不言而喻了，需要说明的一点是，如果我们知道某个mode的名字，可以很方便地找到它对应的map变量，如org-mode对应的keymap为org-mode-map。</p>
+<p>现在我们知道了keymap可以定义的多个层级，text-property -&gt; minor-mode -&gt; major-mode -&gt; global-map。</p>
+<p>上面我们讲到一个(define-key)函数，可用来修改keymap变量里的某个绑定。现在你应该已经知道网上某个家伙emacs配置里的代码片段是什么含义了：</p>
+<pre><code>(define-key &apos;global-map &quot;C-x C-e&quot; &apos;func)</code></pre><p><a id="org149d732"></a></p>
+<h2 id="两个特化的问题"><a href="#两个特化的问题" class="headerlink" title="两个特化的问题"></a>两个特化的问题</h2><p>主要的内容已经讲完了，下面再赠送两个额外的内容。</p>
+<p><a id="org274f6e1"></a></p>
+<h3 id="prefix-keys"><a href="#prefix-keys" class="headerlink" title="prefix keys"></a>prefix keys</h3><p>我想试着绕开这个内容，但是发现做不到。如果真正碰到了，会感觉很迷惑，不如两笔带一下。</p>
+<p>我们上面提到，keymap的元素不一定是(key . map-func)的形式，比如C-x C-f，它实际上是两个序列的组合。在emacs中使用这样的形式来定义：(key . keymap2)，即它的map-func是另一个keymap。</p>
+<p>举个例子，假设我们想在全局的keymap下，定义一个前缀输入为C-;的序列，让它在我们输入C-; 2时，在2的后面添加一个;（只是试验，毫无价值）。</p>
+<pre><code>(defun append-semicolon ()
+  (interactive)
+  (self-insert-command 1)
+  (insert &quot;;&quot;))
+
+(setq ctl-semicolon-map (make-sparse-keymap))
+(define-key ctl-semicolon-map &quot;2&quot; &apos;append-semicolon)
+
+(define-key global-map (kbd &quot;C-;&quot;) ctl-semicolon-map)</code></pre><p>这时，如果我们输入一个C-; 2时，编辑器里就会输入一个2;。</p>
+<p>需要注意，此时，如果我们修改global-map的C-; 3，修改的实际上是ctl-semicolon-map。</p>
+<pre><code>(define-key global-map (kbd &quot;C-; 3&quot;) &apos;append-semicolon)
+ctl-semicolon-map  ;; =&gt; (keymap (51 . append-semicolon) (50 . append-semicolon))</code></pre><p>emacs里的C-x等序列就是这样定义的。</p>
+<p><a id="orgff2bd97"></a></p>
+<h3 id="mode继承"><a href="#mode继承" class="headerlink" title="mode继承"></a>mode继承</h3><p>emacs里的mode是有继承关系的，例如所有的编程语言mode都 <strong>应该</strong> 继承自 <em>prog-mode</em> ，所以针对编程语言的通用keymap，可以直接修改 <em>prog-mode-map</em> 。</p>
+<p>具体的细节，可以查看mode设计的手册。</p>
+<p><a id="orgdeccdc1"></a></p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上的内容就可以把整个keymap串起来了，如果有什么地方不了解，所有需要的知识都在 <code>C-h i</code> 里。尽情查阅吧。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/03/16/emacs-keymap/" data-id="cle4a0ewc000oufiy9nd8aeou" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-customizable-emacs" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/13/customizable-emacs/" class="article-date">
+  <time datetime="2019-03-12T16:00:00.000Z" itemprop="datePublished">2019-03-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/13/customizable-emacs/">高可配置的emacs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
+<li><a href="#org29724c1">customizable emacs</a><ol>
+<li><a href="#org68391dc">源码设计</a></li>
+<li><a href="#org1875486">软件设计</a></li>
+<li><a href="#org92ffea4">扩展语言</a></li>
+<li><a href="#org8490bc4">Emacs并非无所不能</a></li>
+</ol>
+</li>
+</ol>
+<p><a id="org29724c1"></a></p>
+<h1 id="customizable-emacs"><a href="#customizable-emacs" class="headerlink" title="customizable emacs"></a>customizable emacs</h1><p>Emacs是世界上可配置性最强的编辑器。</p>
+<p>我最开始试图在上面这句话里，加上“几乎”或者“之一”来让这句话变得更准确。后来发现不管加上哪个词，这句话都会变成一句错误。</p>
+<p>是的，世界上没有任何编辑器，在可配置性上能超越它。</p>
+<p>争论这句话的对错已经没有意义，我现在想知道，为什么它可以在可配置上能够达到极致。或者，为什么其他编辑器达不到这种可配置程度？</p>
+<p>这篇文章将尝试从一个矿工的视角，把最宝贵的这部分内容挖掘出来。</p>
+<p><a id="org68391dc"></a></p>
+<h2 id="源码设计"><a href="#源码设计" class="headerlink" title="源码设计"></a>源码设计</h2><p>linux kernel内核用到了很小一部分的汇编源码，据说新版本已经完全用c来实现了。</p>
+<p>如果不是迫不得已，我相信linux kernel还是倾向避免接触到汇编的。</p>
+<p>Emacs也遇到了这样的问题，由于效率上的考虑，它不得不将一部分底层代码使用c语言来构建。从本质上来说，Emacs是一个用c语言实现的lisp解释器。</p>
+<p>剩下80%的部分，Emacs是使用在c上构建的lisp语言来编写的。</p>
+<p>elisp更接近脚本语言，它有点类似python（sorry，其实是python有点类似lisp），也可以编译为字节码。它的一切都是可读的，任务一个lisp语言的函数，都可以快速找到它对应的lisp源码。</p>
+<p>这就为用户提供了接近真相的机会，如果你愿意，甚至可以根据自己的需要直接修改核心的Emacs（好吧，你最好不要这么做，这意味着你已经脱离了Emacs和其他Emacer的支持）。</p>
+<p><a id="org1875486"></a></p>
+<h2 id="软件设计"><a href="#软件设计" class="headerlink" title="软件设计"></a>软件设计</h2><p>软件包括两部分，可执行的二进制或脚本文件和它所包含的文档。</p>
+<p>Emacs的核心软件都是结构化的，这使得我们可以很容易地找到相关功能所在的源码。比如，如果你想研究Emacs中的window操作实现，可以找到window操作对应的lisp文件window.el。</p>
+<p>文档部分也是经过了精心设计的，从C-h对应的完整的文档分类可见一斑。这使得Emacs的用户很容易地可以查找到一整块完整的功能，读过Emacs手册的人应该都深有体会。</p>
+<p>这里需要说明一点的是，Emacs的文档系统其实还包含了动态文档系统，比如查看当前mode或key bindings。所有的文档组成了一张严密的网络，使得我们在Emacs中可以快速地到达想要去的各个地方。</p>
+<p><a id="org92ffea4"></a></p>
+<h2 id="扩展语言"><a href="#扩展语言" class="headerlink" title="扩展语言"></a>扩展语言</h2><p>众所周知，Emacs使用了自己用c语言实现的一种lisp方言：elisp。</p>
+<p>我认为，elisp被大家过分夸大了，甚至给人一种“Lisp不同寻常的语法决定了其开发者都是资深开发者”的印象。</p>
+<p>甚至，我认为，恰恰是elisp的一些缺点，才导致Emacs的扩展性达到了无与伦比的高度。</p>
+<p>lisp的括号可能是最被人诟病的设计，有一个lisp笑话被lisp黑客广为流传：“据说一个黑客偷到了美国用于导弹控制的LISP代码的最后一页，却发现这最后一页全是右括号”。</p>
+<p>你可能写过python或者c语言这种面向对象或者面向过程的语言，但是遗憾的是，在lisp的世界里，这两种编程范式都很难被广泛实施，有很大原因源自lisp的括号设计。括号的大量出现，决定了你很难一口气写出100行的代码（希望你有勇气接受这个挑战）。所以它强制你精简每一个函数的实现，大量的微小函数组成了一张紧密的网，来提供强大灵活的整体功能。</p>
+<p>这其实就是自底向上的编程思想了，没错，lisp强制我们使用自底向上的思想来思考问题。</p>
+<p>说到自底向上编码，它的好处在哪里呢？它里面其实包含了分层的思想，即下层的功能可以很容易地被上层代码复用，而且当粒度足够小时，几乎所有想要的功能都一触即达。我们想要的只是一个编辑普通文本的编辑器，最后一不小心就变成了一个操作系统。</p>
+<p>当我在借用第三方package实现某个功能时，一下子就找到了我所需要使用了所有函数，我需要做的只是使用自己的风格封闭它。</p>
+<p>据说，当你打算设计一个极度复杂的系统时，lisp会让开发成本和维护成本随复杂度呈指数下降。Emacs就是一个例子。</p>
+<p>“凡有的，还要给他，让他丰足有余。”</p>
+<p><a id="org8490bc4"></a></p>
+<h2 id="Emacs并非无所不能"><a href="#Emacs并非无所不能" class="headerlink" title="Emacs并非无所不能"></a>Emacs并非无所不能</h2><p>最后的这个标题出人意外，前面夸赞了那么多，最后要承认它只不过是个使用习惯令人蹩脚或者过时的编辑器吗？</p>
+<p>不是的！</p>
+<p>我想知道网络上，Emacer们都在干些什么（问题来自知乎）：</p>
+<ol>
+<li>你认为最好看的 Emacs 配色方案（color scheme）是哪款？</li>
+<li>emacs还能做什么？emacs比vim好在哪里？</li>
+<li>Vim 和 Emacs 分别适合哪些人群？</li>
+<li>谁知道emacs lispy-mode的用法？</li>
+<li>对于使用emacs包管理器ELPA，你有哪些推荐的包？</li>
+</ol>
+<p>我之前是一个vim用户，想学习Emacs多次未果，主要是觉得Emacs的按键太反人类。但是这是一种先入为主的思想，现在看来，应该让Emacs来适应我们，而不是本末倒置，要知道，Emacs就强大在它的可配置性上。</p>
+<p>不要在自己还没有尝试了解一个东西之前，试图通过直接询问的方式一劳永逸。可以临时解决问题，但是不要在自己还不清楚的事情上浪费太多时间，最后原理没了解，只是在东拼西凑试图猜中答案。</p>
+<p>不要做一个完美主义者。我之前也喜欢折腾，从字段，到配色，最后发现，这其实跟不动脑思考只知道蛮干是一样的。要精进不要盲进，少即是多，容忍不知道。</p>
+<p>另外，不要试图寻找自己不需要的答案，也不要试图通过询问一次性获得答案。我们不需要知道别人使用哪些package，自己用的顺手才最重要。第一手资料在官方手册或者包列表服务器，我们要找的答案，绝不会简单地摆放在google里。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/03/13/customizable-emacs/" data-id="cle4a0ewa000hufiygi2oce9i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-life-in-emacs" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/03/life-in-emacs/" class="article-date">
+  <time datetime="2019-03-02T16:00:00.000Z" itemprop="datePublished">2019-03-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/03/life-in-emacs/">使用emacs管理生活</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ol>
+<li><a href="#org3670ae8">使用emacs管理生活</a><ol>
+<li><a href="#orgf0a8799">关于这篇文章</a></li>
+<li><a href="#org6327381">一天应该从一杯牛奶开始吗？</a></li>
+<li><a href="#orgbcb061e">一天从emacs开始</a></li>
+<li><a href="#org3d810a4">来个番茄？</a></li>
+<li><a href="#org5e83310">不能煮咖啡的编辑器不是一个好操作系统</a></li>
+<li><a href="#orgf1ebf60">附件</a></li>
+</ol>
+</li>
+</ol>
+<p><a id="org3670ae8"></a></p>
+<h1 id="使用emacs管理生活"><a href="#使用emacs管理生活" class="headerlink" title="使用emacs管理生活"></a>使用emacs管理生活</h1><p><a id="orgf0a8799"></a></p>
+<h2 id="关于这篇文章"><a href="#关于这篇文章" class="headerlink" title="关于这篇文章"></a>关于这篇文章</h2><p>很久没有写文章了，我是在一周前决定在今天写这篇文章的，用来分享我在emacs上的实践。在这周里，我有时闲下来会想到这篇文章的一些碎片，零零散散，错落有致。</p>
+<p>我是在一两周前转到emacs的，在之前我一直使用vim作为我的编辑器。当然，只是编辑器，因为我的大部分时间都是用来编辑文本（代码、配置）。</p>
+<p>我转到emacs，最开始是借助了spacemacs，它让我看到了emacs与vim共存的可能。但是因为spacemacs过于范化，不能满足我自己的使用习惯，我决定开始打磨自己的emacs配置。</p>
+<p>emacs最令人惊叹的是org-mode，或者更准确地说，围绕org-mode建立起的生态。如果你没有尝试过，建议你在合适的时间研究一下这个模式，相信我，它会彻底改变你的生活方式。</p>
+<p>由于这篇文章主要是分享自己的一些感受，所以不会涉及太多代码（你知道的，在emacs的世界里，存在大量elisp代码片段）。</p>
+<p><a id="org6327381"></a></p>
+<h2 id="一天应该从一杯牛奶开始吗？"><a href="#一天应该从一杯牛奶开始吗？" class="headerlink" title="一天应该从一杯牛奶开始吗？"></a>一天应该从一杯牛奶开始吗？</h2><p>每个人都有自己的节奏，我以前的节奏就是，混乱地开始和混乱的结束一天的生活和工作。如果我们有能力使这种模式免于混乱，便可以得到一个更为高级的名字，叫做自底向上的生活方式，过好当下，然后等着上天赐予我们最好的礼物。拖延症患者的生活方式并不是自底向上，而仍处于混乱状态（譬如我），所以还算不上自底向上。</p>
+<p>对应的方式就是自顶向下了，我们可能会制定一个N年的计划，比如一个长达三年的学习计划，然后逐步分解去执行。不过实际情况往往会跟目标有出入，可以选择分片段逐步细化的方式。</p>
+<p>在经历过长达数年的混沌时期后，我决定让自己逐渐适应并且切换到了第二种方式。我需要一个理论支持，最好是已经成熟并且有很多人实践过的理论。于是我找到了GTD。</p>
+<p>关于GTD（Get Things Done），有一些专门的书籍可以学习。不过在我看来，一个好的实践，一定是不需要太多繁杂步骤的，简单而且行之有效。所以我并没有从头到尾阅读书籍，而是了解了GTD的思想，以及它的大体步骤。</p>
+<p>GTD最核心的思想，可以用一句话来形容：将头脑中的想法记录到载体上。这样做的好处是什么呢？</p>
+<p>首先，大脑没有了负担。设想之前的工作或生活，突然，脑海中想起了一件事，去做或者一会去做，有可能一会又忘记了，大脑承担了很多思考外的低级功能。</p>
+<p>其次，待办更清晰了。只要我们能拿到所有的待办，就可以对待办进行评级、排期。只要一件事情做好了排期，我们只要等到对的时间去做就可以了。</p>
+<p>一句话，解放大脑，提高专注力。</p>
+<p>官方的GTD步骤有五个，我在这里整理下我的实践步骤：</p>
+<ol>
+<li><p>收集：将大脑中的想法、邮件收件箱或其它的工具的信息收集起来。对于记录脑中的想法而言，手机是很方便的一个工具，我喜欢使用mac自带的Notes来记录脑海中一闪而过的想法，还可以直接同步到电脑端打开，再次处理都很方便。</p>
+</li>
+<li><p>整理：收集到的信息，需要进行再次处理，明确意义后归类。比如一个待办的具体定义，要归放到哪个项目下。</p>
+</li>
+<li><p>排期：对待办设置优先级，并查看自己的排期，将待办加入到自己的排期中。我自己一般不会对某个待办设置优先级，而是直接对待办所属的项目制定优先级。比如，我在跟进一个非常重要的项目，那它下面的待办就理应具有更高的优先组。</p>
+</li>
+<li><p>执行：这个步骤就相对简单了，因为信息已经做了梳理和排期，到了合适的时间，按照计划执行就可以了。</p>
+</li>
+</ol>
+<p>当然，第4个步骤简单，但也困难。困难之处在于，有很多情况是我们预料不到的情况。比如，可能会有其它同事来打断，或者有更高优先级的突发事件，这就需要我们根据其它方法论来处理了。碍于篇幅，这种情况我们暂不展开。</p>
+<p>讲了这么多，还没有回答上面的问题。一天应该从一杯牛奶开始吗？对于我来说，答案是否定的。我的一天是从GTD开始的。</p>
+<p><a id="orgbcb061e"></a></p>
+<h2 id="一天从emacs开始"><a href="#一天从emacs开始" class="headerlink" title="一天从emacs开始"></a>一天从emacs开始</h2><p>市面上有很多GTD工具，可惜我都没使用过。我的工作几乎全部使用电脑完成，所以需要一个更加无缝操作的GTD工具，它最好不用分散我太多的注意力。</p>
+<p>emacs里有一个org-mode，可以用来管理TODO列表，例如修改TODO列表状态，对TODO排期，或者记录TODO用时。</p>
+<p>org-agenda是一个org-mode的相关工具，可以自定义项目的TODO列表的展示逻辑，比如显示今天有哪些代办，或者显示有哪些项目处于stuck状态（某个项目下没有TODO列表）。</p>
+<p>用一句很装逼的话来说，“我已经一点都记不起明天需要做什么了”。这应该是我的一个追求吧，现在还没有完全达到。</p>
+<p>到公司后，我的第一件事就是打开emacs。我对它进行了一些配置，打开软件后它会自动为我显示这一天的待办记录，这一天将从查阅待办开始。</p>
+<p>在开始某一个待办前，我会使用org-clock-in对待办进行计时，以此来跟踪我在一个待办上花费的时间，并且在完成一个待办后休息一小段时间。</p>
+<p>世界从未如此高效而轻松。</p>
+<p><a id="org3d810a4"></a></p>
+<h2 id="来个番茄？"><a href="#来个番茄？" class="headerlink" title="来个番茄？"></a>来个番茄？</h2><p>我还找到一个提高专注能力的工作，番茄钟。</p>
+<p>发明者为了提高自己的效率，发明了一种时间分片的方式，每25分钟为一个番茄钟，每个番茄钟结束后休息5分钟，每4个番茄钟休息15分钟。</p>
+<p>这是一种很好的时间管理方式，它能让我们感知到时间的流逝，更好的对某件事所花费的时间做出评估。</p>
+<p>我曾经实践过这种方法，但是发现它过于死板不够灵活，于是根据自己的需要进行了部分改造。</p>
+<p>仍然是25分钟一个番茄钟，但是我可以在必要的时候提前或推迟结束时间。比如，某个待办进行的很顺利，20分钟就完成了，那我会选择提前结束这个番茄钟；如果某个待办需要30分钟，我可能会选择延迟5分钟。当然，有一种情况是这个待办需要1个小时，我会在25分钟左右，在合适的时机结束番茄钟。</p>
+<p>一句话，节奏感很重要。节奏感是一种感觉，即是感觉，就会因人而异，需要找到适合自己的方式或节奏。</p>
+<p>emacs是有包来专门提供番茄钟功能的，我没有使用。在我看来，没有太大的意义。</p>
+<p><a id="org5e83310"></a></p>
+<h2 id="不能煮咖啡的编辑器不是一个好操作系统"><a href="#不能煮咖啡的编辑器不是一个好操作系统" class="headerlink" title="不能煮咖啡的编辑器不是一个好操作系统"></a>不能煮咖啡的编辑器不是一个好操作系统</h2><p>你可能已经听说了，emacs是一个操作系统，而非编辑器。</p>
+<p>这并非对emacs的嘲讽，实际上我认为这是对emacs的高度评价。</p>
+<p>我想先谈一下gnu/linux或者windows操作系统，如果细想一下，“操作系统”这个词并不是很准确，如果你用过gnu/linux，你可能会同意我这个观点：gnu/linux更像是一个资源管理系统，它的任务更多的是接管底层硬件资源并提供调度方式以最大化使用效率。gnu开发了一个套件，用来实现一些与用户交互的功能，但是这是不够的，我们很多时候还是会安装许多额外工具。</p>
+<p>所以称emacs是一个操作系统其实蛮贴切的，错的不是emacs，而是操作系统的定义。</p>
+<p>你可能也听说过一种现象，emacer们倾向于把自己想要的所有功能都记录到emacs里，他们在emacs里浏览网页，阅读rss，收发邮件，可能甚至有人想用它来控制自己的洗衣机。</p>
+<p>我想试着来解释下这种现象，前面我们说过emacs是一个操作系统，甚至它比gnu/linux做得还好，因为它高度定制，且有一致的操作风格。你可以把它看做是一个根据使用者的使用习惯高度特化的操作环境。</p>
+<p>举个例子，比如我现在在编辑当前这篇文章，但是感觉这个自然段的表达方式有点问题，但是现在我的关注点是先把这篇文章写完，此时我可以使用remember命令调出一个临时记录note的buffer，记录一下现在的想法，这时想法就被记录到一个叫做remember-notes里了。我可以继续编辑这篇文章，使我的思绪被打算的可能性降到最低。</p>
+<p>所以答案就很简单了，因为这个“操作系统”里已经集成了很多可用的工具，如果把另一个工具集成进来，效率和便利性会成指数级增长。</p>
+<p>但是这是一个致命的诱惑，你感觉这是一个充满花蜜的骨朵，很有可能它会把你粘住拖进它的花苞消化分解掉，变成它的食物。</p>
+<p>如果你像我一样，没有太多的精力去做这些看上去很有乐趣的事情，那就一定要克制住自己了，一定要守住自己的边界，知道什么不可以做。</p>
+<p><a id="orgf1ebf60"></a></p>
+<h2 id="附件"><a href="#附件" class="headerlink" title="附件"></a>附件</h2><p><img src="https://raw.githubusercontent.com/pysnow530/i/master/emacs-org-agenda.png" alt="img"></p>
+<p>当前正在做的事情被高亮显示（图中为黄色），且会在modeline显示。</p>
+<p>如果某个昨天的待办没有完成，Scheduled会变成Sched. 1x，并被加到今天。比如，写作emacs使用实践和腹肌撕裂者两个待办昨天都没有完成（现在已经是第二天的00:22）了，所以被加到了今天。</p>
+<p>有一种任务是每隔几天就做一次，比如刮胡子这个待办需要每三天做一次，使用 2019-03-03 Sun +3d 时间，系统就会每三天生成一个待办。</p>
+<p><img src="https://raw.githubusercontent.com/pysnow530/i/master/emacs-clock.jpeg" alt="img"></p>
+<p>我喜欢给一些需要随意做的任务记录时间，这样就可以知道我做某件事的整个时间周期了。成就感悠然而生。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/03/03/life-in-emacs/" data-id="cle4a0ewj0014ufiyhy67d2wb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-spacemacs-from-start-to-quit" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/16/spacemacs-from-start-to-quit/" class="article-date">
+  <time datetime="2019-02-15T16:00:00.000Z" itemprop="datePublished">2019-02-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/16/spacemacs-from-start-to-quit/">spacemacs从入门到放弃</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="我的vim史"><a href="#我的vim史" class="headerlink" title="我的vim史"></a>我的vim史</h2><p>我是一个vim编辑器的重度用户，使用vim已经十年有余。从日常记录文本、开发到远程服务器的运维，它一直是我必备的工具。我有自己的一套配置，裸用vim也不在话下。</p>
+<p>我在很久之前接触lisp，并为之倾倒。从来没有哪一门语言的外在表现可以如此完美统一，我相信一门编程语言的设计是完全可以塑造一个人的思维。谈及lisp，几乎毫无疑问谈到emacs编辑器。</p>
+<p>这里顺带谈一个我对emacs设计理念的理解，emacs在我看来是lisp精神的一个很完美的体现（并不是说emacs完美）。emacs使用了20%的c语言代码，实现了一个lisp解释器，然后使用其余80%的代码，在lisp上构造了整个编辑器。所有的操作都对应着lisp函数，使得所有操作都是清晰和可查的。比如我想查找<code>&lt;C-x&gt; &lt;C-f&gt;</code>的实现函数和具体实现，只需要<code>&lt;C-h&gt; k &lt;C-x&gt; &lt;C-f&gt;</code>就可以了。</p>
+<p>在可查的历史里，我曾经尝试N次从vim到emacs的转变，但是最终都以失败告终。</p>
+<p>后来，一个偶然的机会，遇到spacemacs，让我再一次经历了转变失败的过程。</p>
+<h2 id="spacemacs是啥"><a href="#spacemacs是啥" class="headerlink" title="spacemacs是啥"></a>spacemacs是啥</h2><p>不要问我是啥偶然的机会，因为我自己也已经记不得了。</p>
+<p>spacemacs的官网是<a target="_blank" rel="noopener" href="http://spacemacs.org/">http://spacemacs.org/</a>，通过作者的精心包装，从命名到完善的文档，使得它看上去更像一个完整的emacs发行版。但是其它，它的本质是另一份emacs配置。</p>
+<p>是的，它是另一份emacs配置，就像<a target="_blank" rel="noopener" href="https://github.com/">https://github.com/</a>上其它人托管的.emacs一样。</p>
+<p>官方对它的介绍是，”A community-driven Emacs distribution”，一个社区驱动的emacs发行版。</p>
+<h2 id="spacemacs为什么这么吸引我"><a href="#spacemacs为什么这么吸引我" class="headerlink" title="spacemacs为什么这么吸引我"></a>spacemacs为什么这么吸引我</h2><p>如果你也是一个vim重度用户，并尝试从vim转到emacs阵营，你就会像我一样首先被它的操作模式吸引。spacemacs默认集成了evil，使得在操作习惯上像是一个lisp配置的vim。</p>
+<p>当然，对我来说它还有另一个致命的吸引力，那就是华丽丽的外表。默认是一个紫色的本色方案（基佬紫），非常漂亮美观。可以看下面官方的图片：</p>
+<p><img src="http://spacemacs.org/img/screenshots/ss2.png" alt="ss2"></p>
+<p>下面说一下官方宣传的优点：</p>
+<p>我们知道使用emacs的用户，有一些患上了RSI，spacemacs通过集成evil，并将<code>&lt;leader&gt;</code>绑定到space来解决这个问题。由于space键主要使用拇指按压，所以大大减轻了手指的负担。</p>
+<p>spacemacs通过使用助词符前缀，将各个功能对应绑定到各个按键。比如buffer操作绑定到b，help绑定到h。也就是说，buffer对应的操作按键是<code>&lt;space&gt; b ...</code>，并且每一个按键都会有功能提示，交互性也得到了一定保证。可以参考图片。整体上很连贯一致。</p>
+<p>spacemacs引入了一个layer的概念，使用某一个功能实际上是添加某个layer，这样就把具体的功能跟第三方包解耦，我们只需要知道自己想要的功能，而不需要知道这个功能需要安装哪些包。这可以说是脱离折腾苦海的一个绝妙的办法，把折腾的成本交给社区。</p>
+<p>spacemacs默认集成了100多个包，从编辑到cvs管理，功能涉及到方方页面，几乎将emacs包装成了一个简单易用且全面的系统。而且会根据打开的文件类型动态提醒添加的包，完成一站式体验（类似vscode等的包安装提醒）。</p>
+<p>当然，还有一些其它的优势，让我在emacs的体验上走得更远。整整试用了两天时间。</p>
+<h2 id="两天的体验之旅"><a href="#两天的体验之旅" class="headerlink" title="两天的体验之旅"></a>两天的体验之旅</h2><p>在使用spacemacs的这两天里，我发现了很多更优秀的工作流。</p>
+<p>举个例子，项目内的批量替换，spacemacs使用插件使得整个过程更加流畅，首先项目搜索某个关键字，然后在交互环境里整体替换就可以了。</p>
+<p>当然，有一个难以逃避的弊端，应该归给emacs的设计。那就是buffer的管理相当混乱，甚至使用git都要打开n个buffer，导致有很大的成本耗在查找和切换buffer上。</p>
+<p>关于emacs的缺点，可以参考<a target="_blank" rel="noopener" href="https://www.v2ex.com/t/332566">https://www.v2ex.com/t/332566</a>，个人感觉总结的很到位。</p>
+<h2 id="放弃spacemacs"><a href="#放弃spacemacs" class="headerlink" title="放弃spacemacs"></a>放弃spacemacs</h2><p>最终我决定放弃spacemacs，我发现它并不是我要找的圣杯。</p>
+<p>首先，它过于臃肿。我指的臃肿并不是指其他人说的反应慢，而是它有太多不重要的功能，占用了过多的键位，导致看似设计优良的<code>&lt;space&gt;</code>操作方式，一个简单的功能都藏到很深的地方，比如<code>describe-function</code>被绑定到了<code>SPC h d f</code>，甚至很多时候都记不得某个功能对应的按键序列，需要根据交互提醒找到对应按键。当然，这些按键都是可以重新定义的，但是由于设计它耗费了社区很大精力，修改这样的默认按键就显得更加吃力。不知道修改后它还能不能叫做spacemacs了。</p>
+<p>其次，之前谈到的，buffer过多难以维护，严重影响思维逻辑。</p>
+<h2 id="接下来"><a href="#接下来" class="headerlink" title="接下来"></a>接下来</h2><p>你现在看到的这篇文章，是我用emacs写成的。没错，我成功的转到了emacs，使用着我之前使用的vim键位绑定，甚至有一些比以前更好的解决方案。这要归功于spacemacs，它让我看到了自己之前存在的问题。</p>
+<p>spacemacs还是会有大批人在使用的，这印证了一个事实，一个高度可配置的编辑器，仍然可以存在一份可以供一群人使用的通用配置。但这并不能发挥可高度定制这个杀手锏，甚至会阻碍你做过多的配置。</p>
+<p>正如我使用vim的经历一样，现在这份emacs配置是我自己从零开始配置的，这是完全属于我自己的配置，并且不能被其它人使用。</p>
+<p>而且，转换的成功有赖于我另一个努力，那就是努力不使用过多的功能。emacs的功能多到眼花，可能有一些功能这辈子都用不到，而且还会创建过多buffer，导致陷入之前的场景，没法继续使用下去。只使用自己需要的部分功能，就可以熟悉它对buffer的操作，让整个使用过程不会膨胀到自己的控制之外。</p>
+<h2 id="结"><a href="#结" class="headerlink" title="结"></a>结</h2><p>就写这么多吧，思维逻辑比较混乱，本来这件事也有点混乱，刚好了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2019/02/16/spacemacs-from-start-to-quit/" data-id="cle4a0ex40031ufiyc1ir637g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-paramiko-no-existing-session" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/17/paramiko-no-existing-session/" class="article-date">
+  <time datetime="2018-09-16T16:00:00.000Z" itemprop="datePublished">2018-09-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/17/paramiko-no-existing-session/">更换ssh证书导致paramiko报No session existing错误</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题出现"><a href="#问题出现" class="headerlink" title="问题出现"></a>问题出现</h2><p>现在公司的发布系统使用了paramiko来执行远程操作，ssh连接用的证书被记录在配置文件里，是一个列表的形式。没错，我们的证书有很多，用来连接到不同的环境。</p>
+<p>接到运维通知，由于安全原因，访问某台机器使用的证书做了更换。</p>
+<p>随后没多久，就收到测试同学的反馈，发布代码时系统提示“No existing session”。</p>
+<h2 id="简单问题简单解决"><a href="#简单问题简单解决" class="headerlink" title="简单问题简单解决"></a>简单问题简单解决</h2><p>这个问题乍看上去只要更新一下配置就可以了，简单的一批。</p>
+<p>修改配置文件，重启系统，又重试了一次。结果，还是报这个错误。疯狂了疯狂了，配置也生效了，竟然还是不能连接吗？</p>
+<h2 id="问题初探"><a href="#问题初探" class="headerlink" title="问题初探"></a>问题初探</h2><p>连接的代码很简单，就是单纯的连接远程机器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">client = paramiko.SSHClient()</span><br><span class="line">client.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">client.connect(host, SSH_PORT, SSH_USER, SSH_PASSWORD, key_filename=SSH_KEYS)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">client.close()</span><br></pre></td></tr></table></figure>
+
+<p>通过测试，发现用命令行连接远程机器是可以的，而且也没有使用ProxyCommand之类，但是通过paramiko就出问题。毫无疑问，问题出在paramiko或者配置上。</p>
+<p>session关键字让这个问题看起来像是paramiko的锅，它没处理好自己的会话吗？</p>
+<p>一番google，发现了这个链接：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6832248/paramiko-no-existing-session-exception">https://stackoverflow.com/questions/6832248/paramiko-no-existing-session-exception</a>。这个哥们也是遇到了一样的错误提示，但是他用了密码而系统查找私钥导致出错，关掉密钥查找就解决了这个问题。</p>
+<p>看来问题出在密钥的配置上。</p>
+<h2 id="开启paramiko日志"><a href="#开启paramiko日志" class="headerlink" title="开启paramiko日志"></a>开启paramiko日志</h2><p>发布系统使用的是paramiko 2.1.2，在paramiko的源码里找到了打开日志的方法。</p>
+<p>paramiko/util.py:238</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">log_to_file</span>(<span class="params">filename, level=DEBUG</span>):</span><br></pre></td></tr></table></figure>
+
+<p>通过该函数，可以将paramiko的日志打印到某个文件，比如<code>paramiko.util.log(&#39;/tmp/paramiko-debug.log&#39;)</code>。打印的日志如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">.transport: starting thread (client mode): 0x8ab46350L</span><br><span class="line">.transport: Local version/idstring: SSH-2.0-paramiko_2.1.2</span><br><span class="line">.transport: Remote version/idstring: SSH-2.0-OpenSSH_5.3</span><br><span class="line">.transport: Connected (version 2.0, client OpenSSH_5.3)</span><br><span class="line">.transport: kex algos:[u&#x27;diffie-hellman-group-exchange-sha256&#x27;, u&#x27;diffie-hellman-group-exchange-sha1&#x27;, u&#x27;diffie-hellman-group14-sha1&#x27;, u&#x27;diffie-hellman-group1-sha1&#x27;] server key:[</span><br><span class="line">.transport: Kex agreed: diffie-hellman-group1-sha1</span><br><span class="line">.transport: Cipher agreed: aes128-ctr</span><br><span class="line">.transport: MAC agreed: hmac-sha2-256</span><br><span class="line">.transport: Compression agreed: none</span><br><span class="line">.transport: kex engine KexGroup1 specified hash_algo &lt;built-in function openssl_sha1&gt;</span><br><span class="line">.transport: Switch to new keys ...</span><br><span class="line">.transport: Adding ssh-rsa host key for [10.0.2.243]:36000: 2e3faf53075afccf09a3ac2q391dd5e8</span><br><span class="line">.transport: Trying key 3a96e7e9e3f59963fbee693f44x8cf58 from /home/user/.ssh/id_rsa1</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Authentication (publickey) failed.</span><br><span class="line">.transport: Trying key 8628c2021979e0e0302aac6bc8xcbcef from /home/user/.ssh/id_rsa2</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Authentication (publickey) failed.</span><br><span class="line">.transport: Trying key 6e399bc162a737150e1bd643abx7737d from /home/user/.ssh/id_rsa3</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Authentication (publickey) failed.</span><br><span class="line">.transport: Trying key 77d22314df154bfd5ca591bd16x19363 from /home/user/.ssh/id_rsa4</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Authentication (publickey) failed.</span><br><span class="line">.transport: Trying key 77d22314df154bfd5ca591bd16x19363 from /home/user/.ssh/id_rsa5</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Authentication (publickey) failed.</span><br><span class="line">.transport: Trying key c1909f00bf62c74eed5a3a9e5dxa73d1 from /home/user/.ssh/id_rsa6</span><br><span class="line">.transport: userauth is OK</span><br><span class="line">.transport: Disconnect (code 2): Too many authentication failures for user</span><br><span class="line">.transport: Trying key c897a8e51a0d41facf7fa712a2xeace8 from /home/user/.ssh/id_rsa7</span><br><span class="line">.transport: Trying discovered key 3a96e7e9e3f5996xfbee693f44b8cf58 in /home/user/.ssh/id_rsa1</span><br></pre></td></tr></table></figure>
+
+<p>我们几乎可以一眼看到最后的错误提示：“Disconnect (code 2): Too many authentication failures for user”。看起来像是失败次数过多被拒了。google后得到了这个链接：<a target="_blank" rel="noopener" href="https://superuser.com/questions/187779/too-many-authentication-failures-for-username">https://superuser.com/questions/187779/too-many-authentication-failures-for-username</a>。“This is usually caused by inadvertently offering multiple ssh keys to the server.”，答主建议明确指定使用哪个证书来访问服务器。</p>
+<p>我down了一份<code>OpenSSH_7.8</code>的源码下来，经过一番grep，找到了下面这几个代码片段。</p>
+<p>ssh/auth.c:281</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">auth_maxtries_exceeded</span><span class="params">(Authctxt *authctxt)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">ssh</span> *<span class="title">ssh</span> =</span> active_state; <span class="comment">/* XXX */</span></span><br><span class="line"></span><br><span class="line">        error(<span class="string">&quot;maximum authentication attempts exceeded for &quot;</span></span><br><span class="line">            <span class="string">&quot;%s%.100s from %.200s port %d ssh2&quot;</span>,</span><br><span class="line">            authctxt-&gt;valid ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;invalid user &quot;</span>,</span><br><span class="line">            authctxt-&gt;user,</span><br><span class="line">            ssh_remote_ipaddr(ssh),</span><br><span class="line">            ssh_remote_port(ssh));</span><br><span class="line">        packet_disconnect(<span class="string">&quot;Too many authentication failures&quot;</span>);</span><br><span class="line">        <span class="comment">/* NOTREACHED */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ssh/auth2.c:322</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">userauth_finish</span><span class="params">(<span class="keyword">struct</span> ssh *ssh, <span class="type">int</span> authenticated, <span class="type">const</span> <span class="type">char</span> *method,</span></span><br><span class="line"><span class="params">    <span class="type">const</span> <span class="type">char</span> *submethod)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">if</span> (authenticated == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">/* turn off userauth */</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/* Allow initial try of &quot;none&quot; auth without failure penalty */</span></span><br><span class="line">        <span class="keyword">if</span> (!partial &amp;&amp; !authctxt-&gt;server_caused_failure &amp;&amp;</span><br><span class="line">                (authctxt-&gt;attempt &gt; <span class="number">1</span> || <span class="built_in">strcmp</span>(method, <span class="string">&quot;none&quot;</span>) != <span class="number">0</span>))</span><br><span class="line">            authctxt-&gt;failures++;</span><br><span class="line">        <span class="keyword">if</span> (authctxt-&gt;failures &gt;= options.max_authtries)</span><br><span class="line">            auth_maxtries_exceeded(authctxt);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ssh/srvconf.h:39</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> DEFAULT_AUTH_FAIL_MAX   6       <span class="comment">/* Default for MaxAuthTries */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>原来ssh默认允许尝试6个密钥，如果还没有成功，就会直接退出了。这么做的原因想来也显而易见了。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>我的临时解决办法是，将密钥文件的配置控制在6个以内。当然，更好点的办法是使用fabric来替代直接使用paramiko，并复用系统的<code>.ssh/config</code>配置，这就是后面需要考虑的了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2018/09/17/paramiko-no-existing-session/" data-id="cle4a0ewo001mufiy13kqa2sf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-subprocess-async-parallel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/14/subprocess-async-parallel/" class="article-date">
+  <time datetime="2018-09-13T16:00:00.000Z" itemprop="datePublished">2018-09-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/14/subprocess-async-parallel/">使用subprocess模块异步并发执行远程命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="远程执行命令"><a href="#远程执行命令" class="headerlink" title="远程执行命令"></a>远程执行命令</h2><p>运维自动化平台不可避免地会涉及到远程命令执行操作，主要分为两类主要做法：目标机器安装agent，或者使用ssh。</p>
+<p>saltstack是一个典型的agent模式的远程控制工具，麻烦的地方是首先要在目标机器上安装saltstack的agent。</p>
+<p>使用ssh的模块居多，fabric和ansible是此类工具中的典型，这类工具的优点是方便，不用在目标机安装agent。值得一提的是，这两个工具都是基于paramiko。</p>
+<p>使用ssh执行的另一种做法是，直接调用本地的ssh来完成。缺点是针对每一台远程主机都需要开一个进程，比起在程序内建立连接要耗费更多的资源。优点也很明显，比如，公司最近在做ssh的改造，在改造的过程中，可能会出现明明ssh命令可以连接，使用第三方模块就是不灵的情况。ssh的命令和第三方模块在配置上毕竟有差异，需要维护两份配置。</p>
+<p>这篇文章就是要使用进程来完成在批量远程机器上执行某个命令。</p>
+<h2 id="subprocess模块大概"><a href="#subprocess模块大概" class="headerlink" title="subprocess模块大概"></a>subprocess模块大概</h2><p>subprocess模块是python2中的一个官方模块，顾名思义，它主要用于操作子进程。</p>
+<p>subprocess.Popen()用于创建一个子进程，它的第一个参数是列表，即创建进程所需要的参数，类似c语言中的argv。</p>
+<p>需要注意的一点是，Popen是异步执行的，也就是说创建Popen后会立刻返回，子进程继续执行。关于异步，还有很多可以聊的地方，后面另开一篇文章写一下。</p>
+<p>既然是异步的，我们就需要某种机制来跟它进行通信。Popen提供了多个方式来与子进程通信。</p>
+<p>Popen.wait()将主程序挂起等待子进程的结束，结束后会返回子进程的返回码。</p>
+<p>Popen.poll()可以检测子进程是否还在执行，并返回子进程的返回码。</p>
+<p>下面我们将用几个小例子来不断扩展，最终实现一个可在多台远程机器并行执行命令的功能。</p>
+<h2 id="一个简单的远程执行示例"><a href="#一个简单的远程执行示例" class="headerlink" title="一个简单的远程执行示例"></a>一个简单的远程执行示例</h2><p>我们来写一个简单的示例，说明如何使用subprocess模块远程执行一条命令。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cmd = <span class="string">&#x27;echo hello&#x27;</span></span><br><span class="line">cmd_arg = [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;localhost&#x27;</span>, cmd]</span><br><span class="line"></span><br><span class="line">process = subprocess.Popen(</span><br><span class="line">    cmd_arg, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">retcode = process.wait()            <span class="comment"># 0</span></span><br><span class="line">out = process.stdout.read()         <span class="comment"># &#x27;hello&#x27;</span></span><br><span class="line">err = process.stderr.read()         <span class="comment"># &#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们首先创建了一个Popen对象，然后等待这个子进程的执行结束，获取返回值和输出。</p>
+<p>这断代码很简单，注意stdout=subprocess.PIPE，我们想捕捉到子进程的输出，而不是直接打印到标准标出，所以要求Popen把输出打印到管道供我们读取。</p>
+<h2 id="同时在多个机器上执行命令"><a href="#同时在多个机器上执行命令" class="headerlink" title="同时在多个机器上执行命令"></a>同时在多个机器上执行命令</h2><p>这里我们利用了Popen的异步特性，来加快多服务器任务的执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cmd = <span class="string">&#x27;sleep 3 &amp;&amp; echo hello&#x27;</span></span><br><span class="line">cmd_arg1 = [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;localhost&#x27;</span>, cmd]</span><br><span class="line">cmd_arg2 = [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>, cmd]</span><br><span class="line"></span><br><span class="line">process1 = subprocess.Popen(</span><br><span class="line">    cmd_arg1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">process2 = subprocess.Popen(</span><br><span class="line">    cmd_arg2, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"></span><br><span class="line">retcode1 = process1.wait()</span><br><span class="line">retcode2 = process1.wait()</span><br></pre></td></tr></table></figure>
+
+<p>这次，我们连接了两个机器并执行耗时3s的操作，由于Popen是异步的，这个脚本的实际执行时间仍然是3s。这个地方的操作是不是与多线程的操作有点类似，哈哈。</p>
+<h2 id="多个机器执行获取执行时间"><a href="#多个机器执行获取执行时间" class="headerlink" title="多个机器执行获取执行时间"></a>多个机器执行获取执行时间</h2><p>由于网络环境和机器配置的不同，我们在不同机器的执行时间是有差别的。有时候，我们需要一个时间数据来了解哪个机器执行耗时比较久，以此做优化。</p>
+<p>这时，我们需要Popen.poll()来异步检测命令是否执行完成，而不是将主进程挂起等待第一个子进程。如果第一个子进程执行时间比第二个子进程要长，我们就获取不到第二个子进程的执行时间。</p>
+<p>为了更好的可读性，这里我们没有加入for循环之类的结束，放弃了部分逻辑上的灵活性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cmd = <span class="string">&#x27;sleep 3 &amp;&amp; echo hello&#x27;</span></span><br><span class="line">cmd_arg1 = [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;localhost&#x27;</span>, cmd]</span><br><span class="line">cmd_arg2 = [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>, cmd]</span><br><span class="line"></span><br><span class="line">process1 = subprocess.Popen(</span><br><span class="line">    cmd_arg1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">process2 = subprocess.Popen(</span><br><span class="line">    cmd_arg2, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"></span><br><span class="line">process1_ok = <span class="literal">False</span></span><br><span class="line">process2_ok = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> process1_ok <span class="keyword">and</span> process2_ok:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> process1_ok:</span><br><span class="line">        <span class="keyword">if</span> process1.poll() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            process1_ok = <span class="literal">True</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;process 1 finished, delta time:&#x27;</span>, time.time() - start_time</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> process2_ok:</span><br><span class="line">        <span class="keyword">if</span> process2.poll() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            process2_ok = <span class="literal">True</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;process 2 finished, delta time:&#x27;</span>, time.time() - start_time</span><br><span class="line"></span><br><span class="line">    time.sleep(<span class="number">1</span>)       <span class="comment"># 防止空跑导致cpu占用过高</span></span><br></pre></td></tr></table></figure>
+
+<p>执行输出为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">process 1 finished, delta time: 4.01682209969</span><br><span class="line">process 2 finished, delta time: 4.01691508293</span><br></pre></td></tr></table></figure>
+
+<p>最后的执行时间多了1s，这是因为我们做了一个time.sleep(1)操作。由于我们考查的是哪台机器影响了整体的耗时，而且远程任务执行时间远不止1s，所以这里的1s不影响我们的判断。当然，适当缩小time.sleep()的参数也是可以的。</p>
+<h2 id="封闭一个可并行在多台服务器执行的函数"><a href="#封闭一个可并行在多台服务器执行的函数" class="headerlink" title="封闭一个可并行在多台服务器执行的函数"></a>封闭一个可并行在多台服务器执行的函数</h2><p>我们将上面的脚本封闭一下，形成一个可以复用的函数。有点长，但是只是在之前基础上做了一些简单的操作，并没有增加什么高深的东西。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">hostname, command, user=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用ssh执行远程命令</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    hostname    字符串或数组，多个hostname使用数组</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(hostname, <span class="built_in">list</span>):</span><br><span class="line">        hostname = [hostname]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        hostname = <span class="built_in">list</span>(<span class="built_in">set</span>(hostname))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建执行命令子进程</span></span><br><span class="line">    processes = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> hostname:</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            user_at_hostname = h</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            user_at_hostname = <span class="string">&#x27;&#123;0&#125;@&#123;1&#125;&#x27;</span>.<span class="built_in">format</span>(user, h)</span><br><span class="line"></span><br><span class="line">        cmd_args = [<span class="string">&#x27;ssh&#x27;</span>, user_at_hostname, command]</span><br><span class="line">        processes[h] = subprocess.Popen(</span><br><span class="line">            cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 等待子进程结束，获取结果</span></span><br><span class="line">    start_time = time.time()</span><br><span class="line">    result = &#123;&#125;</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        running_hostnames = <span class="built_in">set</span>(processes.keys()) - <span class="built_in">set</span>(result.keys())</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(running_hostnames) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> h <span class="keyword">in</span> running_hostnames:</span><br><span class="line">            process = processes[h]</span><br><span class="line">            retcode = process.poll()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> retcode <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            status = STATUS_SUCC <span class="keyword">if</span> retcode == <span class="number">0</span> <span class="keyword">else</span> STATUS_FAIL</span><br><span class="line">            out, err = process.stdout.read(), process.stderr.read()</span><br><span class="line">            delta_time = time.time() - start_time</span><br><span class="line"></span><br><span class="line">            result[h] = &#123;</span><br><span class="line">                <span class="string">&#x27;out&#x27;</span>: out,</span><br><span class="line">                <span class="string">&#x27;err&#x27;</span>: err,</span><br><span class="line">                <span class="string">&#x27;status&#x27;</span>: status,</span><br><span class="line">                <span class="string">&#x27;delta_time&#x27;</span>: delta_time</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    r = &#123;</span><br><span class="line">        <span class="string">&#x27;ts&#x27;</span>: time.time(),</span><br><span class="line">        <span class="string">&#x27;cmd&#x27;</span>: command,</span><br><span class="line">        <span class="string">&#x27;result&#x27;</span>: result,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> r</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2018/09/14/subprocess-async-parallel/" data-id="cle4a0ex50036ufiy5e3a9se5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-celery-fabric-ssh-w" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/13/celery-fabric-ssh-w/" class="article-date">
+  <time datetime="2018-09-12T16:00:00.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/13/celery-fabric-ssh-w/">celery使用fabric出现大量ssh -W进程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>公司的运维平台有很大一部分是python写的。</p>
+<p>发布系统不可避免的要与远程机器做交互，我们选择了基于paramiko的fabric模块来完成这部分工作。</p>
+<p>由于发布过程中存在大量耗时很久的任务，所以选用了celery来执行异步任务。有一部分远程操作是通过celery的任务调用fabric来完成的。</p>
+<h2 id="出现大量ssh-W"><a href="#出现大量ssh-W" class="headerlink" title="出现大量ssh -W"></a>出现大量ssh -W</h2><p>在某一天，突然接到运维同学的反馈，说生产环境存在大量ssh -W进程，希望可以查一下出现的原因。</p>
+<p>通过定位，很快确认了是ssh连接远程时使用了ProxyCommand，导致出现了ssh -W进程，这些进程实际上是ssh连接到远端的代理。</p>
+<p>但是奇怪的是，为什么任务执行完后仍然存在大量ssh -W不能正常退出。</p>
+<p>后来通过阅读fabric的源代码，在代码里找到了答案。</p>
+<p>fabric/state.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Host connection dict/cache</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">connections = HostConnectionCache()</span><br></pre></td></tr></table></figure>
+
+<p>fabric/network.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HostConnectionCache</span>(<span class="title class_ inherited__">dict</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    ...</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">connect</span>(<span class="params">self, key</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Force a new connection to ``key`` host string.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">from</span> fabric.state <span class="keyword">import</span> env</span><br><span class="line"></span><br><span class="line">        user, host, port = normalize(key)</span><br><span class="line">        key = normalize_to_string(key)</span><br><span class="line">        seek_gateway = <span class="literal">True</span></span><br><span class="line">        <span class="comment"># break the loop when the host is gateway itself</span></span><br><span class="line">        <span class="keyword">if</span> env.gateway:</span><br><span class="line">            seek_gateway = normalize_to_string(env.gateway) != key</span><br><span class="line">        self[key] = connect(</span><br><span class="line">            user, host, port, cache=self, seek_gateway=seek_gateway)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, key</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Autoconnect + return connection object</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        key = normalize_to_string(key)</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self:</span><br><span class="line">            self.connect(key)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dict</span>.__getitem__(self, key)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">disconnect_all</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Disconnect from all currently connected servers.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Used at the end of ``fab``&#x27;s main loop, and also intended for use by</span></span><br><span class="line"><span class="string">    library users.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">from</span> fabric.state <span class="keyword">import</span> connections, output</span><br><span class="line">    <span class="comment"># Explicitly disconnect from all servers</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> connections.keys():</span><br><span class="line">        <span class="keyword">if</span> output.status:</span><br><span class="line">            <span class="comment"># Here we can&#x27;t use the py3k print(x, end=&quot; &quot;)</span></span><br><span class="line">            <span class="comment"># because 2.5 backwards compatibility</span></span><br><span class="line">            sys.stdout.write(<span class="string">&quot;Disconnecting from %s... &quot;</span> % denormalize(key))</span><br><span class="line">        connections[key].close()</span><br><span class="line">        <span class="keyword">del</span> connections[key]</span><br><span class="line">        <span class="keyword">if</span> output.status:</span><br><span class="line">            sys.stdout.write(<span class="string">&quot;done.\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>原来，fabric默认会维护一个连接缓存，并且不会主动断开这些连接，直到脚本结束垃圾回收时自己断开。但是由于使用了celery，celery是常驻进程不会退出，导致fabric不能自己主动释放连接，所以连接一直在，ssh -W也一直在。</p>
+<p>知道原因，就很好解决了。可以主动调用network.disconnect_all()来释放连接，或者干脆就保持着连接，以待下次使用。</p>
+<p>需要注意的是，HostConnectionCache是一个全局变量，在celery这类常驻进程中使用还是存在一些坑的。</p>
+<h2 id="cpu飙升到100"><a href="#cpu飙升到100" class="headerlink" title="cpu飙升到100%"></a>cpu飙升到100%</h2><p>知道原因后，我做了一个kill操作，手动将ssh -W杀死了。这时候，再次向之前的目标机发送命令时，ssh应该会报错，因为代理被干掉了。</p>
+<p>意料之中，系统再次执行命令时果然提示“broken pipe”。</p>
+<p>但是，奇怪的是，运行celery的机器，cpu占用率达到了100%。这就有点奇怪了。</p>
+<p>查找原因无果，在github上提交了一个issue <a target="_blank" rel="noopener" href="https://github.com/paramiko/paramiko/issues/1277">https://github.com/paramiko/paramiko/issues/1277</a>。ploxiln提供了另一个关联issue，表明这是paramiko库的一个bug，通过链接可以查找到patch文件。</p>
+<p>到此，问题都已解决。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2018/09/13/celery-fabric-ssh-w/" data-id="cle4a0ew7000cufiy5r7f410d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-the-art-of-niubility" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/09/the-art-of-niubility/" class="article-date">
+  <time datetime="2017-04-08T16:00:00.000Z" itemprop="datePublished">2017-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/09/the-art-of-niubility/">吹牛逼的艺术</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>写下这个题目，我是非常心虚的。因为我不会吹牛逼。</p>
+<p>不过我想起了之前做过的一些软件系统，它们最开始看上去确实其貌不扬，但是经过不断地优化改进，最终的效果非常令人满意。</p>
+<p>所以我决定写这么一篇其貌不扬的文章，或者说给自己看的一份指南，就像手机使用指南一样。不同的是，这份指南不提供产品，因为我们指导的其实就是我们自己。然后，我来慢慢地把它优化改进，让它变成一份更有参考价值的指南。</p>
+<p>不得不说，吹牛逼是一件很有技术含量的事。</p>
+<h2 id="为什么我们需要吹牛逼"><a href="#为什么我们需要吹牛逼" class="headerlink" title="为什么我们需要吹牛逼"></a>为什么我们需要吹牛逼</h2><p>我觉得我们是需要吹牛逼的，就像我们需要手机。</p>
+<p>对于个人，吹牛逼能将我们丰富的内心世界跃然嘴前。为了不让这么一个美丽的心灵埋没，我们必须要学会吹牛逼的能力。</p>
+<p>对于他人，吹牛逼能把我们的神奇经历传授于众，让人们的生活更丰富。</p>
+<h2 id="如何吹牛逼"><a href="#如何吹牛逼" class="headerlink" title="如何吹牛逼"></a>如何吹牛逼</h2><p>要想吹一个满分的牛逼，需要做到下面几点：</p>
+<ol>
+<li>必须要有吹牛逼的资本。吹自己擅长的，不吹自己不擅长的（这时要吸）。</li>
+<li>吹牛逼一定要吹实，不吹虚。如果吹虚不务实，再牛的逼也会被吹破，让自己陷入尴尬的境地。</li>
+<li>吹牛逼一定要打草稿。不打草稿的牛逼，往往是吹到一半就卡壳泄了气。</li>
+<li>平日一定要注意自己的言行。要时刻牢记，注意当下的言行，以为我们日后吹牛逼积攒资本。</li>
+<li>勤学苦练。我觉得这个在最开始是最难的，因为最开始可吹的牛逼是很少的。这是个量变到质变的过程，不可强硬，顺其自然。</li>
+<li>从小事练起。吹牛逼非一日之功，而且要注意从一些微不足道的地方练起，从走路吃饭说话写字练起，吹可吹与不可吹之牛逼。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/09/the-art-of-niubility/" data-id="cle4a0ex6003bufiy5af2cn47" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-basic-principle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/08/python-basic-principle/" class="article-date">
+  <time datetime="2017-04-07T16:00:00.000Z" itemprop="datePublished">2017-04-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/08/python-basic-principle/">唠唠python(9) -- 基础概念的梳理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>温顾而知新，可以为师矣。</p>
+</blockquote>
+<p>温顾知新，可以为师。当然，我们的目标不是为师。</p>
+<p>时常复习一下自己学习到的东西，是一种不错的习惯。就像牛的反刍，复习是对已有知识的梳理，这个过程既轻松，又能更好的巩固我们的所学，而且时常还可以关注到自己之前因匆忙而遗漏的东西。</p>
+<p>当然，这篇文章草草看一下也是可以的，有很多东西是不需要一次掌握的。</p>
+<p>当我们都意识不到有这么一个概念时，实际上已经掌握个七八分了，只需要再稍微整理一下思路，就可以轻松掌握了。这就是所谓的质变吧？</p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>我们首先得说说“术语”这个词。</p>
+<p>“术语”听起来给人的第一印象是吓人，又是什么神奇的正常人看不懂的东西？</p>
+<p>为什么会有术语这种神奇的东西呢？</p>
+<p>人类的语言是很重要的，从诞生以来，它大大提高了人们沟通的效率。但是随着语言的发展，同一个词都衍生出了多种意思，而在使用不当的情况下，语言恰恰又阻碍了人们的沟通。</p>
+<p>怎么来避免这种一词多义的情况呢，于是人们发明出了术语这么个东西。术语的特点在于，在某种特定的领域或上下文中，同一个术语是精确的，它会被多方理解成同一种意思，这样人们就达成了共识。</p>
+<p>说白了，术语就是为了使大家沟通的过程尽可能少的产生歧义。</p>
+<p>为了达到这种目的，术语就不得不避开我们平日经常会用到的词。这就导致术语看起来稀奇古怪，对我们不那么友好。实际上，它是为了精确的沟通而作了妥协，我们要体谅。</p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">&quot;hello, I&#x27;m a string&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们之前说，<code>print</code>可以显示“一句话”。实际上，“一句话”是非常不准确的，因为一句话有可能是我们听到的一段录音，也有可能是文章中的文字。我们可以找个更明确的词。</p>
+<p>在计算机中，一个字母<code>a</code>叫做一个字符。顾名思义，就是一个符号，它代表一个字母。就像我们的羊肉串是把很多羊肉串起来，我们之前所说的“一句话”是由一个或多个字符组成的，故叫做字符串。</p>
+<p>“a”是字符串，”abc”也是字符串。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;hello, I&#x27;m a string&quot;</span></span><br><span class="line"><span class="built_in">print</span> s</span><br></pre></td></tr></table></figure>
+
+<p>根据我们之前的解释，s类似于一个箱子，它可以把我们的字符串”hello, I’m a string”放进去，在使用的时候（如print s）再从里面取出来，这样就达到了类似箱子一样的暂存功能。</p>
+<p>这里的箱子只是一种类比，在语言中有一个术语，叫做“变量”，这个术语听起来怪怪的，不那么直观。它实际上是从数学里借来的概念（说借并不合适，计算机本就是数学的一个分支），意思是没有固定的值，可以改变的数。到计算机里，它也可能是字符串或其它类型的东西。</p>
+<p>这里的“变”很好理解，一个箱子可以放衣服，也可以放鞋袜。</p>
+<p>当然，有变量就会有常量。比如我们的文具盒只能放铅笔像皮，放不下衣物。python是一门简洁的语言，在语法上是没有定义常量的，所以我们可以不需要纠结“常量”的概念，在这里提到是为了帮助我们理解“变量”这个概念。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p>我们说洗衣机把洗衣服的很多步骤打包封装起来，只留给我们一个按钮开关。“洗衣机有洗衣服的功能”，虽然听起来有点白痴，但它确实是个事实。</p>
+<p>功能的概念是很好好理解的。它比较接近我们的生活。</p>
+<p>在计算机中也有一个概念，叫做“函数”，它是比功能更准确的一种描述。这也是一个从数学中借用过来的概念，它并非我们日常生活中提到的功能，而就是单指语言中所提供的对步骤的封装。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>类是使用了生物学中的概念。</p>
+<p>生物学中对生物有“界门纲目科属种”的不同精细程度的分类，如豹是猫科，豹属，再细分下来是豹种。计算机语言相对于生物学分类，它只有类的概念，但它提供了继承，即豹可以继承自动物，所以在计算机语言中同样可以提供如生物学分类中那样复杂的从属关系。</p>
+<p>类中有类似变量和函数的概念，习惯上被称为属性和方法，以区分我们上面谈到的变量和函数。</p>
+<p>实际上，类在计算机里并不是必要的。在一些古老的计算机语言里，甚至都不存在类这个概念。</p>
+<p>使用类来抽象现实世界的编程方式，又叫做面向对象编程。而不使用类，仅使用函数和变量的编程方式，叫做面向过程编程。前者更接近人类的思考模式，但需要我们掌握更多的概念。</p>
+<h2 id="库"><a href="#库" class="headerlink" title="库"></a>库</h2><p>我们之前在操作表格文件时，用到过一个openpyxl包。它是一些类和函数文件的集合。</p>
+<p>为了更精确地描述，我们有时会把包称作“库”。我们通常会把从网上找到的库叫做第三方库。</p>
+<p>那哪些是第一方库和第二方库呢？有点意思，哈哈。</p>
+<p>我们同样可以把单个文件作为类和函数等的集合。通常我们会把单文件的包叫做模块，比如之前的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> os.name</span><br></pre></td></tr></table></figure>
+
+<p>为了演示方便，我们使用了一个随python语言打包的模块，叫做<code>os</code>。它实际上就是一个模块。</p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>想要装一个完美的x，熟悉并掌握这些概念是必须的。</p>
+<p>不过不必急于求成，就算我们不掌握这些概念，对我们的学习也没有太大影响。</p>
+<p>有很多优秀的东西，我们是可以潜移默化地吸收的。可能突然有一天，我们回头时猛然发现，以前不明不白的概念，竟然已经被我们彻底理解了。</p>
+<p>在那之前，我们可以继续愉快地叨叨。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/08/python-basic-principle/" data-id="cle4a0ewp001qufiyhdba4819" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-round-excel-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/04/python-round-excel-data/" class="article-date">
+  <time datetime="2017-04-03T16:00:00.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/04/python-round-excel-data/">唠唠python(8) -- 使用脚本代替手工数据操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个问题已经过了很多天了，都记不太清细节了。</p>
+<p>先捋一捋我们的需求。</p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p><img src="/public/img/post/bom.png" alt="待处理表格"></p>
+<p>这个表格有点熟悉，好像在之前的文章里看到过。我们还是以它为例子。</p>
+<p>我们有一张如上的物料订单表格。每两行对应一种物料，即需要的料数和订购的料数。不同的列对应不同时期需要的物料数量。</p>
+<p>因为供应商提供给我们的物料都是以10000为单位的，所以就算我们只需要9颗料，也要订购10000颗料。也就是以10000为单位，对料数上取整。</p>
+<p>我们看到其中有一些表格的数量是红颜色，它表示这些数据已经被手工填写了。每个单元格的料数以10000为单位上取整后，被填入它下面的一个单元格。</p>
+<h2 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a>计算公式</h2><p>我们在之前的文章里已经给出了订单数量的计算公式：<code>(n+10000-1) / 10000 * 10000</code>，其中n为需要的实际数量。</p>
+<h2 id="功能清单"><a href="#功能清单" class="headerlink" title="功能清单"></a>功能清单</h2><p>我们列一下需要的功能清单：</p>
+<ol>
+<li>打开或保存excel文件</li>
+<li>读取或写入单元格</li>
+</ol>
+<p>再不需要其它的功能了。</p>
+<p>上一篇讲到的<code>openpyxl</code>很好地实现了我们需要的这些功能。</p>
+<p>打开excel使用<code>workbook = openpyxl.load_workbook(&quot;excel文件位置&quot;)</code>，保存使用<code>workbook.save(&quot;保存到的路径&quot;)</code>。</p>
+<p>读取某个单元格使用<code>print sheet[&quot;B5&quot;].value</code>，写入某个单元格使用<code>sheet[&quot;B5&quot;] = 30000</code>。其中<code>sheet</code>是我们使用<code>workbook.active</code>获取的工作簿里的第一张表格。</p>
+<h2 id="几点逻辑"><a href="#几点逻辑" class="headerlink" title="几点逻辑"></a>几点逻辑</h2><p>我们需要对上面的表格中，I3到S28的奇数行数据查看一遍，还需要根据单元格的内容和它下面一个单元格的内容来判断是否需要处理单元格数据。</p>
+<p>挨个查看一遍我们会用到一个这样的语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    处理row行数据</span><br></pre></td></tr></table></figure>
+
+<p>这条语句的意思是，row分别等于3到28（不包含28）的奇数，然后依次执行下面的语句。后面的2是说，从3开始，取相隔为2的数。</p>
+<p>这里有一点需要注意，我们的行号是数字表示的，但是列号是字母，我们需要先把字母转换成数字，在处理每一列时，再把数字转换成字母。庆幸的是，python已为我们准备好这些了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;I&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;U&quot;</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = <span class="built_in">chr</span>(col)</span><br><span class="line">        处理(row, col_char)单元格数据</span><br></pre></td></tr></table></figure>
+
+<p><code>ord()</code>是将一个字母转化为数字，<code>chr()</code>是将数字转化回字母。注意我们给ord(“U”)加了一个1，因为ord(“U”)是不包含U的。我们再一次与python的作者来了一场完美的合作。</p>
+<p>判断是否需要处理单元格，我们可以使用下面这条语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> sheet[<span class="string">&quot;I3&quot;</span>].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> sheet[<span class="string">&quot;I4&quot;</span>].value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    处理I3单元格</span><br></pre></td></tr></table></figure>
+
+<p>意思也很好懂，翻译过来就是，如果I3单元格不是空的，并且它下面的I4单元格是空的，我们就处理I3单元格，并将处理结果填充到I4单元格。</p>
+<h2 id="实现脚本"><a href="#实现脚本" class="headerlink" title="实现脚本"></a>实现脚本</h2><p>说了这么多，其实脚本已经差不多了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">&quot;a.xlsx&quot;</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_bill</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">return</span> (n+<span class="number">10000</span>-<span class="number">1</span>) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;I&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;U&quot;</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = <span class="built_in">chr</span>(col)</span><br><span class="line"></span><br><span class="line">        cell_src_idx = col_char + <span class="built_in">str</span>(row)</span><br><span class="line">        cell_dst_idx = col_char + <span class="built_in">str</span>(row + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sheet[cell_src_idx].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span></span><br><span class="line">                sheet[cell_dst_idx].value <span class="keyword">is</span> <span class="literal">None</span>):</span><br><span class="line">            n = <span class="built_in">int</span>(sheet[cell_src_idx].value)</span><br><span class="line">            sheet[cell_dst_idx] = count_bill(n)</span><br><span class="line"></span><br><span class="line">sheet.save(<span class="string">&quot;b.xlsx&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>14行代码，就实现了我们的需求。它读取当前目录下的a.xlsx文件，并根据我们之前所说的规则，处理指定范围内的表格数据，并将处理后的结果保存到一个新文件b.xlsx。</p>
+<p>它真正将我们从枯燥无味的繁重工作中解放了出来，终于可以安心地睡个好觉了。</p>
+<h2 id="更好的脚本"><a href="#更好的脚本" class="headerlink" title="更好的脚本"></a>更好的脚本</h2><p>当然，它还不够好，我们在这篇文章里不打算再把它变得更好，因为这个过程是很漫长的。但是它现在已经能帮我们节省比付出多几十倍甚至几百倍的时间。</p>
+<p>它不够好，还能做怎么样的改进呢？</p>
+<p>第一，里面全是代码，代码相对于人类自己的语言来说总没那么直观，毕竟我们是在迁就计算机嘛。</p>
+<p>第二，每次执行时都要修改代码（输入输出文件名和单元格范围），十分之不友好。我们希望它可以让我们通过文件选择框选择某个文件，然后用鼠标拖选出我们要处理的范围，并询问我们要保存到哪个文件。</p>
+<p>以上两点是显而易见的，特别是第二点。</p>
+<p>不过最紧急的事情完成了，这个脚本已经可以帮我们节省下大量时间，以实现我们上面所说的改进了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>终于把处理表格的傻逼工作交接给了计算机，可以舒一口气了。</p>
+<p>为了不加重我们的心理负担，文章里有很多地方只是一带而过。至少对现在这个阶段来说，不需要知道的东西都是不重要的。如果哪里感到困惑，恭喜，这说明我们并不满足现状，想要一个更清晰的结果。</p>
+<p>下一篇，我们先不急着改进上面说的两点不足，它们已经不那么紧急了，我们先来回顾一下之前提到的内容，并重新整理一下知识结构，让他们形成一个清晰的脉络，以便为以后装逼打下坚实的基础。</p>
+<p><img src="/public/img/post/venation.jpg" alt="叶脉"></p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>零零散散地终于把这个脚本完成了，是时候回过头来梳理一下了。</p>
+<p>跟<a target="_blank" rel="noopener" href="http://jinguoliang.github.io/">小金</a>约定，两天或两天以上的假期，每天一篇文章，失约100红包。本是想逼迫自己，竟然有时候写的不易乐乎，到了凌晨2、3点钟还在想读者会不会读懂这句话在说什么。</p>
+<p>作者从读者的角度思考，读者又反过来从作者的角度思考，想想真的是一件很有趣的事情。</p>
+<p>不得不说，写作的过程很快乐，虽然可能没有什么人看，但它至少已经帮助到了我。希望可以尽自己的一点微薄之力，让碰巧看到的人能生活得更轻松。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/04/04/python-round-excel-data/" data-id="cle4a0ewy0027ufiy1zam87n2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/3/">« Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next »</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/14/doggy/">狗子</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCLK447MR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRCLK447MR');
+  </script>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
