@@ -33,7 +33,7 @@
   
 <link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body>
   <div id="container">
@@ -45,6 +45,10 @@
       <h1 id="logo-wrap">
         <a href="/" id="logo">pysnow530 的博客</a>
       </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不要踩坏我的圆</a>
+        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -109,7 +113,7 @@
 
 <p>但是，这样会显得很仓促：1234代表什么呢？我们现在当然知道，它就是我们要求值的数据。但当我们写入到一个文件时，如何把1234传进去呢？</p>
 <p>显然，我们可以直接写到文件，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="number">1234</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="number">1234</span></span><br></pre></td></tr></table></figure>
 
 <p>而此时，如果再重新输入一个数字时，我们就需要打开文件，然后把1234改为新的数字，保存文件，然后运行。修改代码文件很繁琐，而且是很危险的，这还只是一行简单的代码，想想，如果一个代码文件有上百行，我们如何再找到这个数值的位置？会不会小手一抖，把其它行的数据也修改了而自己并没有意识到？繁琐的操作也必然会降低我们的效率。</p>
 <p>这时，我们就自然有这么一个需求。</p>
@@ -118,7 +122,7 @@
 <p>计算机：您实际需要待收的数量是10000。</p>
 <p>嗯，这就是人们所说的交互，其实就是让人跟计算机的沟通像人与人的沟通一样顺畅。</p>
 <p>这时，我们需要知道这么一个东西:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">int</span>(raw_input(<span class="string">&quot;请输入您的待收数量：&quot;</span>))</span><br><span class="line">请输入您的待收数量：<span class="number">1234</span></span><br><span class="line"><span class="number">1234</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>int(raw_input(<span class="string">"请输入您的待收数量："</span>))</span><br><span class="line">请输入您的待收数量：<span class="number">1234</span></span><br><span class="line"><span class="number">1234</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
 
 <p>注意，里面的第一个1234是我们自己输入的，后面还跟了一个回车。</p>
 <p><code>int(raw_input(&quot;请输入您的待收数量：&quot;))</code>，这么大一坨？没关系，先死记下，在之后的文章我们会进一步了解。我们只需要知道，它让计算机询问我们待收数量。</p>
@@ -157,18 +161,18 @@
 <li>…</li>
 </ul>
 <p>也就是说，<code>实收数量</code> 刚好是 <code>(待收数量 + 2) ÷ 3后下取整</code>的3倍，其中的 <code>2</code> 实际上就是由 <code>3 - 1</code> 得来的。我们用数学公式整理一下现在的这个想法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">实收数量</span><br><span class="line">= (待收数量 + 2) / 3 * 3</span><br><span class="line">= (待收数量 + (3 - 1)) / 3 * 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">实收数量</span><br><span class="line">&#x3D; (待收数量 + 2) &#x2F; 3 * 3</span><br><span class="line">&#x3D; (待收数量 + (3 - 1)) &#x2F; 3 * 3</span><br></pre></td></tr></table></figure>
 
 <p>注意，其中的 <code>/</code> 符号即我们python语言里的除法，它是下取整的。</p>
 <p>类比到10000时的情形，我们的公式会变成下面这个样子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实收数量 = (待收数量 + (10000 - 1)) / 3 * 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实收数量 &#x3D; (待收数量 + (10000 - 1)) &#x2F; 3 * 3</span><br></pre></td></tr></table></figure>
 
 <p>实际上，如果我们可以让计算机整数相除时上取整（而不是下取整），公式就会变得异常简单：<code>n 上取整除以 10000 * 10000</code>，在我们学习了后面的更多知识后就可以做到。现在这个公式<code>(n + (10000 - 1)) / 10000 * 10000</code>虽繁琐，但已是我们通过自己仅有的一点计算机知识所能学到的了。</p>
 <h2 id="马儿跑起来"><a href="#马儿跑起来" class="headerlink" title="马儿跑起来"></a>马儿跑起来</h2><p>下面，我们将之前的分析总结到一个文本文件里：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="number">10000</span> * (n + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="number">10000</span> * (n + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span></span><br></pre></td></tr></table></figure>
 
 <p>将n替换为提示用户输入待收数量：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (<span class="built_in">int</span>(raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)) + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> (int(raw_input(<span class="string">"Tell me the quantity: "</span>)) + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br></pre></td></tr></table></figure>
 
 <p>将以上内容保存到a.py，然后输入<code>python a.py</code>并回车，试试看：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python a.py</span><br><span class="line">Tell me the quantity: 1234</span><br><span class="line">10000</span><br></pre></td></tr></table></figure>
@@ -183,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/12/work-is-comming/" data-id="cle4a0ex8003lufiyf94tf8e3" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/12/work-is-comming/" data-id="cle4am4jp003j6jiy6vh3fwc8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -235,7 +239,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
     </div>
   </div>
 
@@ -244,7 +248,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -255,6 +259,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/02/14/hexo-generate-empty-file/">hexo generate生成文件为空，已解决</a>
+          </li>
         
           <li>
             <a href="/2021/05/05/2021-05-05-massive-distributed-operation/">海量分布式运维差异</a>
@@ -270,10 +278,6 @@
         
           <li>
             <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/26/gtd-practice-2/">GTD实践再分享</a>
           </li>
         
       </ul>
