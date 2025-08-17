@@ -9,6 +9,8 @@
 
 ## 发布说明
 
+新文章在 `develop` 分支的 `sources/_posts/` 下创建, 格式为 `2025-08-17-article-title.md`
+
 `develop` 分支下:
 
 ```sh
@@ -19,6 +21,7 @@ npm install
 hexo server
 open http://localhost:4000
 
-# 编译文件
+# 发布
 hexo generate
+copy public/* to master/*
 ```
