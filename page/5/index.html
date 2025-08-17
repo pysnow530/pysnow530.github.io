@@ -66,88 +66,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-python-basic-principle" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/08/python-basic-principle/" class="article-date">
-  <time datetime="2017-04-07T16:00:00.000Z" itemprop="datePublished">2017-04-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/08/python-basic-principle/">唠唠python(9) -- 基础概念的梳理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>温顾而知新，可以为师矣。</p>
-</blockquote>
-<p>温顾知新，可以为师。当然，我们的目标不是为师。</p>
-<p>时常复习一下自己学习到的东西，是一种不错的习惯。就像牛的反刍，复习是对已有知识的梳理，这个过程既轻松，又能更好的巩固我们的所学，而且时常还可以关注到自己之前因匆忙而遗漏的东西。</p>
-<p>当然，这篇文章草草看一下也是可以的，有很多东西是不需要一次掌握的。</p>
-<p>当我们都意识不到有这么一个概念时，实际上已经掌握个七八分了，只需要再稍微整理一下思路，就可以轻松掌握了。这就是所谓的质变吧？</p>
-<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>我们首先得说说“术语”这个词。</p>
-<p>“术语”听起来给人的第一印象是吓人，又是什么神奇的正常人看不懂的东西？</p>
-<p>为什么会有术语这种神奇的东西呢？</p>
-<p>人类的语言是很重要的，从诞生以来，它大大提高了人们沟通的效率。但是随着语言的发展，同一个词都衍生出了多种意思，而在使用不当的情况下，语言恰恰又阻碍了人们的沟通。</p>
-<p>怎么来避免这种一词多义的情况呢，于是人们发明出了术语这么个东西。术语的特点在于，在某种特定的领域或上下文中，同一个术语是精确的，它会被多方理解成同一种意思，这样人们就达成了共识。</p>
-<p>说白了，术语就是为了使大家沟通的过程尽可能少的产生歧义。</p>
-<p>为了达到这种目的，术语就不得不避开我们平日经常会用到的词。这就导致术语看起来稀奇古怪，对我们不那么友好。实际上，它是为了精确的沟通而作了妥协，我们要体谅。</p>
-<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">"hello, I'm a string"</span></span><br></pre></td></tr></table></figure>
-
-<p>我们之前说，<code>print</code>可以显示“一句话”。实际上，“一句话”是非常不准确的，因为一句话有可能是我们听到的一段录音，也有可能是文章中的文字。我们可以找个更明确的词。</p>
-<p>在计算机中，一个字母<code>a</code>叫做一个字符。顾名思义，就是一个符号，它代表一个字母。就像我们的羊肉串是把很多羊肉串起来，我们之前所说的“一句话”是由一个或多个字符组成的，故叫做字符串。</p>
-<p>“a”是字符串，”abc”也是字符串。</p>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"hello, I'm a string"</span></span><br><span class="line"><span class="keyword">print</span> s</span><br></pre></td></tr></table></figure>
-
-<p>根据我们之前的解释，s类似于一个箱子，它可以把我们的字符串”hello, I’m a string”放进去，在使用的时候（如print s）再从里面取出来，这样就达到了类似箱子一样的暂存功能。</p>
-<p>这里的箱子只是一种类比，在语言中有一个术语，叫做“变量”，这个术语听起来怪怪的，不那么直观。它实际上是从数学里借来的概念（说借并不合适，计算机本就是数学的一个分支），意思是没有固定的值，可以改变的数。到计算机里，它也可能是字符串或其它类型的东西。</p>
-<p>这里的“变”很好理解，一个箱子可以放衣服，也可以放鞋袜。</p>
-<p>当然，有变量就会有常量。比如我们的文具盒只能放铅笔像皮，放不下衣物。python是一门简洁的语言，在语法上是没有定义常量的，所以我们可以不需要纠结“常量”的概念，在这里提到是为了帮助我们理解“变量”这个概念。</p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p>我们说洗衣机把洗衣服的很多步骤打包封装起来，只留给我们一个按钮开关。“洗衣机有洗衣服的功能”，虽然听起来有点白痴，但它确实是个事实。</p>
-<p>功能的概念是很好好理解的。它比较接近我们的生活。</p>
-<p>在计算机中也有一个概念，叫做“函数”，它是比功能更准确的一种描述。这也是一个从数学中借用过来的概念，它并非我们日常生活中提到的功能，而就是单指语言中所提供的对步骤的封装。</p>
-<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>类是使用了生物学中的概念。</p>
-<p>生物学中对生物有“界门纲目科属种”的不同精细程度的分类，如豹是猫科，豹属，再细分下来是豹种。计算机语言相对于生物学分类，它只有类的概念，但它提供了继承，即豹可以继承自动物，所以在计算机语言中同样可以提供如生物学分类中那样复杂的从属关系。</p>
-<p>类中有类似变量和函数的概念，习惯上被称为属性和方法，以区分我们上面谈到的变量和函数。</p>
-<p>实际上，类在计算机里并不是必要的。在一些古老的计算机语言里，甚至都不存在类这个概念。</p>
-<p>使用类来抽象现实世界的编程方式，又叫做面向对象编程。而不使用类，仅使用函数和变量的编程方式，叫做面向过程编程。前者更接近人类的思考模式，但需要我们掌握更多的概念。</p>
-<h2 id="库"><a href="#库" class="headerlink" title="库"></a>库</h2><p>我们之前在操作表格文件时，用到过一个openpyxl包。它是一些类和函数文件的集合。</p>
-<p>为了更精确地描述，我们有时会把包称作“库”。我们通常会把从网上找到的库叫做第三方库。</p>
-<p>那哪些是第一方库和第二方库呢？有点意思，哈哈。</p>
-<p>我们同样可以把单个文件作为类和函数等的集合。通常我们会把单文件的包叫做模块，比如之前的示例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> os.name</span><br></pre></td></tr></table></figure>
-
-<p>为了演示方便，我们使用了一个随python语言打包的模块，叫做<code>os</code>。它实际上就是一个模块。</p>
-<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>想要装一个完美的x，熟悉并掌握这些概念是必须的。</p>
-<p>不过不必急于求成，就算我们不掌握这些概念，对我们的学习也没有太大影响。</p>
-<p>有很多优秀的东西，我们是可以潜移默化地吸收的。可能突然有一天，我们回头时猛然发现，以前不明不白的概念，竟然已经被我们彻底理解了。</p>
-<p>在那之前，我们可以继续愉快地叨叨。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/04/08/python-basic-principle/" data-id="cle4am4j9001q6jiy047adjuv" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-python-round-excel-data" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/04/python-round-excel-data/" class="article-date">
@@ -189,19 +107,19 @@
 <p>读取某个单元格使用<code>print sheet[&quot;B5&quot;].value</code>，写入某个单元格使用<code>sheet[&quot;B5&quot;] = 30000</code>。其中<code>sheet</code>是我们使用<code>workbook.active</code>获取的工作簿里的第一张表格。</p>
 <h2 id="几点逻辑"><a href="#几点逻辑" class="headerlink" title="几点逻辑"></a>几点逻辑</h2><p>我们需要对上面的表格中，I3到S28的奇数行数据查看一遍，还需要根据单元格的内容和它下面一个单元格的内容来判断是否需要处理单元格数据。</p>
 <p>挨个查看一遍我们会用到一个这样的语句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    处理row行数据</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    处理row行数据</span><br></pre></td></tr></table></figure>
 
 <p>这条语句的意思是，row分别等于3到28（不包含28）的奇数，然后依次执行下面的语句。后面的2是说，从3开始，取相隔为2的数。</p>
 <p>这里有一点需要注意，我们的行号是数字表示的，但是列号是字母，我们需要先把字母转换成数字，在处理每一列时，再把数字转换成字母。庆幸的是，python已为我们准备好这些了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(ord(<span class="string">"I"</span>), ord(<span class="string">"U"</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = chr(col)</span><br><span class="line">        处理(row, col_char)单元格数据</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;I&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;U&quot;</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = <span class="built_in">chr</span>(col)</span><br><span class="line">        处理(row, col_char)单元格数据</span><br></pre></td></tr></table></figure>
 
 <p><code>ord()</code>是将一个字母转化为数字，<code>chr()</code>是将数字转化回字母。注意我们给ord(“U”)加了一个1，因为ord(“U”)是不包含U的。我们再一次与python的作者来了一场完美的合作。</p>
 <p>判断是否需要处理单元格，我们可以使用下面这条语句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> sheet[<span class="string">"I3"</span>].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> sheet[<span class="string">"I4"</span>].value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    处理I3单元格</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> sheet[<span class="string">&quot;I3&quot;</span>].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> sheet[<span class="string">&quot;I4&quot;</span>].value <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    处理I3单元格</span><br></pre></td></tr></table></figure>
 
 <p>意思也很好懂，翻译过来就是，如果I3单元格不是空的，并且它下面的I4单元格是空的，我们就处理I3单元格，并将处理结果填充到I4单元格。</p>
 <h2 id="实现脚本"><a href="#实现脚本" class="headerlink" title="实现脚本"></a>实现脚本</h2><p>说了这么多，其实脚本已经差不多了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">"a.xlsx"</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count_bill</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (n+<span class="number">10000</span><span class="number">-1</span>) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(ord(<span class="string">"I"</span>), ord(<span class="string">"U"</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = chr(col)</span><br><span class="line"></span><br><span class="line">        cell_src_idx = col_char + str(row)</span><br><span class="line">        cell_dst_idx = col_char + str(row + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sheet[cell_src_idx].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span></span><br><span class="line">                sheet[cell_dst_idx].value <span class="keyword">is</span> <span class="literal">None</span>):</span><br><span class="line">            n = int(sheet[cell_src_idx].value)</span><br><span class="line">            sheet[cell_dst_idx] = count_bill(n)</span><br><span class="line"></span><br><span class="line">sheet.save(<span class="string">"b.xlsx"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">&quot;a.xlsx&quot;</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_bill</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">return</span> (n+<span class="number">10000</span>-<span class="number">1</span>) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">30</span>, <span class="number">2</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">ord</span>(<span class="string">&quot;I&quot;</span>), <span class="built_in">ord</span>(<span class="string">&quot;U&quot;</span>)+<span class="number">1</span>, <span class="number">1</span>):</span><br><span class="line">        col_char = <span class="built_in">chr</span>(col)</span><br><span class="line"></span><br><span class="line">        cell_src_idx = col_char + <span class="built_in">str</span>(row)</span><br><span class="line">        cell_dst_idx = col_char + <span class="built_in">str</span>(row + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sheet[cell_src_idx].value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span></span><br><span class="line">                sheet[cell_dst_idx].value <span class="keyword">is</span> <span class="literal">None</span>):</span><br><span class="line">            n = <span class="built_in">int</span>(sheet[cell_src_idx].value)</span><br><span class="line">            sheet[cell_dst_idx] = count_bill(n)</span><br><span class="line"></span><br><span class="line">sheet.save(<span class="string">&quot;b.xlsx&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <p>14行代码，就实现了我们的需求。它读取当前目录下的a.xlsx文件，并根据我们之前所说的规则，处理指定范围内的表格数据，并将处理后的结果保存到一个新文件b.xlsx。</p>
 <p>它真正将我们从枯燥无味的繁重工作中解放了出来，终于可以安心地睡个好觉了。</p>
@@ -216,14 +134,14 @@
 <p>下一篇，我们先不急着改进上面说的两点不足，它们已经不那么紧急了，我们先来回顾一下之前提到的内容，并重新整理一下知识结构，让他们形成一个清晰的脉络，以便为以后装逼打下坚实的基础。</p>
 <p><img src="/public/img/post/venation.jpg" alt="叶脉"></p>
 <h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>零零散散地终于把这个脚本完成了，是时候回过头来梳理一下了。</p>
-<p>跟<a href="http://jinguoliang.github.io/" target="_blank" rel="noopener">小金</a>约定，两天或两天以上的假期，每天一篇文章，失约100红包。本是想逼迫自己，竟然有时候写的不易乐乎，到了凌晨2、3点钟还在想读者会不会读懂这句话在说什么。</p>
+<p>跟<a target="_blank" rel="noopener" href="http://jinguoliang.github.io/">小金</a>约定，两天或两天以上的假期，每天一篇文章，失约100红包。本是想逼迫自己，竟然有时候写的不易乐乎，到了凌晨2、3点钟还在想读者会不会读懂这句话在说什么。</p>
 <p>作者从读者的角度思考，读者又反过来从作者的角度思考，想想真的是一件很有趣的事情。</p>
 <p>不得不说，写作的过程很快乐，虽然可能没有什么人看，但它至少已经帮助到了我。希望可以尽自己的一点微薄之力，让碰巧看到的人能生活得更轻松。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/04/04/python-round-excel-data/" data-id="cle4am4je00286jiydk7p3zlf" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/04/04/python-round-excel-data/" data-id="cmefcioyl0029h5c955enhu21" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -273,7 +191,7 @@
 <p>现在我们使用包，再来亲自手写一个包？</p>
 <p>这次我们不写了，我们之前谈到封装，其实就是把细节隐藏起来，而让一个东西更好用。比如一台洗衣机，我们只需要学会按按键就可以了。如果我们读了洗衣机的使用说明还不知道洗衣机怎么用，只能说这台洗衣机做得太烂了，或者说交互太差了。</p>
 <p>我们直接来使用一个包体验一下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">print</span> os.name</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="built_in">print</span> os.name</span><br></pre></td></tr></table></figure>
 
 <p>执行上面两条命令后，会显示当前系统的名称。如在mac下，会显示”posix”。它是怎么获取的，我们并不关心，只要返回的名称正确，我们就认为，嗯，小伙子干得不错。</p>
 <p><code>import</code>意思是使用，我们请求使用os包，并要求显示我们os的name。</p>
@@ -287,7 +205,7 @@
 
 <p>是的，就是这么一条简单的命令。然后稍许的等待，这个包就安装成功了。真的方便极了，美好的东西总能让我们心情愉快。我们甚至也不用关心它被安装到了哪，直接用就可以了。</p>
 <p>想想如果我们用表格处理软件查看B5单元格的数据。先打开目标表格文件，然后翻到第一张表格（一个表格文件对应一个工作簿，里面可能有多张表格），找到B5单元格，并查看内容。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">'a.xlsx'</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> sheet[<span class="string">"B5"</span>].value</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line">workbook = openpyxl.load_workbook(<span class="string">&#x27;a.xlsx&#x27;</span>)</span><br><span class="line">sheet = workbook.active</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> sheet[<span class="string">&quot;B5&quot;</span>].value</span><br></pre></td></tr></table></figure>
 
 <p>就这么简单的几行，就把<code>B5</code>单元格的内容显示出来了。</p>
 <h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>现在我们已经可以获取表格中的某个单元格了，写入跟获取是同样简单的。下一篇我们来看如何写入，以及如何来实现我们之前的物料取整问题。</p>
@@ -299,7 +217,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/04/03/python-package/" data-id="cle4am4jd00256jiygzzecec9" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/04/03/python-package/" data-id="cmefcioyk0024h5c923p7f7fh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -353,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/04/02/big-idiot/" data-id="cle4am4im00046jiye06v7ycg" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/04/02/big-idiot/" data-id="cmefcioy00007h5c9ghrp1s4e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -429,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/29/the-art-of-readable-code/" data-id="cle4am4jo003e6jiy3z57csps" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/29/the-art-of-readable-code/" data-id="cmefcioys003ch5c906id89sq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -490,13 +408,13 @@
 <p>这时，有一个问题出现了。老王是个人，但计算机并不知道人是个什么东西。首先，我们需要跟计算机解释人是什么。我们不需要严格的人的定义，而只要梳理一下人自身有哪些信息，可以做哪些事情就可以了。</p>
 <p>人有名字，有出生年月，可以说话，可以写字，可以吃喝拉撒。</p>
 <p>我们只要把这些规则简单地转化成代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span>               <span class="comment"># 定义人类</span></span><br><span class="line">    name = <span class="string">''</span>               <span class="comment"># 人类有名字</span></span><br><span class="line">    birthday = <span class="string">''</span>           <span class="comment"># 而且有生日</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span>        <span class="comment"># 人类会说话</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(self)</span>:</span>        <span class="comment"># 会写字</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trivia</span><span class="params">(self)</span>:</span>       <span class="comment"># 吃喝拉撒样样精通</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>:               <span class="comment"># 定义人类</span></span><br><span class="line">    name = <span class="string">&#x27;&#x27;</span>               <span class="comment"># 人类有名字</span></span><br><span class="line">    birthday = <span class="string">&#x27;&#x27;</span>           <span class="comment"># 而且有生日</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">speak</span>(<span class="params">self</span>):        <span class="comment"># 人类会说话</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">write</span>(<span class="params">self</span>):        <span class="comment"># 会写字</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">trivia</span>(<span class="params">self</span>):       <span class="comment"># 吃喝拉撒样样精通</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 
 <p>这里有几个新东西。<code>class</code> 意思是“定义一个类”。<code>pass</code> 是为了先占个位，我们在这里还不想涉及到 <code>说话</code> 的细节。</p>
 <p>我们在这里看到了上一篇讲到的“功能”，这里的功能跟上一篇的“功能”并无二致。在执行这几个功能时，会传入一个 <code>self</code>，我们可以先暂时不予理会。</p>
 <p>好了，现在计算机已经知道人类是个什么东西了，可以介绍老王了。</p>
 <p>“老王是一个出生于1962年的老头。”</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mr_wang = Person()              <span class="comment"># 有一个人</span></span><br><span class="line">mr_wang.name = <span class="string">'老王'</span>           <span class="comment"># 他的名字叫“老王”</span></span><br><span class="line">mr_wang.birthday = <span class="string">'1962-10-13'</span> <span class="comment"># 出生于1962年10月17日</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> mr_wang.name              <span class="comment"># 打印老王的名字</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mr_wang = Person()              <span class="comment"># 有一个人</span></span><br><span class="line">mr_wang.name = <span class="string">&#x27;老王&#x27;</span>           <span class="comment"># 他的名字叫“老王”</span></span><br><span class="line">mr_wang.birthday = <span class="string">&#x27;1962-10-13&#x27;</span> <span class="comment"># 出生于1962年10月17日</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> mr_wang.name              <span class="comment"># 打印老王的名字</span></span><br></pre></td></tr></table></figure>
 
 <p>这时，计算机就知道老王是怎么一回事了。尽管有点明知顾问，我们最后还是打印了一下老王的名字，计算机显示了一个“老王”。</p>
 <p>想获取老王的个人信息，使用这种方式就可以了：<code>mr_wang.name</code>，很简单，对吧？</p>
@@ -505,7 +423,7 @@
 <p>为了更清楚地了解 <code>mr_wang = Person()</code> 的实际意义，我们来回想一下钥匙的制作过程：如果我们的钥匙丢了，要去重新配一把，来到配钥匙的地方，会发现老师傅那里有很多没齿的钥匙。这时，老师傅会根据我们那把正常钥匙的齿，来打磨一把新的钥匙给我们。<code>mr_wang = Person()</code> 就是取没齿的钥匙的过程。打磨的过程就是将一个对象的特殊性添加到这个对象中的过程。</p>
 <p>也就是说，我们先从人这个类里生成一个新的人（没有姓名、没有生日），然后把老王的数据打磨到这个人里（具体化）。</p>
 <h2 id="开口说话"><a href="#开口说话" class="headerlink" title="开口说话"></a>开口说话</h2><p>我们之前说人类可以说话，但上面这个例子并不能讲话。我们来修改一下代码，让老王可以自报家门：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">()</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Hello, I'm"</span>, self.name</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>():</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">speak</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Hello, I&#x27;m&quot;</span>, self.name</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
 
 <p>为了方便说明，这里只显示了关键代码。我们实现了之前 <code>speak()</code> 功能里的 <code>pass</code> 部分，使用了之前使用过的 <code>print</code>。</p>
 <p>这里有几点要说明：</p>
@@ -515,7 +433,7 @@
 </ol>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>需要说明一点的是，计算机中的类很少是用来分类的，因为大部分情况下，我们已经提前知道一个对象是人还是狗了。它主要是用来划分边界，让我们意识到，这个对象有哪些信息，可以做什么。</p>
 <p>小结不应该太多废话，我们把之前的代码整理一下，看懂即可，<a href="/public/script/mr_wang.py">下载链接</a>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义人类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    name = <span class="string">''</span></span><br><span class="line">    birthday = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Hello, I'm"</span>, self.name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trivia</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体化一个人，并写入老王的信息</span></span><br><span class="line">mr_wang = Person()</span><br><span class="line">mr_wang.name = <span class="string">'老王'</span></span><br><span class="line">mr_wang.birthday = <span class="string">'1962-10-13'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让老王开口说话</span></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义人类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>:</span><br><span class="line">    name = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    birthday = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">speak</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Hello, I&#x27;m&quot;</span>, self.name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">write</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">trivia</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体化一个人，并写入老王的信息</span></span><br><span class="line">mr_wang = Person()</span><br><span class="line">mr_wang.name = <span class="string">&#x27;老王&#x27;</span></span><br><span class="line">mr_wang.birthday = <span class="string">&#x27;1962-10-13&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让老王开口说话</span></span><br><span class="line">mr_wang.speak()</span><br></pre></td></tr></table></figure>
 
 <h2 id="尾注"><a href="#尾注" class="headerlink" title="尾注"></a>尾注</h2><p>嗯，到现在为止，我们已经忽略了很多不需要知道的细节。</p>
 <p>但可能在实操的过程中，我们的好奇心没有停下来，也或者因为小手一抖敲错个空格，而让问题变得非常复杂。我的建议是，保存好有错误的代码，然后重新来过，毕竟到现在为止，长点的代码也不过20行。</p>
@@ -526,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/25/python-class/" data-id="cle4am4ja001t6jiy3xygdar8" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/25/python-class/" data-id="cmefcioyj001zh5c9667ndo8c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -574,7 +492,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/23/the-abandoned-capital/" data-id="cle4am4jm00366jiy5frs4295" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/23/the-abandoned-capital/" data-id="cmefcioyr0037h5c9h0kmd5sx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -634,7 +552,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/19/class-again/" data-id="cle4am4ip000a6jiy8aqvc8w8" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/19/class-again/" data-id="cmefcioy3000eh5c94os3au3v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -688,7 +606,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/18/acceptable-life/" data-id="cle4am4in00056jiy565qdie3" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/18/acceptable-life/" data-id="cmefcioy00006h5c9hn6nghqy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
@@ -744,7 +662,7 @@
 <p><code>表格洗衣机</code>仍然有点抽象，但是实际上，我们在前面已经看过两个例子了。一个是<code>raw_input()</code>，一个是<code>int()</code>。</p>
 <h2 id="raw-input-和int"><a href="#raw-input-和int" class="headerlink" title="raw_input()和int()"></a><code>raw_input()</code>和<code>int()</code></h2><p>现在，我们可以来讲讲之前遇到的<code>int(raw_input(&#39;Tell me the quantity: &#39;))</code>了。</p>
 <p>这一坨长长的东西，可以等价到下面两句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">'Tell me the quantity: '</span>)</span><br><span class="line">quantity = int(quantity_str)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">&#x27;Tell me the quantity: &#x27;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br></pre></td></tr></table></figure>
 
 <p>我们对洗衣机说：“帮我洗一件衣服”。然后塞给它一件衣服，打开开关，它就轰隆隆地开动了。</p>
 <p>当计算机读到<code>quantity_str = raw_input(&#39;Tell me the quantity: &#39;)</code>时，它跟用户说：“Tell me the quantity: ”，并将用户输入的文字写到<code>quantity_str</code>。</p>
@@ -761,16 +679,16 @@
 <li>再次，这段代码的自述性不好。也就是说，它不能表达自己在做什么。</li>
 </ol>
 <p>我们根据这三点，再利用前面提到的技术，来重新组织一下我们的语言：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">"Tell me the quantity: "</span>)</span><br><span class="line">quantity = int(quantity_str)</span><br><span class="line">real_quantity = (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> real_quantity</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br><span class="line">real_quantity = (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> real_quantity</span><br></pre></td></tr></table></figure>
 
 <p>看上去代码量更多了，真的值得吗？</p>
 <p>审视一下我们上面提到的三个问题，新的代码每行不再有大量的括弧，我们可以在第二行后插入<code>print quantity</code>来查看<code>quantity</code>的内容，而且我们很清晰地看到了我们要计算机做的每一步。作为一个简单的脚本，新的代码并没有什么吸引力。但当我们考虑到我们要把它做成一个完整的系统，至少在最后的系统面前，它是值得的。</p>
 <p>考虑当我们的规则非常复杂时，我们就会有一个更好的选择，即上面所谈的洗衣机的智慧：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_real_quantity</span><span class="params">(quantity)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">quantity_str = raw_input(<span class="string">"Tell me the quantity: "</span>)</span><br><span class="line">quantity = int(quantity_str)</span><br><span class="line">real_quantity = compute_real_quantity(quantity)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> real_quantity</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_real_quantity</span>(<span class="params">quantity</span>):</span><br><span class="line">    <span class="keyword">return</span> (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">quantity_str = raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br><span class="line">real_quantity = compute_real_quantity(quantity)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> real_quantity</span><br></pre></td></tr></table></figure>
 
 <p>哇噻，更长了，哈哈。</p>
 <p>我们在这里，定义了一个类似<code>raw_input()</code>的功能，叫做<code>compute_real_quantity()</code>。定义方式就像看到的一样简单。我们再来定义一个加法功能说明，如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> 功能名称<span class="params">(需要输入哪些变量)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> 结果</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(m, n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> m + n</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">功能名称</span>(<span class="params">需要输入哪些变量</span>):</span><br><span class="line">    <span class="keyword">return</span> 结果</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">m, n</span>):</span><br><span class="line">    <span class="keyword">return</span> m + n</span><br></pre></td></tr></table></figure>
 
 <p>这里有一个好处，如果<code>compute_real_quantity()</code>是别人写的，我们就不需要知道规则的细节了。假如这个规则是你来写，我只需要把我的待采购的数量给你，你帮我计算一下实际需要的数量就好了。具体细节，我不关心。</p>
 <h2 id="屏蔽细节让生活更轻松"><a href="#屏蔽细节让生活更轻松" class="headerlink" title="屏蔽细节让生活更轻松"></a>屏蔽细节让生活更轻松</h2><p>我们之前说游戏手柄的输入也非常简单，原因就在于这方面的专家已经帮我们屏蔽了细节。获取手柄的输入，跟获取<code>raw_input()</code>的输入大同小异。</p>
@@ -781,7 +699,133 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/18/python-function/" data-id="cle4am4jd00236jiyf18r0vhn" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/18/python-function/" data-id="cmefcioyj0021h5c9hgmh0os9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-work-is-comming" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/12/work-is-comming/" class="article-date">
+  <time datetime="2017-03-11T16:00:00.000Z" itemprop="datePublished">2017-03-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/12/work-is-comming/">唠唠python(4) -- 简化工作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>胜兵先胜而后求战，败兵先战而后求胜。 – 孙子兵法</p>
+</blockquote>
+<h2 id="遇到问题"><a href="#遇到问题" class="headerlink" title="遇到问题"></a>遇到问题</h2><p>我的女朋友最近生病了，周三下了班就回了家，顺带着还把在公司的一部分工作带了回来。</p>
+<p>等我回到家，她已经卧在床上睡一觉了。</p>
+<p>过了一会她睡醒了，坐起来跟我说：“工作没做完，你帮我做一下吧。很简单，就是把这张表格里的数字，以10000为单位，上或下取整，填到它下面的格子里。”说罢，就又睡了过去。</p>
+<h2 id="怎么计算"><a href="#怎么计算" class="headerlink" title="怎么计算"></a>怎么计算</h2><p>我粗略地看了一眼，这是一个excel表格文件，就是下面的这张表格。</p>
+<p><img src="/public/img/excel.png" alt="待处理表格"></p>
+<p>简单查看了一下excel的基础知识。这一个一个的格子，叫作“单元格”，哈哈，形象吧。暂时我们只需要这个概念。</p>
+<p>这里面有黑色内容的单元格和红色内容的单元格。红色内容的单元格是计算上面的黑色单元格的内容（物料的待收数据）得到的结果。</p>
+<p>我们的目标是，输入这个文件，然后让计算机自己经过一系列的计算过程，将表格中的还未计算过的数据按给定的规则计算，将计算结果写到下面一个单元格，并帮我们把处理后表格保存下来。</p>
+<p>这个目标实在激动人心！我跟我女朋友确认过，以这次的数据量，如果人工来做，可能需要花费3-4个小时的时间。而对计算机来说，在一分钟内就可以完成，而且可以确保结果的准确性。需要的知识也浅显易懂，如果对相关知识熟练，完全可以在半小时内将我们想要做的事情清楚地告诉计算机。</p>
+<p>当然，学习是循序渐进的。在这篇文章中，我们先把目标降低一些：告诉计算机一个待收数量，和一条规则（以10000为单位上取整），让它帮我们计算实际的代收数量。这是我们完成整个目标的第一步，这个技巧也完全可以用在其它类似的工作上。</p>
+<h2 id="获取输入"><a href="#获取输入" class="headerlink" title="获取输入"></a>获取输入</h2><p>首先，我们需要告诉计算机待收数量。这当然很简单，我们在前面已经说过了。假设待收数量是1234：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">1234</span></span><br><span class="line"><span class="number">1234</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>但是，这样会显得很仓促：1234代表什么呢？我们现在当然知道，它就是我们要求值的数据。但当我们写入到一个文件时，如何把1234传进去呢？</p>
+<p>显然，我们可以直接写到文件，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="number">1234</span></span><br></pre></td></tr></table></figure>
+
+<p>而此时，如果再重新输入一个数字时，我们就需要打开文件，然后把1234改为新的数字，保存文件，然后运行。修改代码文件很繁琐，而且是很危险的，这还只是一行简单的代码，想想，如果一个代码文件有上百行，我们如何再找到这个数值的位置？会不会小手一抖，把其它行的数据也修改了而自己并没有意识到？繁琐的操作也必然会降低我们的效率。</p>
+<p>这时，我们就自然有这么一个需求。</p>
+<p>计算机：您好，我最亲爱的某某某，您的待收数量是多少，我来为您计算实际待收数量。</p>
+<p>亲爱的某某某：嗯，1234。</p>
+<p>计算机：您实际需要待收的数量是10000。</p>
+<p>嗯，这就是人们所说的交互，其实就是让人跟计算机的沟通像人与人的沟通一样顺畅。</p>
+<p>这时，我们需要知道这么一个东西:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">int</span>(raw_input(<span class="string">&quot;请输入您的待收数量：&quot;</span>))</span><br><span class="line">请输入您的待收数量：<span class="number">1234</span></span><br><span class="line"><span class="number">1234</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意，里面的第一个1234是我们自己输入的，后面还跟了一个回车。</p>
+<p><code>int(raw_input(&quot;请输入您的待收数量：&quot;))</code>，这么大一坨？没关系，先死记下，在之后的文章我们会进一步了解。我们只需要知道，它让计算机询问我们待收数量。</p>
+<h2 id="如何计算取整后的值"><a href="#如何计算取整后的值" class="headerlink" title="如何计算取整后的值"></a>如何计算取整后的值</h2><p>我们现在用的python是个死脑筋。为什么这么说呢？如果你使用的python是之前文章中链接的python或是系统默认安装的，试试下面这个：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">5</span> / <span class="number">2</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们在学校学到的可是<code>5 ÷ 2 = 2.5</code>，现在却得到个2。谁的问题？</p>
+<p>语言的问题。语言是有局限的，而当我们输入<code>5 / 2</code>时，python解释给计算机说：“请帮我们计算一下<code>5 ÷ 2</code>的值，取整就可以了，小数点我们就不要了。</p>
+<p>语言是在发展的，文章中用的python版本是python2，此时，默认情况下，整数除法的结果是整数，而且是下取整。</p>
+<p>现在回到我们的问题：给一个数字，以10000为单位，上取整或下取整。我们假设是上取整，想想应该怎么做呢？</p>
+<p>我们把单位缩小，先来看一下以3为单位上取整，我们来取一批数值观察一下。</p>
+<p>我们来分别观察一下 <code>待收数量</code>、<code>实收数量</code> 的值和它们之间的相互关系格式：</p>
+<ul>
+<li>待收数量：<code>1</code>，实收数量：<code>3</code>，待收数量 ÷ 3后下取整：<code>0</code></li>
+<li>待收数量：<code>2</code>，实收数量：<code>3</code>，待收数量 ÷ 3后下取整：<code>0</code></li>
+<li>待收数量：<code>3</code>，实收数量：<code>3</code>，待收数量 ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>4</code>，实收数量：<code>6</code>，待收数量 ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>5</code>，实收数量：<code>6</code>，待收数量 ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>6</code>，实收数量：<code>6</code>，待收数量 ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>7</code>，实收数量：<code>9</code>，待收数量 ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>8</code>，实收数量：<code>9</code>，待收数量 ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>9</code>，实收数量：<code>9</code>，待收数量 ÷ 3后下取整：<code>3</code></li>
+<li>…</li>
+</ul>
+<p>我们发现，<code>待收数量 ÷ 3后下取整</code> 的值会随着 <code>实收数量</code> 增长，但并不完全一致，而是相差 <code>2</code>。如果在 <code>÷ 3</code> 前先将 <code>待收数量</code> +2，则结果刚好变成了3倍的关系。如下：</p>
+<ul>
+<li>待收数量：<code>1</code>，实收数量：<code>3</code>，(待收数量 + 2) ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>2</code>，实收数量：<code>3</code>，(待收数量 + 2) ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>3</code>，实收数量：<code>3</code>，(待收数量 + 2) ÷ 3后下取整：<code>1</code></li>
+<li>待收数量：<code>4</code>，实收数量：<code>6</code>，(待收数量 + 2) ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>5</code>，实收数量：<code>6</code>，(待收数量 + 2) ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>6</code>，实收数量：<code>6</code>，(待收数量 + 2) ÷ 3后下取整：<code>2</code></li>
+<li>待收数量：<code>7</code>，实收数量：<code>9</code>，(待收数量 + 2) ÷ 3后下取整：<code>3</code></li>
+<li>待收数量：<code>8</code>，实收数量：<code>9</code>，(待收数量 + 2) ÷ 3后下取整：<code>3</code></li>
+<li>待收数量：<code>9</code>，实收数量：<code>9</code>，(待收数量 + 2) ÷ 3后下取整：<code>3</code></li>
+<li>…</li>
+</ul>
+<p>也就是说，<code>实收数量</code> 刚好是 <code>(待收数量 + 2) ÷ 3后下取整</code>的3倍，其中的 <code>2</code> 实际上就是由 <code>3 - 1</code> 得来的。我们用数学公式整理一下现在的这个想法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">实收数量</span><br><span class="line">= (待收数量 + 2) / 3 * 3</span><br><span class="line">= (待收数量 + (3 - 1)) / 3 * 3</span><br></pre></td></tr></table></figure>
+
+<p>注意，其中的 <code>/</code> 符号即我们python语言里的除法，它是下取整的。</p>
+<p>类比到10000时的情形，我们的公式会变成下面这个样子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实收数量 = (待收数量 + (10000 - 1)) / 3 * 3</span><br></pre></td></tr></table></figure>
+
+<p>实际上，如果我们可以让计算机整数相除时上取整（而不是下取整），公式就会变得异常简单：<code>n 上取整除以 10000 * 10000</code>，在我们学习了后面的更多知识后就可以做到。现在这个公式<code>(n + (10000 - 1)) / 10000 * 10000</code>虽繁琐，但已是我们通过自己仅有的一点计算机知识所能学到的了。</p>
+<h2 id="马儿跑起来"><a href="#马儿跑起来" class="headerlink" title="马儿跑起来"></a>马儿跑起来</h2><p>下面，我们将之前的分析总结到一个文本文件里：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="number">10000</span> * (n + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+
+<p>将n替换为提示用户输入待收数量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (<span class="built_in">int</span>(raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)) + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+
+<p>将以上内容保存到a.py，然后输入<code>python a.py</code>并回车，试试看：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python a.py</span><br><span class="line">Tell me the quantity: 1234</span><br><span class="line">10000</span><br></pre></td></tr></table></figure>
+
+<p>嗯，不错，可以。</p>
+<h2 id="一点遗憾"><a href="#一点遗憾" class="headerlink" title="一点遗憾"></a>一点遗憾</h2><p>这是我们迈出的很重要的一点，如果你跟下来并且看懂了，这说明我们已经掌握了<code>把自己的思想描述给计算机</code>的技巧。</p>
+<p>但这还不完美，离我们的目标<code>自动处理数据并保存结果</code>还是有一定距离的。多远的距离呢，嗯，可能是4-5篇文章吧。不算远，对吧，假定一篇文章40分钟，加起来也就是3-4个小时的样子。想想我们前面提到的，这些数据手工处理都要3-4个小时，太他妈赚了。</p>
+<p>当然，3-4个小时是不够的，我们还需要一些时间消化和遗忘。不过，不管怎么算，这都是人生中很成功的一笔交易。</p>
+<p>这篇文章中，还有很多有趣的东西被我一带而过了，留到下一篇我们再一起聊聊吧。</p>
+<p>已经晚上23了，洗洗睡了。明天又是崭新的一天，啊哈哈。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/12/work-is-comming/" data-id="cmefcioyu003mh5c98oor5yjm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -811,7 +855,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iphone/" rel="tag">iphone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/unity3d/" rel="tag">unity3d</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
     </div>
   </div>
 
@@ -821,7 +865,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/emacs/" style="font-size: 16px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 12px;">gtd</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/iphone/" style="font-size: 10px;">iphone</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 12px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/unity3d/" style="font-size: 10px;">unity3d</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 14px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 14px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 12px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 13.33px;">django</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.67px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.67px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 13.33px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 13.33px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.67px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 10px;">自由职业</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16.67px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.33px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
     </div>
   </div>
 
@@ -830,7 +874,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -843,11 +887,7 @@
       <ul>
         
           <li>
-            <a href="/2023/02/14/unity3d-iphone-orientation/">unity3d如何调整手机横屏</a>
-          </li>
-        
-          <li>
-            <a href="/2023/02/14/hexo-generate-empty-file/">hexo generate生成文件为空，已解决</a>
+            <a href="/2025/08/17/2025-08-17-i-am-back/">回来了</a>
           </li>
         
           <li>
@@ -862,6 +902,10 @@
             <a href="/2020/11/14/doggy/">狗子</a>
           </li>
         
+          <li>
+            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -874,7 +918,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2023 pysnow530@163.com<br>
+      &copy; 2025 pysnow530@163.com<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
