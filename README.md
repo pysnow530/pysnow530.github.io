@@ -15,6 +15,7 @@
 
 ```sh
 # 环境初始化
+npm install -g hexo-cli
 npm install
 
 # 在线运行
