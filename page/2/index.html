@@ -66,6 +66,85 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-open-falcon-agent" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/25/open-falcon-agent/" class="article-date">
+  <time datetime="2020-05-25T13:37:01.000Z" itemprop="datePublished">2020-05-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/25/open-falcon-agent/">open-falcon 监控上报</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="监控平台应用背景"><a href="#监控平台应用背景" class="headerlink" title="监控平台应用背景"></a>监控平台应用背景</h3><p>监控平台被形象地称为运维之眼，没有它软件产品的上线及后期维护将像摸虾一样。</p>
+<p>从监控的对象来划分，监控又可分为基础监控和业务监控。</p>
+<p>基础监控偏重基础组件和基础资源的监控，一般指标比较固定，很大程度上可默认采集。</p>
+<p>业务监控偏重具体服务的指标监控，较为灵活，一般为具体业务自己定义。</p>
+<p>监控平台在整个上线的各个过程中都是有帮助的，它使用的场合有以下几项：</p>
+<ol>
+<li>提供服务上线的参考，如可观察新特性上线后的各项指标是否正常，作为稳定运行的依据</li>
+<li>出现事故后，可作为定位问题的参考，让排查问题更方便</li>
+<li>监控服务及资源的使用情况，为优化或扩容做准备</li>
+</ol>
+<p>其中，12基础监控和业务监控兼有，一般方式为基础监控缩小范围，业务监控更准确地查找。业务监控一般会配合日志平台一起提供帮助。</p>
+<p>3涉及到具体IaaS层资源，基础监控可以提供更多帮助。</p>
+<h3 id="常见架构设计"><a href="#常见架构设计" class="headerlink" title="常见架构设计"></a>常见架构设计</h3><p>市面监控平台多以agent上报的方式采集数据，由于监控平台写多读少的缘故，上报链路中间多可插入一个消息队列或代理。</p>
+<p>由于采集端已有监控数据，告警平台多与监控平台整合，这样一个采集，一个消费，就会方便很多。</p>
+<h3 id="open-falcon"><a href="#open-falcon" class="headerlink" title="open-falcon"></a>open-falcon</h3><p>open-falcon是小米的监控平台，open-falcon之前，小米使用的是zabbix。</p>
+<p>open-falcon的架构图如下所示：</p>
+<p><img src="/images/open-falcon.png" alt="open-falcon架构图"></p>
+<p>乍一看挺复杂，捊一捊就比较清晰了。</p>
+<p><strong>数据上报链路</strong>：绿色粗线即为数据上报链路，数据从App产生或由agent采集，然后发送到transfer，transfer再将数据分发给judge和graph。judge即为告警判定模块，graph存储监控数据。</p>
+<p><strong>配置下发链路</strong>：橙色虚线为配置下发链接，portal为配置存储中心。为了加速配置的下发，同时减小portal的压力，hbs会将portal缓存一份到自己的内存，在需要的时候会下发给agent（监控配置）和judge（告警配置）。</p>
+<p><strong>监控查看链路</strong>：蓝色虚线部分为监控查看链路，graph是监控数据的存储组件，出于负载均衡的考虑，graph可能有多个实例，query组件负责整合多个实例的结果，供dashboard读取。dashboard为通往用户的web界面。</p>
+<p>open-falcon中的大部分组件都是可以水平扩展的，transfer、judge和graph都是可能会出现瓶颈的组件。官网有一个机器量与瓶颈及应对的对应关系，很有参考价值。</p>
+<h3 id="agent-采集上报"><a href="#agent-采集上报" class="headerlink" title="agent 采集上报"></a>agent 采集上报</h3><p>agent 是数据采集和上报端，更接近数据，比较重要。</p>
+<p>agent 默认已提供机器的大部分基础监控，<code>modules/funcs/</code> 下可以看到监控的列表，cpu、内存、磁盘、负载、网络io等，涵盖了绝大部分机器相关监控。</p>
+<p>agent 每隔一段会将 metrics 上报到 transfer，metrics 是一个列表，下面是一个比较典型的 metric 结构：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MetricValue <span class="keyword">struct</span> &#123;</span><br><span class="line">	Endpoint  <span class="type">string</span>      <span class="string">`json:&quot;endpoint&quot;`</span></span><br><span class="line">	Metric    <span class="type">string</span>      <span class="string">`json:&quot;metric&quot;`</span></span><br><span class="line">	Value     <span class="keyword">interface</span>&#123;&#125; <span class="string">`json:&quot;value&quot;`</span></span><br><span class="line">	Step      <span class="type">int64</span>       <span class="string">`json:&quot;step&quot;`</span></span><br><span class="line">	Type      <span class="type">string</span>      <span class="string">`json:&quot;counterType&quot;`</span></span><br><span class="line">	Tags      <span class="type">string</span>      <span class="string">`json:&quot;tags&quot;`</span></span><br><span class="line">	Timestamp <span class="type">int64</span>       <span class="string">`json:&quot;timestamp&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里说一下 Type，主要有 GAUGE 和 COUNTER 两种。GAUGE 为实际的测量值，如内存使用率；COUNTER 为计数值，上报时会计算差值，比较典型的如磁盘读请求次数（linux内核提供的值为总计，我们希望了解的是上一分钟及这一分钟的读请求次数）。</p>
+<p>在扩展性方面，agent 还提供了另外两种采集方式，http push 上报的方式和 plugin 采集。这两种方式都是以 MetricValue 为上报的基础数据结构。</p>
+<p><strong>push</strong> 方式，agent 会在本机提供一个 http 服务，应用可将数据以 http 请求的方式上报给 agent。http 提供了很大的灵活性，应用可整合上报功能来集成业务监控。</p>
+<p><strong>plugin</strong> 方式，需要提供一个包含采集脚本的仓库。所谓采集脚本，即是指本地可运行的脚本，该脚本会输出 MetricValue 结构的 json 数据，agent 将定期执行并将输出上报给 transfer。</p>
+<p>下面是官方提供的一个 python 采集脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/open-falcon/plugin/blob/master/demo/60_plugin.py</span></span><br><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">data = [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;metric&#x27;</span>: <span class="string">&#x27;plugins.xx&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;endpoint&#x27;</span>: <span class="string">&#x27;host-001.bj&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span>: <span class="built_in">int</span>(time.time()),</span><br><span class="line">            <span class="string">&#x27;step&#x27;</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">&#x27;value&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">&#x27;counterType&#x27;</span>: <span class="string">&#x27;GAUGE&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags&#x27;</span>: <span class="string">&#x27;idc=aa&#x27;</span></span><br><span class="line">            &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;metric&#x27;</span>: <span class="string">&#x27;plugins.yy&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;endpoint&#x27;</span>: <span class="string">&#x27;host-002.bj&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span>: <span class="built_in">int</span>(time.time()),</span><br><span class="line">            <span class="string">&#x27;step&#x27;</span>: <span class="number">60</span>,</span><br><span class="line">            <span class="string">&#x27;value&#x27;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">&#x27;counterType&#x27;</span>: <span class="string">&#x27;GAUGE&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags&#x27;</span>: <span class="string">&#x27;idc=bb&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(json.dumps(data))</span><br></pre></td></tr></table></figure>
+
+<p>NOTE: 需要注意的是，为了避免 plugin 全量上报造成干扰，plugin 上报需要在 dashboard/portal 中指定启用哪些上报脚本。</p>
+<p>第三方监控多以 push 方式上报，有了上面两种扩展的上报方式，即可以实现其它基础监控或者业务监控。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>open-falcon 算是国内比较成熟的监控产品，虽说多组件的方式部署可能较为庞杂，但 falcon-plus 对 open-falcon 的组件做了整合，部署难度已经下降了好几个数量级，安装已经不再是大问题。</p>
+<p>open-falcon 以 golang 和 python 为主要开发语言。提供水平扩展的组件多为 golang 开发，可单独打包，降低了部署的难度；web 端以 python 为主，开发效率较高。各取所长。组件粒度较细，解耦也较彻底，二次开发难度较小。</p>
+<p>push 上报方式是许多监控产品采用的方式，较为灵活通用，可满足扩展的需要。其它监控如 mysql 或者具体业务的监控等也可基于此方式实现。</p>
+<p>另外，open-falcon 组件内部多使用 rpc 协议沟通，效率也是比较高的。有时间再展开写一写。</p>
+<p>除了监控数据，另一块是告警判定逻辑。后面来补充。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2020/05/25/open-falcon-agent/" data-id="cmeo2ftlc001l96j0bxsegpvy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-macosx-window-tile-manager" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/05/24/macosx-window-tile-manager/" class="article-date">
@@ -122,7 +201,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/05/24/macosx-window-tile-manager/" data-id="cmefi4mc8001hf0c93njkdene" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/05/24/macosx-window-tile-manager/" data-id="cmeo2ftla001g96j004zv1zhg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li></ul>
@@ -215,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/05/22/golang-concurrency/" data-id="cmefi4mc2000sf0c9afwg400y" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/05/22/golang-concurrency/" data-id="cmeo2ftl1000u96j0hx566khy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li></ul>
@@ -253,7 +332,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/04/26/read-the-programmers-who-created-the-software-revolution/" data-id="cmefi4mch002pf0c94yhobhuf" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/04/26/read-the-programmers-who-created-the-software-revolution/" data-id="cmeo2ftln002o96j06msvhf3b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -291,7 +370,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/04/23/read-ted-talks/" data-id="cmefi4mch002nf0c95jsr61o7" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/04/23/read-ted-talks/" data-id="cmeo2ftlm002m96j09ggoapq4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -329,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/04/15/read-what-is-life/" data-id="cmefi4mci002uf0c909chhh4m" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/04/15/read-what-is-life/" data-id="cmeo2ftlo002t96j06fvv59fg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -367,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/04/08/read-kexuedelicheng/" data-id="cmefi4mcf002gf0c94icafjtc" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/04/08/read-kexuedelicheng/" data-id="cmeo2ftlk002e96j066tycd3i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
@@ -415,7 +494,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/04/02/brownian-motion/" data-id="cmefi4mbx000cf0c95usg1b36" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/04/02/brownian-motion/" data-id="cmeo2ftkv000e96j062wze6mq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li></ul>
@@ -459,7 +538,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/28/spring-rain/" data-id="cmefi4mck0037f0c9hwol56bw" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/28/spring-rain/" data-id="cmeo2ftls003596j08p2k0wt5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
@@ -549,93 +628,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/27/python-function-colorize/" data-id="cmefi4mcd0023f0c9ag4l827e" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2020/03/27/python-function-colorize/" data-id="cmeo2ftlh002296j06hp7eb7o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-jango-3-wsgi" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/26/jango-3-wsgi/" class="article-date">
-  <time datetime="2020-03-26T13:28:00.000Z" itemprop="datePublished">2020-03-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/26/jango-3-wsgi/">django核心处理流程 3. wsgi</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>wsgi 是 python 服务器与 web 应用间交互的通用接口，实现该接口的应用可以通过任何实现了该接口的服务器部署。</p>
-<h3 id="wsgi-诞生的背景"><a href="#wsgi-诞生的背景" class="headerlink" title="wsgi 诞生的背景"></a>wsgi 诞生的背景</h3><p>我们知道，接口可以有效地解耦调用方与被调方。</p>
-<p>拿 cmq 举例，如果我们实现了它所规定的相关接口，就可以提供给调用方使用，而不必关心它是否是原生的 cmq。</p>
-<p>最开始的 web 框架花样繁多，服务的部署多种多样，往往框架的选择就已经限制了服务器的选择。而 wsgi 的目标，就是将框架的选择与Web服务器的选择解耦。</p>
-<h3 id="需要做哪些工作"><a href="#需要做哪些工作" class="headerlink" title="需要做哪些工作"></a>需要做哪些工作</h3><p>我们先思考一下，如何分离这两者，提供一个统一的界面接口。</p>
-<p>首先，在我们的框架里，是不需要关心 http 细节的，这就需要把 http 的相关信息以一种通用的格式打包过来。一种比较直观的结构是一维字典，或者是一个元组列表。</p>
-<p>拿到处理的信息后，我们可以对其进行解析，然后执行处理逻辑，返回 http 响应。</p>
-<p>响应当然可以直接返回一个 http 协议文本，但是 web 应用不该过多参与 http 细节。这里将返回分解为了三部分，返回状态说明、响应头、响应体。</p>
-<p>我们知道，响应头是必须先于响应体的，那么在技术上如何保证呢？</p>
-<p>wsgi 给出一个 start_response 参数，这是一个可调用函数，以返回状态说明和响应头为参数。如此我们便可以判断其与响应体的顺序了。</p>
-<p>另外还有一个问题，一个请求的响应体可能会分多段返回，比如我们要对一个列表的每个元素做计算，由于计算量很大，我希望每算得一个结果就返回一个结果。所以这里我希望能以 yield 的方式来做返回。</p>
-<p>跟据上面一些问题的考量，我们就可以得到一个近似 wsgi 的接口了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">simple_app</span>(<span class="params">environ, start_response</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Simplest possible application object&quot;&quot;&quot;</span></span><br><span class="line">    status = <span class="string">&#x27;200 OK&#x27;</span></span><br><span class="line">    response_headers = [(<span class="string">&#x27;Content-type&#x27;</span>, <span class="string">&#x27;text/plain&#x27;</span>)]</span><br><span class="line">    start_response(status, response_headers)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">yield</span> <span class="string">&#x27;hello\n&#x27;</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">&#x27;world\n&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>实际返回的 headers 跟这里的 response_headers 并不完全一致，应用只负责它关心的 header，剩下的就交给 wsgi 服务器了。</p>
-<h3 id="wsgiref-模块"><a href="#wsgiref-模块" class="headerlink" title="wsgiref 模块"></a>wsgiref 模块</h3><p>python 的 wsgiref 模块实现了一个简单的 wsgi 服务器，我们可以借助它来让我们前面写的一些代码变为运行时。</p>
-<p>首先，我们把之前的逻辑包装为一个标准的 wsgi 应用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_wsgi_application</span>(<span class="params">root_urlconf</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将ROOT_URLCONF中配置的路由，包装为一个wsgi应用</span></span><br><span class="line"><span class="string">    :param root_urlconf: 字符串，根url模块位置</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wsgi_application</span>(<span class="params">environ, start_response</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;标准wsgi程序&quot;&quot;&quot;</span></span><br><span class="line">        request = HttpRequest(environ)</span><br><span class="line">        response = handle_view(request, root_urlconf)</span><br><span class="line"></span><br><span class="line">        status = STATUS_TO_DISPLAY[response.status_code]</span><br><span class="line">        headers = []</span><br><span class="line">        start_response(status, headers)</span><br><span class="line"></span><br><span class="line">        ret = [response.content.encode(<span class="string">&#x27;utf-8&#x27;</span>)]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wsgi_application</span><br></pre></td></tr></table></figure>
-
-<p>然后，我们将该应用传递给 wsgi 服务器，让它把这个应用运行起来：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wsgi_application = get_wsgi_application(settings.ROOT_URLCONF)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> make_server(host, port, wsgi_application) <span class="keyword">as</span> httpd:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Serving on port http://<span class="subst">&#123;host&#125;</span>:<span class="subst">&#123;port&#125;</span>...&quot;</span>)</span><br><span class="line">    httpd.serve_forever()</span><br></pre></td></tr></table></figure>
-
-<p>此时，我们访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:5302/welcome/oog">http://127.0.0.1:5302/welcome/oog</a> 就可以看到下面的提示了：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello oog, welcome to jango.</span><br></pre></td></tr></table></figure>
-
-<h3 id="发挥-wsgi-的优势"><a href="#发挥-wsgi-的优势" class="headerlink" title="发挥 wsgi 的优势"></a>发挥 wsgi 的优势</h3><p>我们前面说，wsgi 可以解耦应用和服务器，也就是说，我们的应用同样可以部署在其它 wsgi 服务器下。</p>
-<p>这里我们尝试使用 gunicorn 来验证该服务是否可以在其它 wsgi 服务器下正常运行。</p>
-<p>首先我们创建一个脚本来生成一个 wsgi 接口的函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># demo/wsgi.py</span></span><br><span class="line">settings = importlib.import_module(<span class="string">&#x27;demo.settings&#x27;</span>)</span><br><span class="line">application = get_wsgi_application(settings.ROOT_URLCONF)</span><br></pre></td></tr></table></figure>
-
-<p>然后，我们在命令行启动 gunicorn，并将该 application 传递给它：</p>
-<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn -b 127.0.0.1:5302 -w 4 demo.wsgi:application</span><br></pre></td></tr></table></figure>
-
-<p>这里我们借助 gunicorn 的支持，启动了 4 个 worker，一切运行正常。wsgi 做得很好。</p>
-<p>到这里，我们就已经成功把静态代码部署为一个服务器了。相关代码可以在 <a target="_blank" rel="noopener" href="https://github.com/pysnow530/jango">https://github.com/pysnow530/jango</a> 找到。</p>
-<p>虽然这里只有一些核心逻辑，但是已经看到了一些 django 的脉络。</p>
-<p>当然，django 的能力不止于此，它实际上是一个框架的框架，中间件、灵活的配置系统、第三方模块，使得它可以在系统层面做进一步的抽象。它的思想远不及此，不过这些已超出本文的范围，就此打住了。</p>
-<p>这只是旅途的一个开始，想要的答案，让我们去 django 的源码里找吧。</p>
-<h3 id="一些重要细节"><a href="#一些重要细节" class="headerlink" title="一些重要细节"></a>一些重要细节</h3><p>上面的响应体使用了 yield 和 list 两种返回形式，本质上所有的可迭代对象都可以作为响应体返回使用。</p>
-<p>同样的，这里所说的函数，也可以替换为其它可执行对象，包括实现了 <code>__call__</code> 方法的类。</p>
-<h3 id="扩展资料"><a href="#扩展资料" class="headerlink" title="扩展资料"></a>扩展资料</h3><p>wsgi 协议可参考</p>
-<ul>
-<li>v1.0 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0333/">https://www.python.org/dev/peps/pep-0333/</a></li>
-<li>v1.0.1 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-3333/">https://www.python.org/dev/peps/pep-3333/</a>。</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2020/03/26/jango-3-wsgi/" data-id="cmefi4mc50014f0c900zl1ysu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li></ul>
 
     </footer>
   </div>
@@ -662,7 +658,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" rel="tag">工作汇报</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA/" rel="tag">职场</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
     </div>
   </div>
 
@@ -672,7 +668,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 13.33px;">django</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.67px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.67px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 13.33px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 13.33px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.67px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 10px;">自由职业</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16.67px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.33px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 13.33px;">django</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.67px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.67px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 10px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 10px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 13.33px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 13.33px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.67px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 10px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 10px;">自由职业</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16.67px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.33px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
     </div>
   </div>
 
@@ -694,6 +690,10 @@
       <ul>
         
           <li>
+            <a href="/2025/08/23/2025-08-23-why-work-not-happy-anymore/">为什么我们工作越来越不开心了？</a>
+          </li>
+        
+          <li>
             <a href="/2025/08/17/2025-08-17-i-am-back/">回来了</a>
           </li>
         
@@ -707,10 +707,6 @@
         
           <li>
             <a href="/2020/11/14/doggy/">狗子</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/08/thinking-of-standing/">站着的碎想</a>
           </li>
         
       </ul>
