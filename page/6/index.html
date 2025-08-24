@@ -66,6 +66,99 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python-function" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/18/python-function/" class="article-date">
+  <time datetime="2017-03-17T16:00:00.000Z" itemprop="datePublished">2017-03-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/18/python-function/">唠唠python(5) -- 打包操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>这篇文章依然是承接自上一篇文章，来讲一讲上一章遗留下来的问题。</p>
+</blockquote>
+<blockquote>
+<p>上一章我们讲到<code>int(raw_input(&#39;Tell me the quantity: &#39;))</code>是让计算机帮我们从用户那里获取一个数字，现在我们来看看它是如何做的。</p>
+</blockquote>
+<h2 id="洗衣机的智慧"><a href="#洗衣机的智慧" class="headerlink" title="洗衣机的智慧"></a>洗衣机的智慧</h2><p>对，我们先来谈一谈洗衣机。</p>
+<p>我现在住的这个地方有点小，担心买了洗衣机更显局促，所以一直没买。但这不妨碍我们谈洗衣机的智慧。</p>
+<p>如果现在还没有出现洗衣机这么个东西，设想我们渴望有一个机器，它可以帮我们(1)自动加水，(2)清洗衣物，(3)自动甩干，(4)自动烘干。</p>
+<p>这么一大批动作，当然每个动作分别需要一个机器也是可以的，但是每一个动作人为介入，势必会降低我们的效率。怎么办呢？</p>
+<p>哈哈，其实办法我们已经知道了，但还是要假装吃惊一下。啊？居然还有机器可以集成上面说到的全部功能，而且只需要在执行第一步前按一个按钮，接下来的四步自动依次完成，帮我们屏蔽了之前的细节。</p>
+<p>这样的例子有很多，人类的智慧大大促进了人们生活水平的提高。</p>
+<h2 id="洗衣机智慧在计算机语言中的妙用"><a href="#洗衣机智慧在计算机语言中的妙用" class="headerlink" title="洗衣机智慧在计算机语言中的妙用"></a>洗衣机智慧在<code>计算机语言</code>中的妙用</h2><p>刚刚我们谈了洗衣机的智慧，我们再进一步来谈一下，对我们来说，它到底意味着什么。</p>
+<p>我们知道，光洗衣服这件小事，就涉及了非常多个工序。什么倒洗衣粉、搓洗衣服、拧干、晾晒，等了个等。像我们这种追求(zhi)生活(nan)品质(ai)的人，怎么能忍受得了这么变态的工序。</p>
+<p>福音来了，现在你眼前的这个工具，只需要把衣物放进去，按下开关。二小时后，将衣物取出放进衣柜就可以万事大吉了。</p>
+<p>为什么这么神奇，因为洗衣机帮我们把洗衣服的细节给屏蔽掉了。它把必须由我们来做的事（打开开关）暴露给我们（看得见的开关按钮），我们只需要打开开关，二小时后，它就会把结果（衣服洗完）给我们。</p>
+<p>计算机语言也存在着类似的思想。</p>
+<p>我们再拿之前提到的表格处理的例子，我们希望把表格中每个数字，按照某种规则处理完后写到其下面的表格，然后将处理后的表格保存到一个新文件。</p>
+<p>假设我们有一台<code>表格洗衣机</code>，来达到上面的效果。我们假设这台<code>表格洗衣机</code>是洗衣机厂家生产的。我们不管厂家怎么制作出来的，也不管它怎么个洗法，我们的想法是，只要给这台<code>表格洗衣机</code>一个实际的数据表格（相当于洗衣机的开关）就可以了。它会把处理完后的表格给我们。</p>
+<p><code>表格洗衣机</code>仍然有点抽象，但是实际上，我们在前面已经看过两个例子了。一个是<code>raw_input()</code>，一个是<code>int()</code>。</p>
+<h2 id="raw-input-和int"><a href="#raw-input-和int" class="headerlink" title="raw_input()和int()"></a><code>raw_input()</code>和<code>int()</code></h2><p>现在，我们可以来讲讲之前遇到的<code>int(raw_input(&#39;Tell me the quantity: &#39;))</code>了。</p>
+<p>这一坨长长的东西，可以等价到下面两句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">&#x27;Tell me the quantity: &#x27;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br></pre></td></tr></table></figure>
+
+<p>我们对洗衣机说：“帮我洗一件衣服”。然后塞给它一件衣服，打开开关，它就轰隆隆地开动了。</p>
+<p>当计算机读到<code>quantity_str = raw_input(&#39;Tell me the quantity: &#39;)</code>时，它跟用户说：“Tell me the quantity: ”，并将用户输入的文字写到<code>quantity_str</code>。</p>
+<p><code>quantity_str</code>又是啥？我们可以把它想象成一个箱子，我们把计算机读到的用户输入的文字放到这个箱子里。</p>
+<p>注意，这条语句是从右往左读的：“计算机显示Tell me the quantity，并把用户输入的文字放到<code>quantity_str</code>这个箱子里”。</p>
+<p>现在我们知道了，<code>raw_input()</code>就是要计算机帮我们获得一段文字。具体怎么获得，我们不管，你（计算机）自己去想。</p>
+<p><code>int()</code>也是一样的东西，它的功能是将某段文字（如<code>&quot;1234&quot;</code>）转换成一个整数。<code>int(quantity_str)</code>即，将我们<code>quantity_str</code>箱子里的文字转换成一个整数，并放到一个名为<code>quantity</code>的箱子。</p>
+<p>为了更直观地感觉一下，我们来自己做一台”洗衣机”。</p>
+<h2 id="更好的规则计算过程"><a href="#更好的规则计算过程" class="headerlink" title="更好的规则计算过程"></a>更好的规则计算过程</h2><p>之前的例子，我们写了一段代码来实现通过规则计算结果：<code>print (int(raw_input(&quot;Tell me the quantity: &quot;)) + (10000 - 1)) / 10000 * 10000</code>。</p>
+<p>这一行代码有几个问题：</p>
+<ol>
+<li>首先，这一句非常长，而且里面有n个()，就算我们自己，也要用手一个括弧一个括弧地匹配。</li>
+<li>其次，里面可能有多个中间结果，但我们没法查看中间结果的值。</li>
+<li>再次，这段代码的自述性不好。也就是说，它不能表达自己在做什么。</li>
+</ol>
+<p>我们根据这三点，再利用前面提到的技术，来重新组织一下我们的语言：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">quantity_str = raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br><span class="line">real_quantity = (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> real_quantity</span><br></pre></td></tr></table></figure>
+
+<p>看上去代码量更多了，真的值得吗？</p>
+<p>审视一下我们上面提到的三个问题，新的代码每行不再有大量的括弧，我们可以在第二行后插入<code>print quantity</code>来查看<code>quantity</code>的内容，而且我们很清晰地看到了我们要计算机做的每一步。作为一个简单的脚本，新的代码并没有什么吸引力。但当我们考虑到我们要把它做成一个完整的系统，至少在最后的系统面前，它是值得的。</p>
+<p>考虑当我们的规则非常复杂时，我们就会有一个更好的选择，即上面所谈的洗衣机的智慧：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_real_quantity</span>(<span class="params">quantity</span>):</span><br><span class="line">    <span class="keyword">return</span> (quantity + (<span class="number">10000</span> - <span class="number">1</span>)) / <span class="number">10000</span> * <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">quantity_str = raw_input(<span class="string">&quot;Tell me the quantity: &quot;</span>)</span><br><span class="line">quantity = <span class="built_in">int</span>(quantity_str)</span><br><span class="line">real_quantity = compute_real_quantity(quantity)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> real_quantity</span><br></pre></td></tr></table></figure>
+
+<p>哇噻，更长了，哈哈。</p>
+<p>我们在这里，定义了一个类似<code>raw_input()</code>的功能，叫做<code>compute_real_quantity()</code>。定义方式就像看到的一样简单。我们再来定义一个加法功能说明，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">功能名称</span>(<span class="params">需要输入哪些变量</span>):</span><br><span class="line">    <span class="keyword">return</span> 结果</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">m, n</span>):</span><br><span class="line">    <span class="keyword">return</span> m + n</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个好处，如果<code>compute_real_quantity()</code>是别人写的，我们就不需要知道规则的细节了。假如这个规则是你来写，我只需要把我的待采购的数量给你，你帮我计算一下实际需要的数量就好了。具体细节，我不关心。</p>
+<h2 id="屏蔽细节让生活更轻松"><a href="#屏蔽细节让生活更轻松" class="headerlink" title="屏蔽细节让生活更轻松"></a>屏蔽细节让生活更轻松</h2><p>我们之前说游戏手柄的输入也非常简单，原因就在于这方面的专家已经帮我们屏蔽了细节。获取手柄的输入，跟获取<code>raw_input()</code>的输入大同小异。</p>
+<p>类似的，从一个表格文件中获取输入跟<code>raw_input()</code>差别不大。我们会使用这一篇文章中讲到的技术及之后的少量新技术，来从表格文件中读取表格数据，处理完后，使用类似<code>print</code>的功能，将处理结果输出到新文件（而不是神秘的黑色窗口）。</p>
+<p>明天你是否会想起？</p>
+<p>不止明天，我哪一天都不想起。睡觉。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/18/python-function/" data-id="cmeo2koqp00c35mj0a8dg28fp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-work-is-comming" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/12/work-is-comming/" class="article-date">
@@ -180,7 +273,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/12/work-is-comming/" data-id="cmeo2ftlx003n96j07o8l5eni" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/12/work-is-comming/" data-id="cmeo2kor600db5mj0ekf39rtk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -248,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/11/new-world/" data-id="cmeo2ftlb001i96j079wd4hl3" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/11/new-world/" data-id="cmeo2koqh00bj5mj08n7c7o9x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li></ul>
@@ -345,7 +438,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/05/python-script-file/" data-id="cmeo2ftlj002c96j0f4w53c0p" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/05/python-script-file/" data-id="cmeo2koqr00c95mj01y8m1kac" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -432,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/03/04/python-abc/" data-id="cmeo2ftle001r96j0crmrdcld" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/03/04/python-abc/" data-id="cmeo2koqj00br5mj0boop8hpw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -493,7 +586,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/26/python-context/" data-id="cmeo2ftlg001x96j085ya8o6m" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/26/python-context/" data-id="cmeo2koqm00bx5mj0awoo74mp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -547,7 +640,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/25/silent/" data-id="cmeo2ftlq002y96j04bj2bkdk" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/25/silent/" data-id="cmeo2koqy00cr5mj0hl6ub8gx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
@@ -601,7 +694,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/18/crashed-plane/" data-id="cmeo2ftkx000j96j06lgm8lel" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/18/crashed-plane/" data-id="cmeo2koq800ah5mj0d1tdeuo6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li></ul>
@@ -698,7 +791,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/15/git-object-db/" data-id="cmeo2ftl0000s96j02yo31wci" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/15/git-object-db/" data-id="cmeo2koqa00ar5mj0e9nx0ew9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
@@ -763,65 +856,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/10/why-not-jetbrains/" data-id="cmeo2ftlw003k96j04llmgp2u" class="article-share-link">Share</a>
+      <a data-url="https://pysnow530.github.io/2017/02/10/why-not-jetbrains/" data-id="cmeo2kor500d95mj08qw9euq9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-16-end-17-start" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/05/16-end-17-start/" class="article-date">
-  <time datetime="2017-02-04T16:00:00.000Z" itemprop="datePublished">2017-02-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/05/16-end-17-start/">16年逝，17年始</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>屎屎屎，都是屎。。。</p>
-</blockquote>
-<blockquote>
-<p>一年又转一年，感觉白驹过隙的，是否又废了这365天，过成了一个老爷爷老太太的模样？</p>
-</blockquote>
-<h3 id="关键字：读书"><a href="#关键字：读书" class="headerlink" title="关键字：读书"></a>关键字：读书</h3><p>16年的关键字该是读书，虽然量不大，但还是开了个好头。也多亏自己这浮躁的嫉妒心被《微信读书》抓个正着。</p>
-<h3 id="认知：钱到底是什么"><a href="#认知：钱到底是什么" class="headerlink" title="认知：钱到底是什么"></a>认知：钱到底是什么</h3><p>16年，自己的认知发生了很大的变化，特别是对钱的认识上。</p>
-<p>之前晚上转火车都不舍得花钱住店。</p>
-<p>16年去过几次海底捞，终于明白海底捞对我意味着什么了。</p>
-<p>钱是等价交换物，是一把衡量价值的尺子。</p>
-<p>对个人来说，比钱更珍贵的东西，我现在找到了这么几样：时间、精力、好心情。</p>
-<p>16年第一次在得到上，狠下心订阅了400块的专栏。其实，没过几个星期，我就知道，花出去的钱已经变换成更重要的知识回赠回来了。</p>
-<p>这几样比钱更重要的东西，成了我在kindle花几百块买电子书的理由：随着互联网的开放，我们当然可以找到大部分资源，但是找资源的过程中，我们有可能会失去比金钱更重要的东西，时间，精力。</p>
-<h3 id="关于“老好人”"><a href="#关于“老好人”" class="headerlink" title="关于“老好人”"></a>关于“老好人”</h3><p>年底最大的收获是，下定了决心，不再做一个虚假的“老好人”。</p>
-<p>转头一看，却也已经带着这个面具欢快的生活了二三十年。“老好人”并非一条不归路，但走地越久，越像是一个干瘪的僵师，倒更像是老人家说的，离坟墓越来越近。</p>
-<p>不要为难自己，做更真实的自己。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/05/16-end-17-start/" data-id="cmeo2ftkj000196j09yzn95yt" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li></ul>
 
     </footer>
   </div>
@@ -858,7 +896,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 13.33px;">django</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.67px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.67px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 10px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 10px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 13.33px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 13.33px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.67px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 10px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 10px;">自由职业</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16.67px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.33px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 13.33px;">django</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.67px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.67px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 11.67px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 11.67px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%A2%A6/" style="font-size: 13.33px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 13.33px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.67px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 11.67px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 10px;">自由职业</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 16.67px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.33px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
     </div>
   </div>
 
@@ -880,6 +918,10 @@
       <ul>
         
           <li>
+            <a href="/2025/08/24/2025-08-24-how-to-make-a-speech/">公众场合讲话紧张怎么办？</a>
+          </li>
+        
+          <li>
             <a href="/2025/08/23/2025-08-23-why-work-not-happy-anymore/">为什么我们工作越来越不开心了？</a>
           </li>
         
@@ -893,10 +935,6 @@
         
           <li>
             <a href="/2021/01/17/20210117-org-mode-again/">org-mode again</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/14/doggy/">狗子</a>
           </li>
         
       </ul>
