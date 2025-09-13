@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>借助Q语言理解编程核心思想 | pysnow530 的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景前几年我在研究时序数据库时，了解到了kdb+这款当时号称全世界最快的数据库。kdb+主要的应用在金融领域，用在一些量化分析的场景下，在计算机领域用的相对比较少。 kdb+的最底层是K语言，他是一种基于符号的语言，继承了APL的核心思想，但是换用更标准的ascii符号来编码。而它的上层界面是在K语言基础上封装的Q语言，使用可读性更高的单词来代替符号。 最近由于需要对大规模的业务数据做一些分析，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="借助Q语言理解编程核心思想">
+<meta property="og:url" content="https://pysnow530.github.io/2025/09/13/2025-09-13-thinking-in-q/index.html">
+<meta property="og:site_name" content="pysnow530 的博客">
+<meta property="og:description" content="背景前几年我在研究时序数据库时，了解到了kdb+这款当时号称全世界最快的数据库。kdb+主要的应用在金融领域，用在一些量化分析的场景下，在计算机领域用的相对比较少。 kdb+的最底层是K语言，他是一种基于符号的语言，继承了APL的核心思想，但是换用更标准的ascii符号来编码。而它的上层界面是在K语言基础上封装的Q语言，使用可读性更高的单词来代替符号。 最近由于需要对大规模的业务数据做一些分析，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pysnow530.github.io/images/langs.jpg">
+<meta property="article:published_time" content="2025-09-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-13T13:08:12.075Z">
+<meta property="article:author" content="pysnow530@163.com">
+<meta property="article:tag" content="kdb+">
+<meta property="article:tag" content="q语言">
+<meta property="article:tag" content="k语言">
+<meta property="article:tag" content="时序数据库">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pysnow530.github.io/images/langs.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="pysnow530 的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">pysnow530 的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pysnow530.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2025-09-13-thinking-in-q" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/09/13/2025-09-13-thinking-in-q/" class="article-date">
+  <time datetime="2025-09-12T16:00:00.000Z" itemprop="datePublished">2025-09-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      借助Q语言理解编程核心思想
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/images/langs.jpg" alt=""></p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>前几年我在研究时序数据库时，了解到了kdb+这款当时号称全世界最快的数据库。kdb+主要的应用在金融领域，用在一些量化分析的场景下，在计算机领域用的相对比较少。</p>
+<p>kdb+的最底层是K语言，他是一种基于符号的语言，继承了APL的核心思想，但是换用更标准的ascii符号来编码。而它的上层界面是在K语言基础上封装的Q语言，使用可读性更高的单词来代替符号。</p>
+<p>最近由于需要对大规模的业务数据做一些分析，又重新学习了一下Q语言，对编程有了一些新的理解和感悟，在这里记录一下算是自我检查, 也希望对大家有所启发。</p>
+<h2 id="重新思考函数的本质"><a href="#重新思考函数的本质" class="headerlink" title="重新思考函数的本质"></a>重新思考函数的本质</h2><p>函数这个概念最开始是从数学中提出的，可能是从初中阶段引入的。</p>
+<p>数学上的函数代表了一种映射关系。比如我们说平方函数，他代表着一个映射关系，可以将一个数字映射成它的平方。这种映射关系是明确的，也就是我输入一个A，必然会得到一个固定的B。</p>
+<p>编程里的函数就没有那么幸运，因为他要处理的是现实世界的问题，，就不可能有数学函数定义的那么单纯。一方面它仍可以作为一种映射关系，同时又引入了一个副作用的概念，比如在一个函数中，它不仅有输出，可能还会有一些I/O操作，比如写文件。</p>
+<p>与副作用相对的是一种叫做纯函数的编程范式，在纯函数式编程的范式下，函数的概念在数学和编程上达到了一致，一个输入就是对应着明确的输出，并且没有副作用。Haskell 就是纯函数式编程的代表，他用一些特殊的手段隔离了副作用。</p>
+<p>但是就像前面说的，编程有很多时候是用来处理现实世界的问题，他不可能是数学世界那么单纯的理想模型，所以就导致纯函数听起来很美好，但是现实世界应用的并不多。</p>
+<p>当然，我们这里说的Q语言也是一种函数式编程语言，但是同时他也引入了副作用，在函数式编程的同时保留了一定的灵活性。</p>
+<p>这里举一个比较典型的例子来说明函数的本质是一种映射关系。</p>
+<p>斐波那契数列是一个正整数组成的数列，数列的前两项都是1，后面的某一项是该项前面相邻两项的和。</p>
+<p>假设我们要定义一个函数，该函数可以接受一个参数，返回对应位置的斐波纳契数字。按照传统习惯，位置从零开始计数，也就是输入是0或者是1的时候返回的都是1。</p>
+<p>下面我们使用函数定义的方式来实现这个数列的逻辑计算，并且验证一下结果：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q)fib1: &#123;$[x&lt;=<span class="number">1</span>; <span class="number">1</span>; fib1[x<span class="number">-1</span>]+fib1[x<span class="number">-2</span>]]&#125;</span><br><span class="line">q)fib1 <span class="number">9</span></span><br><span class="line"><span class="number">55</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们来直接定义映射关系，并且检查一下他的结果：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q)fib2: <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span>!<span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">5</span> <span class="number">8</span> <span class="number">13</span> <span class="number">21</span> <span class="number">34</span> <span class="number">55</span></span><br><span class="line">q)fib2 <span class="number">9</span></span><br><span class="line"><span class="number">55</span></span><br></pre></td></tr></table></figure>
+
+<p>从调用的方式和实现的功能上来看，两者其实是完全等价的。也就是抛开副作用的话，函数的本质就是一种映射。</p>
+<h2 id="四则运算是函数吗"><a href="#四则运算是函数吗" class="headerlink" title="四则运算是函数吗?"></a>四则运算是函数吗?</h2><p>四则运算和逻辑运算, 其实本质就是一种映射关系，只是因为他的使用过于高频，所以有很多语言把它作为了表达式的一部分。</p>
+<p>举个例子，在 python里面，整数的加法底层仍然是一个函数，可以通过下面的命令去查看函数的具体定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; help(int.__add__)</span><br><span class="line">Help on wrapper_descriptor:</span><br><span class="line"></span><br><span class="line">__add__(self, value, /) unbound builtins.int method</span><br><span class="line">    Return self+value.</span><br></pre></td></tr></table></figure>
+
+<p>加法跟斐波纳契函数的一个不同之处在于它的参数是有两个，而且一般情况下，这两个参数是分布在加法的左右两侧的。</p>
+<p>在Q语言里，我们可以看到加法的这两种不同的格式 (其中第二种格式为Q语言的函数调用格式)：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q)<span class="number">1</span> + <span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line">q)+[<span class="number">1</span>; <span class="number">2</span>]</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>所以我们知道函数是语言中很重要的一类组成部分, 在某些语言里函数也叫做verb, 即动词。</p>
+<h2 id="编程语言与自然语言的关系是什么？"><a href="#编程语言与自然语言的关系是什么？" class="headerlink" title="编程语言与自然语言的关系是什么？"></a>编程语言与自然语言的关系是什么？</h2><p>刚才我们已经提到了动词, 这个本是自然语言的一个概念。回过头来看, 编程语言与自然语言的边界又在哪里呢?</p>
+<p>编程语言跟自然语言的本质是相同的，都是为了沟通而存在的。不同点只是用于沟通的双方，是我们要跟机器沟通，还是要跟人沟通。</p>
+<p>编程语言同样存在语法结构，而且同样存在多种语法结构迥异的语言分支。</p>
+<p>我们已经了解了动词, 编程语言实际也有自己的名词和副词，甚至我了解到有些语言（比如J语言）在定义语言的组成元素时，就是使用了verb、noun和adverb。</p>
+<p>动词表现形式就像上面说的, 在大部分语言里就是函数。</p>
+<p>名词其实也挺好理解的，就是常量、变量或者对象。</p>
+<p>副词是一个挺有意思的组成元素，有点像是Python里面的装饰器，主要作用就是改变动词的行为。这也是函数式编程的一个特点，由于函数是一个变量，所以他也可以作为副词修饰的目标（参数）。</p>
+<p>下面是一个比较典型的示例，通过each这个副词，我们可以在保留原函数核心逻辑的情况下，很方便的改变函数的整体行为。</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">q)fib1 <span class="built_in">each</span> <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">9</span></span><br><span class="line"><span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">5</span> <span class="number">55</span></span><br></pre></td></tr></table></figure>
+
+<p>所以通过语言的类比, 编程语言其实也有自己的语法结构, 跟自然语言极其相似。</p>
+<h2 id="借助交互式理解SQL？"><a href="#借助交互式理解SQL？" class="headerlink" title="借助交互式理解SQL？"></a>借助交互式理解SQL？</h2><p>kdb+的牛逼之处，他通过Q语言提供了一个叫做qSQL的DSL，使其既能够像MySQL一样可以灵活的查询数据，同时又具有极高的可解释性。</p>
+<p>下面我们来通过一个典型的案例，看一下qSQL的牛逼之处（这里需要再补充一点说明，就是Q语言的求值是从右向左的）。</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">q)tbl:([] id:<span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">2</span> <span class="number">2</span>;val:<span class="number">100</span> <span class="number">200</span> <span class="number">300</span> <span class="number">400</span> <span class="number">500</span>)</span><br><span class="line">q)tbl</span><br><span class="line">id val</span><br><span class="line">------</span><br><span class="line"><span class="number">1</span>  <span class="number">100</span></span><br><span class="line"><span class="number">1</span>  <span class="number">200</span></span><br><span class="line"><span class="number">2</span>  <span class="number">300</span></span><br><span class="line"><span class="number">2</span>  <span class="number">400</span></span><br><span class="line"><span class="number">2</span>  <span class="number">500</span></span><br><span class="line">q)<span class="keyword">select</span> val <span class="keyword">by</span> id <span class="keyword">from</span> tbl <span class="built_in">where</span> val &lt; <span class="number">500</span></span><br><span class="line">id| val</span><br><span class="line">--| -------</span><br><span class="line"><span class="number">1</span> | <span class="number">100</span> <span class="number">200</span></span><br><span class="line"><span class="number">2</span> | <span class="number">300</span> <span class="number">400</span></span><br></pre></td></tr></table></figure>
+
+<p>下面我们来看where的部分：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">q)tbl.val</span><br><span class="line"><span class="number">100</span> <span class="number">200</span> <span class="number">300</span> <span class="number">400</span> <span class="number">500</span></span><br><span class="line">q)tbl.val &lt; <span class="number">500</span></span><br><span class="line"><span class="number">11110</span>b</span><br><span class="line">q)<span class="built_in">where</span> tbl.val &lt; <span class="number">500</span></span><br><span class="line"><span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line">q)tbl <span class="built_in">where</span> tbl.val &lt; <span class="number">500</span></span><br><span class="line">id val</span><br><span class="line">------</span><br><span class="line"><span class="number">1</span>  <span class="number">100</span></span><br><span class="line"><span class="number">1</span>  <span class="number">200</span></span><br><span class="line"><span class="number">2</span>  <span class="number">300</span></span><br><span class="line"><span class="number">2</span>  <span class="number">400</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到where本身其实就是一个动词，一个纯粹的可以单独使用的动词。所以其实不管这里的where多复杂都是可以实现的，他本身就是Q语言的一部分，并没有像MySQL语法上的限制，是完全完备的一种查询语法。</p>
+<p>再来看select的部分：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q)tmp: tbl <span class="built_in">where</span> tbl.val &lt; <span class="number">500</span></span><br><span class="line">q)tmp.val <span class="built_in">group</span> tmp.id</span><br><span class="line"><span class="number">1</span>| <span class="number">100</span> <span class="number">200</span></span><br><span class="line"><span class="number">2</span>| <span class="number">300</span> <span class="number">400</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到select仍然是一层薄薄的封装，并不需要在语法上的过多解析就可以执行。</p>
+<p>所以从这里可以看到qSQL的牛逼之处在于以下几点：</p>
+<ol>
+<li>语法的每个部分都是语言级别的支持，是完备的，完全不限制大家的想象</li>
+<li>qSQL只是一层薄薄的抽象，不需要做太多的解析，对性能上来说几乎是零损耗</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2025/09/13/2025-09-13-thinking-in-q/" data-id="cmfia7wzs0000x5j06s1o8tll" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kdb/" rel="tag">kdb+</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k%E8%AF%AD%E8%A8%80/" rel="tag">k语言</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/q%E8%AF%AD%E8%A8%80/" rel="tag">q语言</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">时序数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/09/07/2025-09-07-how-to-interview/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何完整的准备一场面试？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kdb/" rel="tag">kdb+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k%E8%AF%AD%E8%A8%80/" rel="tag">k语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/q%E8%AF%AD%E8%A8%80/" rel="tag">q语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" rel="tag">工作汇报</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">时序数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA/" rel="tag">职场</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" rel="tag">表达能力</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 12.5px;">django</a> <a href="/tags/emacs/" style="font-size: 16.25px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/kdb/" style="font-size: 10px;">kdb+</a> <a href="/tags/k%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">k语言</a> <a href="/tags/linux/" style="font-size: 11.25px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.25px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/q%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">q语言</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 15px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 11.25px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">时序数据库</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 12.5px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.25px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 13.75px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 11.25px;">自由职业</a> <a href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" style="font-size: 10px;">表达能力</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 17.5px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.75px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/09/">September 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/09/13/2025-09-13-thinking-in-q/">借助Q语言理解编程核心思想</a>
+          </li>
+        
+          <li>
+            <a href="/2025/09/07/2025-09-07-how-to-interview/">如何完整的准备一场面试？</a>
+          </li>
+        
+          <li>
+            <a href="/2025/09/06/2025-09-06-what-about-solo-developer/">2025年，独立开发还有前途吗？</a>
+          </li>
+        
+          <li>
+            <a href="/2025/08/31/2025-08-31-how-to-promote-speek/">如何提升自己的语言表达能力？</a>
+          </li>
+        
+          <li>
+            <a href="/2025/08/24/2025-08-24-how-to-make-a-speech/">公众场合讲话紧张怎么办？</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 pysnow530@163.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCLK447MR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LRCLK447MR');
+  </script>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
