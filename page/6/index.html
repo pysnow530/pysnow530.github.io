@@ -66,6 +66,82 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-the-art-of-readable-code" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/29/the-art-of-readable-code/" class="article-date">
+  <time datetime="2017-03-28T16:00:00.000Z" itemprop="datePublished">2017-03-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/29/the-art-of-readable-code/">读《编写可读代码的艺术》</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>感谢公司的图书角，让我免费读到了这样一本好书。</p>
+<p>用kindle已经有一段时间了，也陆陆续续地在上面买了一些电子书。但慢慢地发现，还是读纸质书来得舒服，翻起来也方便。当然，最好是自己买的书，可圈可点，不喜欢的书还可以拿来擦屁股。</p>
+<p>然后我就联想到了李敖的读书秘诀，给大家摘一段体会一下：</p>
+<blockquote>
+<p>我李敖看的书很少会忘掉，什么原因呢？方法好。什么方法？心狠手辣。剪刀美工刀全部用到，把书给分尸掉了，就是切开了。这一页我需要，这一段我需要，我把它按类别分开来。那背面有用怎么办呢？把它影印出来，或者一开始就买两本书，把两本书都切开以后整理出来，把要看的部分分类留存。结果一本书看完了，这本书也被分尸掉了。这就是我的看书方法。</p>
+</blockquote>
+<p>虽然有点偏激，但至少说明，读书要活读，要跟书互动，产生参与感，还要温故知新，常翻常新。纸质书可以做到，电子书总归不那么方便。</p>
+<p>《编写可读代码的艺术》，一个书名就已经道出了它接下来的目标了。谈到艺术，大多时候是从微小处着眼，细细体味，而非一个hello world那么简单。有生活，有哲学，代码也该像一件精心雕琢的艺术品。</p>
+<p>这本书的结构已经非常清晰了，再做总结总显啰嗦。下面是我读这本书时想到的，并非笔记。</p>
+<h2 id="想人所想"><a href="#想人所想" class="headerlink" title="想人所想"></a>想人所想</h2><p>这个标题看起来一点都不酷，但是做起来甚至会感动到我们自己。我们不想看到队友因为看不懂代码而苦恼的样子，我们的用户已经疲惫不堪，我们不想让他们再承受着蹩脚的使用体验。</p>
+<p>写代码和写文章是极其类似的，作者要站在读者的角度思考问题。</p>
+<p>读者读到这个词时是否会理解它，会不会产生歧义，是否需要了解某个背景，这段话是不是多余，会不会太啰嗦。</p>
+<p>作者要思考比读者多得多的东西，因为作者这个角色本身，是包含了读者角色的双重角色。</p>
+<p>站在再高一点，从系统用户的视角来看，这个字段的描述用户是否能看懂，是否正确理解了它的用途，有没有必要填写，用户是否可直观地了解有哪些注意事项，是否知道在做什么，当用户看到这个提示时是否知道它在说什么，blahblahblah一大坨，慢慢体会。</p>
+<p>我们即是作者，又是读者；即是开发者，又是维护者；即是产品，又是用户。</p>
+<h2 id="遵循惯例"><a href="#遵循惯例" class="headerlink" title="遵循惯例"></a>遵循惯例</h2><p>遵循惯例可以看作是“想人所想”的一部分。</p>
+<p>每个行业都有自己的惯例。伴随着行业的发展，大家在相互配合中，整理出了一些行之有效的通用规则。</p>
+<p>理想的情况是，这些通用规则，本行业的人，大家耳熟能详。</p>
+<p>既然大家耳熟能详，就很少存在误解，也可能更好地被理解。这无疑对读者更友好。</p>
+<p>当然，惯例也有可能带来相反的效果。《编写可读代码的艺术》里提到过一个例子，<code>get_xxx()</code>按惯例来说就该是O(1)复杂度的函数，该书作者坚信这一点，结果该函数并非O(1)函数，导致作者在优化速度时吃了点苦头。</p>
+<p>不过就像爱情一样，惯例是有的，你坚信，准没错，至少它能保证你在80%的情况下是正确的。这很值。</p>
+<h2 id="讲究卫生"><a href="#讲究卫生" class="headerlink" title="讲究卫生"></a>讲究卫生</h2><p>一张干净的脸总是讨人喜欢的。</p>
+<p>记得小时候家里不富裕，还穿过打补丁的裤子。老师教导我们，裤子破了打补丁很正常，但即使打了补丁，也要把裤子洗干净。一个漂亮的补丁，甚至会给一条旧裤子增色，就是这样。</p>
+<p>在我的理解里，讲究卫生意味着整洁和干净。注意变量的出场顺序，把相关的代码或变量分块，都是一些好习惯。</p>
+<p>好的代码就是要看上去赏心悦目。</p>
+<p>可能有的人觉得，只要让系统运行起来就万事大吉了，很明显，这是不负责任。</p>
+<p>我维护过一些系统，杂乱且无用的旧代码像战场上的残骸，任性的空格空行天马行空放荡不羁，拷贝的痕迹随处可见。这些都会加重读者的心理负担。</p>
+<p>当然，我们也有能力写出这样的代码，所以，可以安静下来想想，怎么对待自己。</p>
+<h2 id="提升技能"><a href="#提升技能" class="headerlink" title="提升技能"></a>提升技能</h2><p>书中提到一点我觉得很受用：偶尔地翻一下语言内置的和常用的第三方库。</p>
+<p>维护代码需要很大成本，甚至我们的大部分时间都是在做维护的工作。以我之前做的“代码发布系统”为例，开发用了一个月，后期的维护已经达到8个月之久，而且还会持续下去。</p>
+<p>而大部分第三方库都已经过严格测试，而且可以节约我们的维护成本。</p>
+<p>有的程序员喜欢重造轮子，出于学习目的或现存库不能满足需求还好，如果是为技术而技术，可要在关键时刻提醒一下自己啰。</p>
+<h2 id="屏蔽细节"><a href="#屏蔽细节" class="headerlink" title="屏蔽细节"></a>屏蔽细节</h2><p>最后一点同样重要，帮助我们的读者隐藏不必要的细节。</p>
+<p>函数的一个好处是，它把繁杂的上下文剥离开，让理解变得简单。比如，<code>send_mail_html(mail_address, html)</code>这个函数可以给指定邮箱地址发送一段html类型的文本，只要函数封装地够好，用户或主调函数无需关心它的实现细节。</p>
+<p>这也是自下而上编码的好处，上层提供了比下层更高一级的操作接口，并为用户屏蔽下层的实现细节。从这个意义上来说，编程语言也是自下而上中的一层实现，语言的细节我们无需关心，只要它封装地够好且使用无歧义。</p>
+<p>再往大了说，一个好的团队也应该有屏蔽彼此细节的能力，团队中的成员由不同的领域专家组成，大家的职责彼此正交。这时，如果你是一个虚拟化技术的专家，而我更擅长用系统来为大家提供帮助，如果我的系统需要申请一个临时环境，调用你的一个接口，我可以获得一个可用的ip，你怎么生成这个环境我不关心，我怎么用你也不用关心。再这时，如果我们要改变容器的管理方式，这对我们的用户是透明的，也就是说，他们甚至都不知道我们在做这一操作，用户只需关心他们所应关心的内容即可。</p>
+<p>函数的使用亦如是，彼此一体却又边界清晰。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>编码如是，生活亦如是。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://pysnow530.github.io/2017/03/29/the-art-of-readable-code/" data-id="cmf9hzmsv003sdvj0h0cfbccz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python-class" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/25/python-class/" class="article-date">
@@ -796,67 +872,6 @@
 
 
   
-    <article id="post-python-context" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/26/python-context/" class="article-date">
-  <time datetime="2017-02-25T16:00:00.000Z" itemprop="datePublished">2017-02-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/26/python-context/">唠唠python(1) -- 开学典礼</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="为谁而写"><a href="#为谁而写" class="headerlink" title="为谁而写"></a>为谁而写</h2><p>有一天，我女朋友跟我说，你帮我处理一个电子表格吧。</p>
-<p>最开始，我做了一个vba（一种计算机语言）脚本，觉得不行。因为使用起来太过繁琐，这可能会让她崩溃，也可能会让我在回答各种问题的过程中崩溃。</p>
-<p>之后又写了一个python（另一门我们将要详细讨论的计算机语言）脚本，还是不行。要使用这个脚本，需要学会安装python这个软件，然后安装一大堆额外的东西。这也太他妈不方便了。我是不会把这么一个鸟东西给出去的。</p>
-<p>后来我想到了最佳的解决方案：让她学习一点计算机语言。“一点”以足以应对这种简单繁琐的操作。但是我找到的资料都不是很理想，很少有面向非计算机专业的。</p>
-<p>这些文章就是为这类人群准备的，我们（请允许我角色带入）没有系统地学习过计算机方面的知识，而又在日常生活工作中经常用到计算机，我们试图通过与计算机更有效地沟通，来提高自己的工作效率。但是报个班又太不值，毕竟班里大部分同学当初是奔着程序员梦进去的。</p>
-<p>简而言之，这一系列文章是为非计算机专业而又意识到计算机的重要性，想要快速与计算机建立高效沟通以提高工作效率的人准备的。</p>
-<h2 id="与其它同类文章有什么不一样"><a href="#与其它同类文章有什么不一样" class="headerlink" title="与其它同类文章有什么不一样"></a>与其它同类文章有什么不一样</h2><p>在网上已有非常非常多的《python从入门到出家》类的文章或教程。</p>
-<p>他们有的打着“简单”、“易学”的愰子，随便翻一下，里面充斥着“条件语句”、“函数”、“异常”等看上去屌炸天的词汇，全然不顾我们的感受。</p>
-<p>他们并没有站到我们的角度来思考问题。现阶段，我们并不想知道“异常”是个什么东西，而只想尽快让计算机帮我们计算出这批元器件缺少的数量，然后去补货。</p>
-<p>这些词汇和程序员式的思考方式，严重阻碍了我们的学习过程，损耗我们的注意力。很可能有那么一天，在我们尝到与计算机高效交互的甜头前，终于忍受不了各种纠缠在一起的专业名词，而选择了结束这个恼人的过程。然后留下一种感觉，“程序员都他妈是神经病”。</p>
-<p>当然，这篇文章只是提供另一种学习python的体验，而上面所说的这种情况也只是一种假设。如果你愿意听一个人每天唠叨几句（有可能只是十分、二十分钟），自己同时又能有所收获，以至最后竟然能流畅地与计算机沟通，那你就可以继续往下看了。</p>
-<p>这里没有乱七八糟的词汇，我希望自己能以一个中年大妈唠家常的姿态给大家讲述一下与隔避老王沟通的技巧。所以你也不用有什么负担。</p>
-<p><img src="/public/img/dama.jpg" alt="我是中年大妈，不要有压力"></p>
-<h2 id="为什么是python语言"><a href="#为什么是python语言" class="headerlink" title="为什么是python语言"></a>为什么是python语言</h2><p>计算机语言，说白了，就是我们与计算机沟通的工具。比如，我们跟邻居沟通用汉语，而跟美国人沟通用英语。我们与计算机沟通，用的是计算机和我们都可以听得懂的语言。</p>
-<p>计算机就像一个语言天才，它精通多种语言。不幸的是，没有一种是我们人类的语言。也就是说，要想与计算机流畅地沟通，除了学习它使用的语言，我们别无他法。</p>
-<p>计算机语言有很多种，比如A语言、B语言、C语言等。甚至我们可以创造一门我们自己的语言来教会计算机，然后用这门语言与它沟通。正如我们的祖先创造了汉语，并让它普及于世一样。</p>
-<p>既然计算机能使用这么多语言，我们想要与它沟通，自然最好是选择一门学习起来相对容易的语言。python语言就具有这样的特质，它真正的简单易学，而且学习曲线可以非常平缓。也就是说，我们完全可以一边享受它给我们带来的切实好处，一边进一步的学习以更好地与计算机沟通。</p>
-<h2 id="我能得到什么"><a href="#我能得到什么" class="headerlink" title="我能得到什么"></a>我能得到什么</h2><p>想像一下，如果你学会了一门外语，就可以流畅地与老外沟通交流，还可以更方便地在国外打到车。节省了你的时间和精力，你可以多喝几杯茶了。</p>
-<p>这些文章里没有语法结构、俚语俗语，当然并不是说它们不重要，你可能以后会感兴趣。这里更多的是教你在异国他乡（计算机的世界），更好的打到车，更快地找到饭店，或者是雇佣一个保姆帮你打扫卫生。</p>
-<p>你可以用你的想象力去工作，把自己从繁琐的工作中解放出来吧。 – 这是我承诺给你的，学不会不收费。</p>
-<h2 id="简单了解python语言"><a href="#简单了解python语言" class="headerlink" title="简单了解python语言"></a>简单了解python语言</h2><p>终于讲到我们的python语言了，这篇文章只是开个头，我们只要有一点印象就可以了。</p>
-<p>就像前面提到的：“我们可以创造一门我们自己的语言来教会计算机，然后用这门语言与它沟通。”python语言就是这样诞生的，作者创造了它，并教会了计算机使用这门语言。</p>
-<p>关于python的介绍其实就这么多，下一篇文章我们就可以用这门语言跟计算机进行简单的沟通了。是的，计算机语言就是这么容易使用。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pysnow530.github.io/2017/02/26/python-context/" data-id="cmf9hzms60027dvj0449u89ix" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -875,7 +890,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kdb/" rel="tag">kdb+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k%E8%AF%AD%E8%A8%80/" rel="tag">k语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/q%E8%AF%AD%E8%A8%80/" rel="tag">q语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" rel="tag">工作汇报</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">时序数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA/" rel="tag">职场</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" rel="tag">表达能力</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/" rel="tag">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/" rel="tag">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fabric/" rel="tag">fabric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/" rel="tag">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iostat/" rel="tag">iostat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetbrains/" rel="tag">jetbrains</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kdb/" rel="tag">kdb+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k%E8%AF%AD%E8%A8%80/" rel="tag">k语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/" rel="tag">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon/" rel="tag">open-falcon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/" rel="tag">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paramiko/" rel="tag">paramiko</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/q%E8%AF%AD%E8%A8%80/" rel="tag">q语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wsgi/" rel="tag">wsgi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/" rel="tag">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" rel="tag">工作汇报</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" rel="tag">我的世界</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87/" rel="tag">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">时序数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%A6/" rel="tag">梦</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" rel="tag">海量运维</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" rel="tag">监控告警</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8A%E5%A4%A9/" rel="tag">聊天</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA/" rel="tag">职场</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" rel="tag">自由职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" rel="tag">表达能力</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag">计算机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" rel="tag">计算机模拟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A4%E7%9F%A5/" rel="tag">认知</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E6%89%AF/" rel="tag">闲扯</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" rel="tag">阅读器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag">降本增效</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AD%94%E6%96%B9/" rel="tag">魔方</a></li></ul>
     </div>
   </div>
 
@@ -885,7 +900,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 12.5px;">django</a> <a href="/tags/emacs/" style="font-size: 16.25px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/kdb/" style="font-size: 10px;">kdb+</a> <a href="/tags/k%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">k语言</a> <a href="/tags/linux/" style="font-size: 11.25px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.25px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/q%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">q语言</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 15px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 11.25px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">时序数据库</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 12.5px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.25px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 13.75px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 11.25px;">自由职业</a> <a href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" style="font-size: 10px;">表达能力</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 17.5px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.75px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
+      <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/django/" style="font-size: 12.5px;">django</a> <a href="/tags/emacs/" style="font-size: 16.25px;">emacs</a> <a href="/tags/fabric/" style="font-size: 10px;">fabric</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/golang/" style="font-size: 10px;">golang</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/jekyll/" style="font-size: 10px;">jekyll</a> <a href="/tags/jetbrains/" style="font-size: 10px;">jetbrains</a> <a href="/tags/kdb/" style="font-size: 10px;">kdb+</a> <a href="/tags/k%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">k语言</a> <a href="/tags/linux/" style="font-size: 11.25px;">linux</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/open-falcon/" style="font-size: 11.25px;">open-falcon</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/paramiko/" style="font-size: 10px;">paramiko</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/q%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">q语言</a> <a href="/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/tags/wsgi/" style="font-size: 10px;">wsgi</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 15px;">工作</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B1%87%E6%8A%A5/" style="font-size: 11.25px;">工作汇报</a> <a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 10px;">我的世界</a> <a href="/tags/%E6%95%88%E7%8E%87/" style="font-size: 10px;">效率</a> <a href="/tags/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">时序数据库</a> <a href="/tags/%E6%A2%A6/" style="font-size: 12.5px;">梦</a> <a href="/tags/%E6%B5%B7%E9%87%8F%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">海量运维</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E6%BC%94%E8%AE%B2/" style="font-size: 10px;">演讲</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6/" style="font-size: 12.5px;">监控告警</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 11.25px;">编程语言</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 10px;">编辑器</a> <a href="/tags/%E8%81%8A%E5%A4%A9/" style="font-size: 10px;">聊天</a> <a href="/tags/%E8%81%8C%E5%9C%BA/" style="font-size: 13.75px;">职场</a> <a href="/tags/%E8%87%AA%E7%94%B1%E8%81%8C%E4%B8%9A/" style="font-size: 11.25px;">自由职业</a> <a href="/tags/%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B/" style="font-size: 10px;">表达能力</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 10px;">计算机</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E6%8B%9F/" style="font-size: 10px;">计算机模拟</a> <a href="/tags/%E8%AE%A4%E7%9F%A5/" style="font-size: 10px;">认知</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a> <a href="/tags/%E9%97%B2%E6%89%AF/" style="font-size: 17.5px;">闲扯</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 18.75px;">阅读</a> <a href="/tags/%E9%98%85%E8%AF%BB%E5%99%A8/" style="font-size: 10px;">阅读器</a> <a href="/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" style="font-size: 10px;">降本增效</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%AD%94%E6%96%B9/" style="font-size: 10px;">魔方</a>
     </div>
   </div>
 
@@ -907,6 +922,10 @@
       <ul>
         
           <li>
+            <a href="/2025/09/20/2025-09-20-how-to-talk/">聊天怎么聊？</a>
+          </li>
+        
+          <li>
             <a href="/2025/09/13/2025-09-13-thinking-in-q/">借助Q语言理解编程核心思想</a>
           </li>
         
@@ -920,10 +939,6 @@
         
           <li>
             <a href="/2025/08/31/2025-08-31-how-to-promote-speek/">如何提升自己的语言表达能力？</a>
-          </li>
-        
-          <li>
-            <a href="/2025/08/24/2025-08-24-how-to-make-a-speech/">公众场合讲话紧张怎么办？</a>
           </li>
         
       </ul>
